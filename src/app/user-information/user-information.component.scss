@@ -1,0 +1,64 @@
+$primary-color: #28a745;
+$primary-color-dark: #218838;
+
+body {
+  font-family: Arial, sans-serif;
+  background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/900px-Cat03.jpg') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.profile-icon {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  margin-top: 30px;
+  margin-left: 75%;
+}
+
+.form-container {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  width: 75px;
+  margin-top: 30px;
+  margin-left: 7%;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+button {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  background-color: $primary-color; 
+  color: #fff;
+  border: none;
+  
+  &:hover {
+    background-color: $primary-color-dark; 
+  }
+}
