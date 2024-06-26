@@ -1,0 +1,175 @@
+<app-header></app-header>
+<router-outlet></router-outlet>
+
+
+<div class="container">
+    <div class="item">
+        <div class="avatar">
+            <!-- <button mat-fab class="insert" (click)="insertRecord(loginForm)">
+                <mat-icon>add</mat-icon>
+            </button> -->
+
+                <div class="text-center">
+                  <button type="button" mat-fab class="insert" data-toggle="modal" data-target="#myModal2"><mat-icon>add</mat-icon></button>
+                </div>
+                <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 *ngIf="rightPopupIndex===1">Tạo hồ sơ thú cưng</h1>
+                        <h1 *ngIf="rightPopupIndex===2">Lịch sử sức khoẻ</h1>
+                        <h1 *ngIf="rightPopupIndex===3">Lịch sử tiêm phòng</h1>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+                        <div class="modal-body" *ngIf="rightPopupIndex===1">
+                            <div class="left-col">
+                                <div class="form-group">
+                                    <form>
+                                        <label class="file-upload">
+                                            <div *ngIf="!myImage">
+                                                <img src="https://i.pinimg.com/474x/d7/70/33/d7703333ad8ba85827b60fccf42f9c25.jpg" alt="">
+                                                <input type="file" (change)="onChange($event)"/>
+                                            </div>
+                                            <div *ngIf="myImage">
+                                                <img [src]="myImage" alt="">
+                                                <input type="file" (change)="onChange($event)"/>
+                                            </div>
+                                        </label>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="right-col">
+                                <div class="form-group">
+                                    <!-- <label for="username"></label> -->
+                                    <input autocomplete="off" required class="form-control mt-1" placeholder="Tên">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <!-- <label for="password"></label> -->
+                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Loài">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <!-- <label for="password"></label> -->
+                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Giống">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <!-- <label for="password"></label> -->
+                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Giới tính">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <!-- <label for="password"></label> -->
+                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Ngày sinh">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <!-- <label for="password"></label> -->
+                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Màu sắc">
+                                </div>
+                                <div class="form-group mt-3">
+                                    <!-- <label for="password"></label> -->
+                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Đặc điểm nhận dạng">
+                                </div>
+                            </div>
+                            <button mat-fab class="mat-fab" *ngIf="rightPopupIndex===1" (click)="nextRecord()">
+                                <mat-icon class="arrow-forward">arrow_forward</mat-icon>
+                            </button>
+                        </div>
+                        <div class="modal-body" *ngIf="rightPopupIndex===2">
+                            <div class="form-group">
+                                <form>
+                                    <textarea class="form-control" id="" rows="20" cols="50"></textarea>
+                                </form>
+                            </div>
+                            <button mat-fab class="mat-fab" *ngIf="rightPopupIndex===2" (click)="nextRecord()">
+                                <mat-icon class="arrow-forward">arrow_forward</mat-icon>
+                            </button>
+                        </div>
+                        <div class="modal-body" *ngIf="rightPopupIndex===3">
+                            <div class="form-group">
+                                <form>
+                                    <textarea class="form-control" id="" rows="20" cols="50"></textarea>
+                                </form>
+                            </div>
+                            <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3">
+                                Lưu
+                            </button>
+                        </div>
+                        <!-- <button mat-fab class="mat-fab" *ngIf="rightPopupIndex===1 || rightPopupIndex===2" (click)="nextRecord()">
+                            <mat-icon class="arrow-forward">arrow_forward</mat-icon>
+                        </button> -->
+                        <!-- <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3">
+                            Lưu
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nick-name">
+            <h2>Thêm hồ sơ thú cưng</h2>
+        </div>
+    </div>
+    <div class="item">
+        <div class="avatar">
+            <button mat-mini-fab class="cancel">
+                <mat-icon>clear</mat-icon>
+            </button>
+            <img src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg">
+        </div>
+        <div class="nick-name">
+            <h2>Husky</h2>
+        </div>
+    </div>
+    <div class="item">
+        <div class="avatar">
+            <button mat-mini-fab class="cancel">
+                <mat-icon>clear</mat-icon>
+            </button>
+            <img src="https://i.pinimg.com/originals/c4/7c/3c/c47c3cec76bdafa04cbe9a2f62f742c3.jpg">
+        </div>
+        <div class="nick-name">
+            <h2>Chiba</h2>
+        </div>
+    </div>
+
+</div>
+
+    <!-- <div class="container demo">
+      <div class="text-center">
+        <button type="button" class="btn btn-demo" data-toggle="modal" data-target="#myModal2"> Right Sidebar Modal </button>
+      </div>
+      <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              Right Sidebar </div>
+            <div class="modal-body">
+              <p>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+
+<!-- <ng-template #loginForm>
+    <form ngNativeValidate>
+        <div class="modal-header">
+          <b><h1 class="modal-title pull-left">Đăng nhập</h1></b>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="username">Tên tài khoản</label>
+            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Tên tài khoản"
+              >
+          </div>
+          <div class="form-group mt-3">
+            <label for="password">Mật khẩu</label>
+            <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
+              placeholder="Mật khẩu">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="operate-btn">
+            <button type="submit" class="btn btn-primary mt-3">Đăng nhập</button>
+          </div>
+        </div>
+      </form>
+</ng-template> -->

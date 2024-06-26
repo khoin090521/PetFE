@@ -16,6 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {FormsModule} from '@angular/forms'
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { MatInputModule } from '@angular/material/input';
+import { HomeCustomerComponent } from './home-customer/home-customer.component';
 
 
 
@@ -23,7 +24,8 @@ import { MatInputModule } from '@angular/material/input';
   declarations: [
     AppComponent,
     HomeComponent,
-    HeaderComponent
+    HeaderComponent,
+    HomeCustomerComponent
   ],
   imports: [
     BrowserModule,
