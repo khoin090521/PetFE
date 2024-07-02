@@ -1,0 +1,139 @@
+<app-header></app-header>
+<router-outlet></router-outlet>
+
+<div class="detail-bar">
+    <div class="infor-detail">
+        <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
+        <h3 class="name-detail">Husky</h3>
+        <div class="option-detail">
+            <button class="profile-btn" mat-fab extended (click)="openProfile()">Hồ sơ</button>
+            <button class="erecord-btn" mat-fab extended (click)="openERecord()">Bệnh án điện tử</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="profile-tab" *ngIf="statusTab">
+    <div class="profile-tab-container">
+        <button mat-fab extended (click)="openBasicDetail()">
+            Thông tin cơ bản
+        </button>
+        <button mat-fab extended (click)="openHealthHistory()">
+            Lịch sử sức khoẻ
+        </button>
+        <button mat-fab extended (click)="openInjectionhHistory()">
+            Lịch sử tiêm phòng
+        </button>
+    </div>
+</div>
+
+<div class="basic-profile" *ngIf="profiltTabStatus === 1">
+    <div class="left-group">
+        <div class="form-group">
+            <!-- <label for="username"></label> -->
+            <input autocomplete="off" required class="form-control mt-1" placeholder="Tên">
+        </div>
+        <div class="form-group mt-3">
+            <!-- <label for="password"></label> -->
+            <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Loài">
+        </div>
+        <div class="form-group mt-3">
+            <!-- <label for="password"></label> -->
+            <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Giống">
+        </div>
+        <div class="form-group mt-3">
+            <!-- <label for="password"></label> -->
+            <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Giới tính">
+        </div>
+        <div class="form-group mt-3">
+            <!-- <label for="password"></label> -->
+            <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Ngày sinh">
+        </div>
+        <div class="form-group mt-3">
+            <!-- <label for="password"></label> -->
+            <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Màu sắc">
+        </div>
+    </div>
+
+    <div class="right-group">
+        <form>
+            <label class="file-upload">
+                <div class="update-right">
+                    <img class="update-avatar" src="https://i.pinimg.com/474x/d7/70/33/d7703333ad8ba85827b60fccf42f9c25.jpg" alt=""><br>
+                    <!-- <input type="file" (change)="onChange($event)"/> -->
+                    <button class="update-btn" mat-fab extended (click)="openProfile()">Cập nhật</button>
+                </div>
+                <!-- <div *ngIf="myImage">
+                    <img [src]="myImage" alt="">
+                    <input type="file" (change)="onChange($event)"/>
+                </div> -->
+            </label>
+        </form>
+    </div>
+</div>
+
+<div class="basic-profile" *ngIf="profiltTabStatus === 2">
+    <div class="left-group">
+        <form>
+            <textarea class="form-control" id="" rows="5" cols="50"></textarea>
+        </form>
+    </div>
+    <div class="right-group">
+        <form>
+            <div class="update-right">
+                <button mat-fab class="openTextArea">
+                    <mat-icon>add</mat-icon>
+                </button><br><br>
+                <button mat-fab extended>Cập nhật</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="basic-profile" *ngIf="profiltTabStatus === 3">
+    <div class="left-group">
+        <form>
+            <textarea class="form-control" id="" rows="5" cols="50"></textarea>
+        </form>
+    </div>
+    <div class="right-group">
+        <form>
+            <div class="update-right">
+                <button mat-fab class="openTextArea">
+                    <mat-icon>add</mat-icon>
+                </button><br><br>
+                <button mat-fab extended>Cập nhật</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="erecord-tab" *ngIf="!statusTab">
+    <table mat-table [dataSource]="dataSource123" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef> Ngày khám </th>
+          <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Bác sĩ </th>
+          <td mat-cell *matCellDef="let element"> {{element.doctor}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="weight">
+          <th mat-header-cell *matHeaderCellDef> Chẩn đoán sơ bộ  </th>
+          <td mat-cell *matCellDef="let element"> {{element.diagnose}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="symbol">
+          <th mat-header-cell *matHeaderCellDef> Chi tiết </th>
+          <td mat-cell *matCellDef="let element"> {{element.detail}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>      
+</div>

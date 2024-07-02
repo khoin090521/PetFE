@@ -17,6 +17,8 @@ import {FormsModule} from '@angular/forms'
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { MatInputModule } from '@angular/material/input';
 import { HomeCustomerComponent } from './home-customer/home-customer.component';
+import { DetailPetComponent } from './detail-pet/detail-pet.component';
+import {MatTableModule} from '@angular/material/table';
 
 
 
@@ -25,7 +27,8 @@ import { HomeCustomerComponent } from './home-customer/home-customer.component';
     AppComponent,
     HomeComponent,
     HeaderComponent,
-    HomeCustomerComponent
+    HomeCustomerComponent,
+    DetailPetComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,6 +37,7 @@ import { HomeCustomerComponent } from './home-customer/home-customer.component';
     MatButtonModule,
     BrowserAnimationsModule,
     MatDialogModule,
+    MatTableModule,
     // HttpClient,
     HttpClientModule,
     // HttpClient

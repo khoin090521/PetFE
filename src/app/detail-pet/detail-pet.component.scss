@@ -1,0 +1,97 @@
+.avatar-detail{
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}
+
+.detail-bar{
+    display: flex;
+    width: 100%;
+    background-color: white;
+}
+
+.infor-detail{
+    display: flex;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.name-detail{
+    margin-top: 1%;
+}
+
+.option-detail{
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    margin-right: auto;
+    margin-left: 30%;
+}
+
+.profile-btn{
+    background-color: #104cac;
+    margin-inline: auto;
+    color: #fff;
+}
+
+.erecord-btn{
+    background-color: #fff;
+    margin-inline: auto;
+}
+
+.profile-tab{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: #e0dcdc;
+    gap: 50px;
+    height: 50px;
+    margin: auto;
+}
+
+a{
+    text-decoration: none;
+}
+
+.profile-tab-container{
+    display: flex;
+    margin: auto;
+    gap: 100px;
+}
+
+table {
+    width: 100%;
+}
+
+.basic-profile{
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+}
+
+.update-avatar {
+    width: 30%;
+    height: auto;
+    border-radius: 100px; /* Optional: rounded corners for the image */
+    // margin-left: 100px;
+    margin-top: 50px;
+}
+
+.update-btn{
+    width: 150px;
+}
+
+.left-group {
+    width: 50%;
+    margin-left: 25%;
+}
+
+.right-group{
+    text-align: center;
+    width: 50%;
+}
+
+.openTextArea{
+    background-color: #e0dcdc;
+}
