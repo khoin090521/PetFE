@@ -1,6 +1,5 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule, Routes } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,11 +14,21 @@ import {MatButtonModule} from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import {FormsModule} from '@angular/forms'
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { registerLocaleData } from '@angular/common';
+import localeIt from '@angular/common/locales/it';
+registerLocaleData(localeIt);
 import { MatInputModule } from '@angular/material/input';
 import { HomeCustomerComponent } from './home-customer/home-customer.component';
 import { DetailPetComponent } from './detail-pet/detail-pet.component';
 import {MatTableModule} from '@angular/material/table';
-
+import { CustomerBookingComponent } from './customer-booking/customer-booking.component';
+import { CalendarModule, DateAdapter, MOMENT } from 'angular-calendar';
+import { SchedulerModule, CalendarSchedulerUtils } from 'angular-calendar-scheduler';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { AppService } from './service/app.service';
+import * as moment from 'moment';
+// import { MatFormFieldModule } from '@angular/material';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @NgModule({
@@ -29,6 +38,7 @@ import {MatTableModule} from '@angular/material/table';
     HeaderComponent,
     HomeCustomerComponent,
     DetailPetComponent,
+    CustomerBookingComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,13 +48,19 @@ import {MatTableModule} from '@angular/material/table';
     BrowserAnimationsModule,
     MatDialogModule,
     MatTableModule,
-    // HttpClient,
     HttpClientModule,
-    // HttpClient
     MatIconModule,
-    ModalModule.forRoot()
+    MatFormFieldModule,
+    ModalModule.forRoot(),
+    CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory,}),
+    SchedulerModule.forRoot({ locale: 'en', headerDateFormat: 'daysRange' }),
   ],
-  providers: [BsModalService],
+  providers: [
+    BsModalService,
+    AppService,
+    { provide: LOCALE_ID, useValue: 'en-US' },//vi-VN
+    { provide: MOMENT, useValue: moment }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
