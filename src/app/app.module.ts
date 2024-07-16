@@ -12,7 +12,7 @@ import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { MatIconModule } from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import {FormsModule} from '@angular/forms'
+// import {FormsModule} from '@angular/forms'
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeIt from '@angular/common/locales/it';
@@ -29,7 +29,9 @@ import { AppService } from './service/app.service';
 import * as moment from 'moment';
 // import { MatFormFieldModule } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChatDoctorComponent } from './chat-doctor/chat-doctor.component';
+import { ChatComponent } from './component/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -39,10 +41,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     HomeCustomerComponent,
     DetailPetComponent,
     CustomerBookingComponent,
+    ChatDoctorComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,
     BrowserAnimationsModule,

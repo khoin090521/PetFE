@@ -21,6 +21,8 @@
     "@angular/platform-browser": "^16.1.0",
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",
+    "@stomp/stompjs": "^7.0.0",
+    "@types/sockjs-client": "^1.5.4",
     "angular-calendar-scheduler": "^16.0.0",
     "bootstrap": "^5.3.3",
     "date-fns": "^3.6.0",

@@ -50,6 +50,7 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
     modalRef?: BsModalRef;
     dateModel: Date = new Date();
     maxWidth: number = 42;
+    bookingDate: any = "";
 
     view: CalendarView = CalendarView.Week;
     viewDate: Date = new Date();
@@ -72,6 +73,7 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
     eventModifier: Function;
     prevBtnDisabled: boolean = false;
     nextBtnDisabled: boolean = false;
+    calendar: boolean = true;
 
     actions: CalendarSchedulerEventAction[] = [
         {
@@ -123,20 +125,9 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
 
     ngOnInit(): void {
         this.appService.getEvents(this.actions).then((events: CalendarSchedulerEvent[]) => this.events = events);
-        // setTimeout(() => {
-        //     this.zone.run(() => {
-        //         this.maxWidth = 88;
-        //     });
-        // }, 1000);
-        
-
     }
 
     ngAfterViewChecked() {
-        // this.cdr.detectChanges();
-        // setTimeout(() => {
-        //     this.maxWidth = 88;
-        // });
     }
 
     adjustViewDays(): void {
@@ -190,9 +181,38 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
         console.log('hourClicked Hour', hour);
     }
 
+    formatDate(dateString: string): string {
+        const date = new Date(dateString);
+    
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+        return `${year}/${month}/${day} ${hours}:${minutes}`;
+    }
+
     segmentClicked(action: string, segment: SchedulerViewHourSegment, template: TemplateRef<any>): void {
         console.log('segmentClicked Action', action);
-        console.log('segmentClicked Segment', segment);
+        console.log('segmentClicked Segment', segment.date);
+
+
+        // const date = new Date(segment.date);
+
+        // // Extract the individual components
+        // const year = date.getUTCFullYear();
+        // const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
+        // const day = String(date.getUTCDate()).padStart(2, '0');
+        // const hours = String(date.getUTCHours()).padStart(2, '0');
+        // const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+
+        // // Format the date-time string
+        const formattedString = this.formatDate(segment.date.toString());
+        this.bookingDate = formattedString;
+
+        console.log("formattedString",formattedString);
+
         this.modalRef = this.modalService.show(template);
     }
 
@@ -216,6 +236,14 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
 
     closeForm() {
         this.modalRef?.hide();
+    }
+
+    openCalendar(){
+        this.calendar = true;
+    }
+
+    openMedical(){
+        this.calendar = false;
     }
   
 }
