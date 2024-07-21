@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdminManagerComponent } from './admin-manager/admin-manager.component';
 import { ChatDoctorComponent } from './chat-doctor/chat-doctor.component';
 import { ChatComponent } from './component/chat/chat.component';
 import { CreateDoctorComponent } from './create-doctor/create-doctor.component';
@@ -16,7 +17,8 @@ const routes: Routes = [
   { path: 'customer-booking',  component: CustomerBookingComponent},
   { path: 'chat-doctor/:userId',  component: ChatDoctorComponent},
   { path: 'chat-doctor/:userId',  component: ChatComponent},
-  { path: 'create-doctor',  component: CreateDoctorComponent}
+  { path: 'create-doctor',  component: CreateDoctorComponent},
+  { path: 'admin-manager',  component: AdminManagerComponent}
 ];
 
 @NgModule({

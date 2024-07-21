@@ -34,6 +34,7 @@ import { ChatDoctorComponent } from './chat-doctor/chat-doctor.component';
 import { ChatComponent } from './component/chat/chat.component';
 import { CreateDoctorComponent } from './create-doctor/create-doctor.component';
 import { MatSelectModule } from '@angular/material/select';
+import { AdminManagerComponent } from './admin-manager/admin-manager.component';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { MatSelectModule } from '@angular/material/select';
     ChatDoctorComponent,
     ChatComponent,
     CreateDoctorComponent,
+    AdminManagerComponent,
   ],
   imports: [
     BrowserModule,

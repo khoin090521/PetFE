@@ -1,6 +1,11 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
+interface Food {
+  value: string;
+  viewValue: string;
+}
+
 @Component({
   selector: 'app-create-doctor',
   templateUrl: './create-doctor.component.html',
@@ -12,6 +17,11 @@ export class CreateDoctorComponent implements OnInit{
   openMedicineScreen: any = false;
   createDoctorMeeting: any = false;
 
+  foods: Food[] = [
+    {value: 'steak-0', viewValue: 'Steak'},
+    {value: 'pizza-1', viewValue: 'Pizza'},
+    {value: 'tacos-2', viewValue: 'Tacos'},
+  ];
 
   constructor(
     private modalService: BsModalService

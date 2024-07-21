@@ -1,0 +1,5 @@
+/* hide the column with id 'id' */
+th[mat-column-def="id"], td[mat-column-def="id"] {
+    display: none;
+  }
+  
