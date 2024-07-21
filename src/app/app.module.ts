@@ -32,6 +32,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChatDoctorComponent } from './chat-doctor/chat-doctor.component';
 import { ChatComponent } from './component/chat/chat.component';
+import { CreateDoctorComponent } from './create-doctor/create-doctor.component';
+import { MatSelectModule } from '@angular/material/select';
+
 
 @NgModule({
   declarations: [
@@ -43,6 +46,7 @@ import { ChatComponent } from './component/chat/chat.component';
     CustomerBookingComponent,
     ChatDoctorComponent,
     ChatComponent,
+    CreateDoctorComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,6 +61,7 @@ import { ChatComponent } from './component/chat/chat.component';
     HttpClientModule,
     MatIconModule,
     MatFormFieldModule,
+    MatSelectModule,
     ModalModule.forRoot(),
     CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory,}),
     SchedulerModule.forRoot({ locale: 'en', headerDateFormat: 'daysRange' }),

@@ -15,18 +15,19 @@
 
 <div class="profile-tab">
     <div class="profile-tab-container">
-        <button mat-fab extended>
+        <button mat-fab extended (click)="contact()">
             Liên hệ
         </button>
-        <button mat-fab extended>
+        <button mat-fab extended (click)="add_record()">
             Thêm bệnh án điện tử
         </button>
-        <button mat-fab extended>
+        <button mat-fab extended (click)="open_schedule()">
             Lịch hẹn
         </button>
     </div>
 </div>
 
+<div class="contact-screen" *ngIf="openContactScreen">
   <div class="user-chat">
     <div class="infor-chat">
       <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
@@ -79,8 +80,6 @@
     </div>
   </div>
     
-
-
   <div class="chat_window">
     <div class="top_menu">
       <div class="title">
@@ -106,3 +105,95 @@
       </div>
     </div>
   </div>
+</div>
+  
+<div class="add-record-screen" *ngIf="openAddRecord">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef> No. </th>
+      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+    </ng-container>
+  
+    <!-- Name Column -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Ngày </th>
+      <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+    </ng-container>
+  
+    <!-- Weight Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Tên bác sĩ </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+  
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="diagnostic">
+      <th mat-header-cell *matHeaderCellDef> Chẩn đoán sơ bộ </th>
+      <td mat-cell *matCellDef="let element"> {{element.diagnostic}} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> Xem chi tiết </th>
+      <td mat-cell *matCellDef="let element"> {{element.diagnostic}} </td>
+    </ng-container> 
+  
+    <tr mat-header-row *matHeaderRowDef="displayedDiagnostic"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedDiagnostic;"></tr>
+  </table>
+
+</div>
+
+<div class="add-record-screen" *ngIf="openSchedule">
+  <table mat-table [dataSource]="dataSourceSchedule" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="schedule">
+      <th mat-header-cell *matHeaderCellDef> Thời gian khám </th>
+      <td mat-cell *matCellDef="let element"> {{element.schedule}} </td>
+    </ng-container>
+  
+    <!-- Name Column -->
+    <ng-container matColumnDef="detail">
+      <th mat-header-cell *matHeaderCellDef> Chi tiết </th>
+      <td mat-cell *matCellDef="let element"> {{element.detail}} </td>
+    </ng-container>
+  
+    <!-- Weight Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
+      <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+    </ng-container>
+
+    <!-- <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      <button mat-stroked-button>Basic</button>
+      <button mat-flat-button>Basic</button>
+
+      <mat-cell *matCellDef="let row">
+        <button mat-stroked-button>Basic</button>
+        <button mat-flat-button>Basic</button>
+      </mat-cell>
+
+    </ng-container> -->
+
+    <ng-container matColumnDef="id" style="width: 100%;">
+      <th mat-header-cell *matHeaderCellDef>Duyệt</th>
+      <!-- <th mat-cell *matCellDef="let row">
+        <button >Basic</button>
+        <button mat-flat-button>Basic</button>
+      </th> -->
+      <mat-cell *matCellDef="let row">
+        <button mat-fab color="warn" aria-label="Edit Row">
+          <mat-icon>done_outline</mat-icon>
+        </button>
+        <button mat-fab color="success" aria-label="Edit Row">
+          <mat-icon>close</mat-icon>
+        </button>
+    </mat-cell>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedSchedule"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedSchedule;"></tr>
+  </table>
+</div>

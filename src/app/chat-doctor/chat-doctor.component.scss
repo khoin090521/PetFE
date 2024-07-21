@@ -74,16 +74,17 @@ a{
   .chat_window {
     position: absolute;
     width: calc(100% - 20px);
-    max-width: 600px;
+    // max-width: 600px;
     height: 510px;
     border-radius: 20px;
     background-color: #fff;
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-    background-color: #f8f8f8;
-    overflow: hidden;
+    // box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    // background-color: #f8f8f8;
+    // overflow: hidden;
+    // margin-left: 30%;
   }
   
   .top_menu {
@@ -292,7 +293,8 @@ a{
 
   .chat_window {
     margin-top: 5%;
-    width: 500px;
+    margin-left: 15%;
+    width: 70%;
   }
 
   .user-chat{
@@ -300,8 +302,10 @@ a{
     flex-direction: column;
     width: 30%;
     background-color: #f8f8f8;
-    overflow-y: scroll; 
-    height:75%;
+
+    overflow-y: auto;
+    height: 550px;
+
   }
 
   h2{

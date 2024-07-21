@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ChatDoctorComponent } from './chat-doctor/chat-doctor.component';
 import { ChatComponent } from './component/chat/chat.component';
+import { CreateDoctorComponent } from './create-doctor/create-doctor.component';
 import { CustomerBookingComponent } from './customer-booking/customer-booking.component';
 import { DetailPetComponent } from './detail-pet/detail-pet.component';
 import { HomeCustomerComponent } from './home-customer/home-customer.component';
@@ -14,7 +15,8 @@ const routes: Routes = [
   { path: 'detail-pet',  component: DetailPetComponent},
   { path: 'customer-booking',  component: CustomerBookingComponent},
   { path: 'chat-doctor/:userId',  component: ChatDoctorComponent},
-  { path: 'chat-doctor/:userId',  component: ChatComponent}
+  { path: 'chat-doctor/:userId',  component: ChatComponent},
+  { path: 'create-doctor',  component: CreateDoctorComponent}
 ];
 
 @NgModule({
