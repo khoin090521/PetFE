@@ -1,47 +1,134 @@
 <mat-toolbar style="display: flex;">
-
     <a class="home-router" routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page" >
         <img
         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHzk11ew70ojpgPNU6wYKRY_o1DI_JRVkz3g-VIZpf35P8RB6itrtnEHWfAgDssDVBbZI&usqp=CAU" alt="">
     </a>
 
-    <div class="search-container">
-        <input class="search-input" type="text" placeholder="Tìm kiếm...">
+    <div class="search-container" *ngIf="username">
+        <input class="search-input" type="text" placeholder="Tìm kiếm..." [(ngModel)]="searchName" [ngModelOptions]="{standalone: true}">
         <mat-icon class="search-icon">search</mat-icon>
     </div>
-
+    
     <div class="right-container">
-        <button mat-fab class="mat-fab" (click)="openLoginForm(loginForm)">
+        <button mat-fab class="mat-fab" (click)="openLoginForm(loginForm, logoutForm)">
             <mat-icon class="account-icon">account_circle</mat-icon>
         </button>
-        
-        <!-- <button type="button" class="btn btn-danger" (click)="openLoginForm(loginForm)">Đăng nhập</button> -->
-        <!-- <button type="button" class="btn btn-danger" (click)="openLoginForm(loginForm)">Đăng nhập</button> -->
-        
-        <!-- <button mat-fab class="mat-fab">
-            <mat-icon class="cart-icon">shopping_cart</mat-icon>
-        </button> -->
+        <!-- <button mat-raised-button (click)="redirectToBooking()">Đặt lịch</button> -->
+        <button mat-fab class="mat-fab" (click)="redirectToBooking()">
+          <mat-icon class="account-icon">calendar_today</mat-icon>
+      </button>
     </div>
-
 </mat-toolbar>
 
+<ng-template #logoutForm>
+  <form *ngIf="openProfile == false">
+    <div class="modal-header">
+      <b><h1 class="modal-title pull-left">Chào {{username}}</h1></b>
+    </div>
+  
+    <div class="modal-body">
+      <div class="btn-option">
+        <button mat-raised-button (click)="openMyProfile()">Hồ sơ cá nhân</button>
+        <button mat-raised-button (click)="openChangePassword()">Đổi mật khẩu</button>
+        <button mat-raised-button (click)="onLogout()">Đăng xuất</button>
+      </div>
+    </div>
+  </form>
+
+  <form *ngIf="openChange == true">
+    <div class="modal-header">
+      <b><h1 class="modal-title pull-left">Đổi mật khẩu</h1></b>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" id="old-password" placeholder="Mật khẩu cũ" [(ngModel)] = "oldPassword" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" id="new-password" placeholder="Mật khẩu mới" [(ngModel)] = "newPassword" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" id="retype-password" placeholder="Nhập lại mật khẩu mới" [(ngModel)] = "retypePassword" [ngModelOptions]="{standalone: true}">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="operate-btn">
+        <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+        <button type="button" class="btn btn-primary mt-3" (click)="updatePassword()">Thay đổi</button>
+      </div>
+    </div>
+  </form>
+
+  <form *ngIf="openFormProfile == true" ngNativeValidate>
+    <div class="modal-header">
+      <b><h1 class="modal-title pull-left">Hồ sơ cá nhân</h1></b>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" id="name" placeholder="Họ và tên" [(ngModel)] = "nameInfor" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input type="email" [disabled]="true" autocomplete="off" required class="form-control mt-1" id="gmail" placeholder="Gmail" [(ngModel)] = "gmailInfor" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" id="phone-number" placeholder="Số điện thoại" [(ngModel)] = "address" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" id="addrres" placeholder="Địa chỉ" [(ngModel)] = "phoneInfor" [ngModelOptions]="{standalone: true}">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="operate-btn">
+        <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+        <button type="submit" class="btn btn-primary mt-3" (click)="updateProfile()">Thay đổi</button>
+      </div>
+    </div>
+  </form>
+
+</ng-template>
+
+
+<!-- <ng-template #myProfile>
+  <form *ngIf="registerStatus == false" [formGroup]="formLogin" (ngSubmit)="onLogin()" ngNativeValidate>
+    <div class="modal-header">
+      <b><h1 class="modal-title pull-left">Hồ sơ cá nhân</h1></b>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" id="name" placeholder="Họ và tên" formControlName="gmail">
+      </div>
+      <div class="form-group">
+        <input type="email" autocomplete="off" required class="form-control mt-1" id="gmail" placeholder="Gmail" formControlName="gmail">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" id="phone-number" placeholder="Số điện thoại" formControlName="phone-number">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" id="addrres" placeholder="Địa chỉ" formControlName="addrres">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="operate-btn">
+        <button type="submit" class="btn btn-primary mt-3">Xác nhận</button>
+      </div>
+    </div>
+  </form>
+</ng-template> -->
 
 <ng-template #loginForm>
-    <form *ngIf="registerStatus == false" ngNativeValidate>
+    <form *ngIf="registerStatus == false" [formGroup]="formLogin" (ngSubmit)="onLogin()" ngNativeValidate>
       <div class="modal-header">
         <b><h1 class="modal-title pull-left">Đăng nhập</h1></b>
-        <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button>
       </div>
       <div class="modal-body">
         <div class="form-group">
           <label for="username">Tên tài khoản</label>
-          <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Tên tài khoản"
-            >
+          <input [disabled]="true" autocomplete="off" required class="form-control mt-1" id="gmail" placeholder="Tên tài khoản"
+          formControlName="gmail">
         </div>
         <div class="form-group mt-3">
           <label for="password">Mật khẩu</label>
           <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
-            placeholder="Mật khẩu">
+            placeholder="Mật khẩu" formControlName="password">
         </div>
       </div>
       <div class="modal-footer">
@@ -56,27 +143,34 @@
     <form *ngIf="registerStatus" ngNativeValidate>
       <div class="modal-header">
         <b><h1 class="modal-title pull-left">Đăng ký</h1></b>
-        <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <!-- <label for="username">Họ và tên</label> -->
-          <input autocomplete="off" required class="form-control mt-1" id="name" placeholder="Họ và tên">
-          <!-- <label for="username">Email</label> -->
-          <input type="email" autocomplete="off" required class="form-control mt-1" id="email" placeholder="Email">
-          <!-- <label for="username">Số điện thoại</label> -->
-          <input autocomplete="off" required class="form-control mt-1" id="phone" placeholder="Số điện thoại">
-          <!-- <label for="username">Địa chỉ</label> -->
-          <input autocomplete="off" required class="form-control mt-1" id="addres" placeholder="Địa chỉ">
-          <!-- <label for="username">Mật khẩu</label> -->
-          <input type="password" autocomplete="off" required class="form-control mt-1" id="password" placeholder="Mật khẩu">
-          <!-- <label for="username">Nhập lại mật khẩu</label> -->
-          <input type="password" autocomplete="off" required class="form-control mt-1" id="re-password" placeholder="Nhập lại mật khẩu">
+          <input type="email" autocomplete="off" required class="form-control mt-1" id="email" placeholder="Email" [(ngModel)]="gmailRegister" [ngModelOptions]="{standalone: true}">
+          <input autocomplete="off" required class="form-control mt-1" id="name" placeholder="Họ và tên" [(ngModel)]="fullnameRegister" [ngModelOptions]="{standalone: true}">
+          <input type="password" autocomplete="off" required class="form-control mt-1" id="password" placeholder="Mật khẩu" [(ngModel)]="passwordRegister" [ngModelOptions]="{standalone: true}">
+          <input autocomplete="off" required class="form-control mt-1" id="addres" placeholder="Địa chỉ" [(ngModel)]="addressRegister" [ngModelOptions]="{standalone: true}">
+          <input autocomplete="off" required class="form-control mt-1" id="phone" placeholder="Số điện thoại" [(ngModel)]="phoneRegister" [ngModelOptions]="{standalone: true}">
         </div>
       </div>
       <div class="modal-footer">
         <div class="operate-btn">
-          <button type="button" class="btn btn-warning mt-3" (click)="openRegisterForm()">Đăng ký</button>
+          <button type="button" class="btn btn-warning mt-3" (click)="registerAccount()">Đăng ký</button>
+        </div>
+      </div>
+      <div class="modal-header">
+        <!-- <b><h1 class="modal-title pull-left">Nhập mã xác thực</h1></b> -->
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <input type="email" autocomplete="off" required class="form-control mt-1" id="email" placeholder="Nhập mã xác thực">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="operate-btn">
+          <button type="button" class="btn btn-warning mt-3">Xác thực</button>
         </div>
       </div>
     </form>
@@ -84,20 +178,20 @@
     <form *ngIf="forgotPasswordStatus" ngNativeValidate>
       <div class="modal-header">
         <b><h1 class="modal-title pull-left">Tìm tài khoản của bạn</h1></b>
-        <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
       </div>
       <div class="modal-body">
         <h4>Vui lòng Nhập gmail hoặc số điện thoại để tìm kiếm tài khoản của bạn.</h4>
         <div class="form-group">
           <label for="username">Email</label>
-          <input autocomplete="off" required class="form-control mt-1" id="email" placeholder="Email"
+          <input autocomplete="off" required class="form-control mt-1" id="email" placeholder="Email" [(ngModel)]="gmail" [ngModelOptions]="{standalone: true}"
             >
         </div>
       </div>
       <div class="modal-footer">
         <div class="operate-btn">
-          <button type="button" class="btn btn-danger mt-3">Huỷ</button>
-          <button type="button" class="btn btn-primary mt-3">Tìm kiếm</button>
+          <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+          <button type="button" class="btn btn-primary mt-3" (click)="sendSMS()">Tìm kiếm</button>
         </div>
       </div>
     </form>

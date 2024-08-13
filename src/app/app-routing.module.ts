@@ -8,17 +8,57 @@ import { CustomerBookingComponent } from './customer-booking/customer-booking.co
 import { DetailPetComponent } from './detail-pet/detail-pet.component';
 import { HomeCustomerComponent } from './home-customer/home-customer.component';
 import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './auth/auth.guard';
+import { RoleGuard } from './auth/role.guard';
+import { UserRole } from './_services/auth.service';
 
 const routes: Routes = [
   { path: '',  component: HomeComponent},
-  { path: 'home',  component: HomeComponent},
-  { path: 'home-customer',  component: HomeCustomerComponent},
-  { path: 'detail-pet',  component: DetailPetComponent},
-  { path: 'customer-booking',  component: CustomerBookingComponent},
-  { path: 'chat-doctor/:userId',  component: ChatDoctorComponent},
-  { path: 'chat-doctor/:userId',  component: ChatComponent},
-  { path: 'create-doctor',  component: CreateDoctorComponent},
-  { path: 'admin-manager',  component: AdminManagerComponent}
+  { 
+    path: 'home',  component: HomeComponent,
+  },
+  { 
+    path: 'home-customer',  component: HomeCustomerComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { 
+      role: UserRole.ROLE_USER,
+    },
+  },
+  {
+    path: 'detail-pet',  component: DetailPetComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { 
+      role: UserRole.ROLE_DOCTOR,
+    },
+  },
+  {
+    path: 'customer-booking',  component: CustomerBookingComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { 
+      role: UserRole.ROLE_USER,
+    },
+  },
+  { 
+    path: 'chat-doctor/:userId',  component: ChatDoctorComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { 
+      role: UserRole.ROLE_DOCTOR,
+    },
+  },
+  { 
+    path: 'create-doctor',  component: CreateDoctorComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { 
+      role: UserRole.ROLE_HOST,
+    },
+  },
+  { 
+    path: 'admin-manager',  component: AdminManagerComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { 
+      role: UserRole.ROLE_ADMIN,
+    },
+  }
 ];
 
 @NgModule({

@@ -36,7 +36,7 @@ export class AppService {
                 }
             },
             <CalendarSchedulerEvent>{
-                id: '12',
+                id: '2',
                 start: subHours(addDays(startOfHour(new Date()), 1), 1),
                 end: subHours(addDays(addHours(startOfHour(new Date()), 1), 1), 1),
                 title: 'Event 12',
@@ -65,34 +65,10 @@ export class AppService {
                 isDisabled: false
             },
             <CalendarSchedulerEvent>{
-                id: '22',
-                start: subHours(addDays(startOfHour(new Date()), 2), 1),
-                end: subHours(addDays(addHours(startOfHour(new Date()), 1), 2), 1),
-                title: 'Event 22',
-                content: 'LESS IMPORTANT EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'warning' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false
-            },
-            <CalendarSchedulerEvent>{
                 id: '3',
                 start: addDays(startOfHour(new Date()), 3),
                 end: addDays(addHours(startOfHour(new Date()), 3), 3),
                 title: 'Event 3',
-                content: 'NOT IMPORTANT EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'ok' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false
-            },
-            <CalendarSchedulerEvent>{
-                id: '32',
-                start: subHours(addDays(startOfHour(new Date()), 3), 1),
-                end: subHours(addDays(addHours(startOfHour(new Date()), 1), 3), 1),
-                title: 'Event 32',
                 content: 'NOT IMPORTANT EVENT',
                 color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
                 actions: actions,
@@ -124,46 +100,11 @@ export class AppService {
                 isClickable: true,
                 isDisabled: false
             },
-            <CalendarSchedulerEvent>{
-                id: '51',
-                start: addDays(startOfHour(setHours(new Date(), 6)), 2),
-                end: addHours(addDays(startOfHour(setHours(new Date(), 6)), 2), 1),
-                title: 'Event 51',
-                content: 'EARLY EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'ok' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false
-            },
-            <CalendarSchedulerEvent>{
-                id: '52',
-                start: addHours(addDays(startOfHour(setHours(new Date(), 6)), 2), 1),
-                end: addHours(addDays(startOfHour(setHours(new Date(), 6)), 2), 2),
-                title: 'Event 52',
-                content: 'EARLY EVENT WITH LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG DESCRIPTION',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'ok' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false
-            },
-            <CalendarSchedulerEvent>{
-                id: '53',
-                start: addHours(addDays(startOfHour(setHours(new Date(), 6)), 2), 2),
-                end: addMinutes(addHours(addDays(startOfHour(setHours(new Date(), 6)), 2), 2), 30),
-                title: 'Event 53',
-                content: 'EARLY EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'ok' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false
-            },
+            
             <CalendarSchedulerEvent>{
                 id: '6',
-                start: startOfHour(setHours(new Date(), 22)),
-                end: addHours(startOfHour(setHours(new Date(), 22)), 10),
+                start: addHours(addDays(startOfHour(setHours(new Date(), 6)), 2), 2),
+                end: addMinutes(addHours(addDays(startOfHour(setHours(new Date(), 6)), 2), 2), 30),
                 title: 'Event 6',
                 content: 'TWO DAYS EVENT',
                 color: { primary: '#E0E0E0', secondary: '#EEEEEE' },

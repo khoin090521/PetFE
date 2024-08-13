@@ -33,13 +33,34 @@ export class DetailPetComponent {
   statusTab: boolean = true;
   profiltTabStatus: number = 1;
 
+  profileBtn: string = "profile-btn";
+  erecordBtn: string = "erecord-btn";
+
+  transistionStatus: number = 1;
+
 
   openProfile(){
+    this.profiltTabStatus = 1;
     this.statusTab = true;
+    if(this.transistionStatus == 1){
+      this.profileBtn = "profile-btn";
+      this.erecordBtn = "erecord-btn";
+    }else if(this.transistionStatus == 0){
+      this.erecordBtn = "profile-btn";
+      this.profileBtn = "erecord-btn";
+    }
   }
 
   openERecord(){
+    this.profiltTabStatus = 0;
     this.statusTab = false;
+    if(this.transistionStatus == 0){
+      this.erecordBtn = "erecord-btn";
+      this.profileBtn = "profile-btn";
+    }else if(this.transistionStatus == 1){
+      this.erecordBtn = "profile-btn";
+      this.profileBtn = "erecord-btn";
+    }
   }
 
   openBasicDetail(){

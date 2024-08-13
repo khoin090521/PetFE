@@ -2,13 +2,9 @@
 <router-outlet></router-outlet>
 
 
-<div class="container">
+<div class="container" *ngIf="!searchResults">
     <div class="item">
         <div class="avatar">
-            <!-- <button mat-fab class="insert" (click)="insertRecord(loginForm)">
-                <mat-icon>add</mat-icon>
-            </button> -->
-
                 <div class="text-center">
                   <button type="button" mat-fab class="insert" data-toggle="modal" data-target="#myModal2"><mat-icon>add</mat-icon></button>
                 </div>
@@ -27,7 +23,7 @@
                                         <label class="file-upload">
                                             <div *ngIf="!myImage">
                                                 <img src="https://i.pinimg.com/474x/d7/70/33/d7703333ad8ba85827b60fccf42f9c25.jpg" alt="">
-                                                <input type="file" (change)="onChange($event)"/>
+                                                <input type="file" (change)="onChange($event)" [(ngModel)]="transfer_contract" [ngModelOptions]="{standalone: true}">
                                             </div>
                                             <div *ngIf="myImage">
                                                 <img [src]="myImage" alt="">
@@ -39,32 +35,22 @@
                             </div>
                             <div class="right-col">
                                 <div class="form-group">
-                                    <!-- <label for="username"></label> -->
-                                    <input autocomplete="off" required class="form-control mt-1" placeholder="Tên">
+                                    <input autocomplete="off" required class="form-control mt-1" placeholder="Tên" [(ngModel)] = "name" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Loài">
+                                    <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Loài" [(ngModel)] = "species" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Giống">
+                                    <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Giới tính" [(ngModel)] = "gender" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Giới tính">
+                                    <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Ngày sinh" [(ngModel)] = "age" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Ngày sinh">
+                                    <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Đặc điểm nhận dạng" [(ngModel)] = "identifying" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Màu sắc">
-                                </div>
-                                <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Đặc điểm nhận dạng">
+                                    <input autocomplete="off" required type="file" class="form-control mt-1" [(ngModel)] = "origin_certificate" [ngModelOptions]="{standalone: true}">
                                 </div>
                             </div>
                             <button mat-fab class="mat-fab" *ngIf="rightPopupIndex===1" (click)="nextRecord()">
@@ -74,7 +60,7 @@
                         <div class="modal-body" *ngIf="rightPopupIndex===2">
                             <div class="form-group">
                                 <form>
-                                    <textarea class="form-control" id="" rows="20" cols="50"></textarea>
+                                    <textarea class="form-control" id="" rows="20" cols="50" [(ngModel)]="descriptionHealthHistory" [ngModelOptions]="{standalone: true}"></textarea>
                                 </form>
                             </div>
                             <button mat-fab class="mat-fab" *ngIf="rightPopupIndex===2" (click)="nextRecord()">
@@ -84,19 +70,21 @@
                         <div class="modal-body" *ngIf="rightPopupIndex===3">
                             <div class="form-group">
                                 <form>
-                                    <textarea class="form-control" id="" rows="20" cols="50"></textarea>
+                                    <div class="form-group">
+                                        <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)] = "vaccine" [ngModelOptions]="{standalone: true}">
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" id="" rows="10" cols="50" [(ngModel)]="descriptionVacineHistory" [ngModelOptions]="{standalone: true}"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <input autocomplete="off" required type="date" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)] = "injection_date" [ngModelOptions]="{standalone: true}">
+                                    </div>
                                 </form>
                             </div>
-                            <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3">
+                            <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3" (click)="addPet()">
                                 Lưu
                             </button>
                         </div>
-                        <!-- <button mat-fab class="mat-fab" *ngIf="rightPopupIndex===1 || rightPopupIndex===2" (click)="nextRecord()">
-                            <mat-icon class="arrow-forward">arrow_forward</mat-icon>
-                        </button> -->
-                        <!-- <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3">
-                            Lưu
-                        </button> -->
                     </div>
                 </div>
             </div>
@@ -113,23 +101,35 @@
             <img src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg">
         </div>
         <div class="nick-name">
-            <!-- <h2>Husky</h2> -->
             <button mat-fab extended>Husky</button>
         </div>
     </div>
     <div class="item">
         <div class="avatar">
-            <button mat-mini-fab class="cancel">
+            <!-- <button mat-mini-fab class="cancel">
                 <mat-icon>clear</mat-icon>
-            </button>
+            </button> -->
             <img src="https://i.pinimg.com/originals/c4/7c/3c/c47c3cec76bdafa04cbe9a2f62f742c3.jpg">
         </div>
         <div class="nick-name">
-            <!-- <h2>Chiba</h2> -->
             <button mat-fab extended>Husky</button>
         </div>
     </div>
+</div>
 
+<div class="container" *ngIf="searchResults">
+    <div *ngFor="let i of searchResults" class="item">
+        <div class="avatar">
+            <button mat-mini-fab class="cancel">
+                <mat-icon>clear</mat-icon>
+            </button>
+            <img src="https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg">
+        </div>
+        <div class="nick-name">
+            <!-- <h2>Husky</h2> -->
+            <button mat-fab extended>{{i.full_name}}</button>
+        </div>
+    </div>
 </div>
 
     <!-- <div class="container demo">

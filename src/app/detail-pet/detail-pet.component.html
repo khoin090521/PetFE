@@ -5,13 +5,14 @@
     <div class="infor-detail">
         <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
         <h3 class="name-detail">Husky</h3>
-        <div class="option-detail">
-            <button class="profile-btn" mat-fab extended (click)="openProfile()">Hồ sơ</button>
-            <button class="erecord-btn" mat-fab extended (click)="openERecord()">Bệnh án điện tử</button>
-        </div>
+        <!-- <div class="option-detail"> -->
+            <!-- <button class="profile-btn" mat-fab extended (click)="openProfile()">Hồ sơ</button>
+            <button class="erecord-btn" mat-fab extended (click)="openERecord()">Bệnh án điện tử</button> -->
+        <!-- </div> -->
+        <button [ngClass]="profileBtn" mat-fab extended (click)="openProfile()">Hồ sơ</button>
+        <button [ngClass]="erecordBtn" mat-fab extended (click)="openERecord()">Bệnh án điện tử</button>
     </div>
 </div>
-
 
 <div class="profile-tab" *ngIf="statusTab">
     <div class="profile-tab-container">

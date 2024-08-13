@@ -7,7 +7,8 @@
             <mat-icon>supervisor_account</mat-icon>
         </button>
         <button mat-fab class="mat-fab" (click)="openMedicine()">
-            <mat-icon>add</mat-icon>
+            <!-- <mat-icon>add</mat-icon> -->
+            <img style="width: 50px;height:50px;" src="https://static-00.iconduck.com/assets.00/medical-symbol-icon-2048x2048-t5g00ol5.png" alt="">
         </button>
         <button mat-fab class="mat-fab" (click)="openCreateMeeting(createMeeting)">
             <mat-icon>camera_enhance</mat-icon>
@@ -19,27 +20,31 @@
     <form ngNativeValidate>
       <div class="modal-header">
         <b><h1 class="modal-title pull-left">Tạo bác sĩ</h1></b>
-        <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
       </div>
       <div class="modal-body">
         <div class="form-group">
           <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Họ và tên">
         </div>
         <div class="form-group mt-3">
-          <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
+          <input autocomplete="off" required type="password" class="form-control mt-1"
             placeholder="Email">
         </div>
         <div class="form-group mt-3">
-            <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
+            <input autocomplete="off" required type="password" class="form-control mt-1"
               placeholder="Số điện thoại">
           </div>
           <div class="form-group mt-3">
-            <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
+            <input autocomplete="off" required type="password" class="form-control mt-1"
               placeholder="Địa chỉ">
           </div>
           <div class="form-group mt-3">
-            <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
+            <input autocomplete="off" required type="password" class="form-control mt-1"
               placeholder="Mật khẩu">
+          </div>
+          <div class="form-group mt-3">
+            <input autocomplete="off" required type="password" class="form-control mt-1"
+              placeholder="Link meet">
           </div>
       </div>
       <div class="modal-footer">
@@ -56,7 +61,7 @@
     <form ngNativeValidate>
       <div class="modal-header">
         <b><h1 class="modal-title pull-left">Tạo meeting cho bác sĩ</h1></b>
-        <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
       </div>
       <div class="modal-body">
         <div class="form-group">

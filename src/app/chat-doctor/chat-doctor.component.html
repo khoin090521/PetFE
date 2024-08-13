@@ -5,10 +5,10 @@
     <div class="infor-detail">
         <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
         <h3 class="name-detail">Bác sĩ 1</h3>
-        <div class="option-detail">
-            <button class="profile-btn" mat-fab extended>Hồ sơ</button>
-            <button class="erecord-btn" mat-fab extended>Bệnh án điện tử</button>
-        </div>
+        <!-- <div class="option-detail"> -->
+          <button [ngClass]="profileBtn" mat-fab extended (click)="openProfile()">Hồ sơ</button>
+          <button [ngClass]="erecordBtn" mat-fab extended (click)="openERecord()">Bệnh án điện tử</button>
+        <!-- </div> -->
     </div>
 </div>
 
@@ -83,7 +83,6 @@
   <div class="chat_window">
     <div class="top_menu">
       <div class="title">
-        <!-- <img src="../../../assets/whatsapp-icon.png" width="25px" height="25px"> -->
         WhatsApp
       </div>
     </div>
@@ -108,26 +107,36 @@
 </div>
   
 <div class="add-record-screen" *ngIf="openAddRecord">
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <div class="container" *ngIf="searchResults">
+    <div *ngFor="let i of searchResults" class="item">
+        <div class="avatar">
+            <img src="https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg">
+        </div>
+        <div class="nick-name">
+            <!-- <h2>Husky</h2> -->
+            <button mat-fab extended>{{i.full_name}}</button>
+        </div>
+    </div>
+  </div>
+
+  <!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <ng-container matColumnDef="position">
       <th mat-header-cell *matHeaderCellDef> No. </th>
       <td mat-cell *matCellDef="let element"> {{element.position}} </td>
     </ng-container>
   
-    <!-- Name Column -->
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef> Ngày </th>
       <td mat-cell *matCellDef="let element"> {{element.date}} </td>
     </ng-container>
   
-    <!-- Weight Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Tên bác sĩ </th>
       <td mat-cell *matCellDef="let element"> {{element.name}} </td>
     </ng-container>
   
-    <!-- Symbol Column -->
     <ng-container matColumnDef="diagnostic">
       <th mat-header-cell *matHeaderCellDef> Chẩn đoán sơ bộ </th>
       <td mat-cell *matCellDef="let element"> {{element.diagnostic}} </td>
@@ -140,7 +149,7 @@
   
     <tr mat-header-row *matHeaderRowDef="displayedDiagnostic"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedDiagnostic;"></tr>
-  </table>
+  </table> -->
 
 </div>
 

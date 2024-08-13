@@ -297,10 +297,8 @@ a{
     flex-direction: column;
     width: 30%;
     background-color: #f8f8f8;
-
     overflow-y: auto;
     height: 550px;
-
   }
 
   h2{
@@ -319,3 +317,71 @@ a{
     color: #a3d063;
     background-color: #fff;
   }
+
+  @media (max-width: 715px) {
+    .profile-tab-container{
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        gap: 10px;
+    }
+  
+    .profile-tab{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        background-color: #e0dcdc;
+        gap: 50px;
+        height: 200px;
+        margin: auto;
+    }
+  
+    .user-chat{
+      display: flex;
+      flex-direction: column;
+      width: 30%;
+      background-color: #f8f8f8;
+      overflow-y: auto;
+      height: 420px;
+    }
+
+    .chat_window{
+      margin-top: 200px;
+    }
+  }
+
+.container{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1em; /* Adjust the gap between items as needed */
+    padding: 1em;
+    width: 100%;
+    // background: red;
+}
+
+.avatar {
+  background: #a8a4a4; /* Background color for the frame */
+  padding: 1em;
+  border: 1px solid #ccc; /* Border around the frame */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: add a subtle shadow for depth */
+  text-align: center; /* Center-align the text */
+}
+
+.item{
+  background: white;
+  border-radius: 8px;
+}
+
+.nick-name{
+  text-align: center;
+}
+
+.item img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 100px; /* Optional: rounded corners for the image */
+}
+.item h2 {
+  margin: 0.5em 0 0; /* Space between image and text */
+}

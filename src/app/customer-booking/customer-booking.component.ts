@@ -32,7 +32,23 @@ import {
 } from 'date-fns';
 import { AppService } from '../service/app.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { Observable, catchError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BASE_URL } from '../_common/constants/api';
+import { ToastrService } from 'ngx-toastr';
 
+
+interface SearchResult {
+    id: number,
+    name: string,
+    quantity: number,
+    price: 12000,
+    type: string,
+    trademark: string,
+    descrition: string,
+    clinicId: number,
+    medicine_image: []
+}
 
 @Component({
   selector: 'app-customer-booking',
@@ -74,6 +90,10 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
     prevBtnDisabled: boolean = false;
     nextBtnDisabled: boolean = false;
     calendar: boolean = true;
+    medicineDescription?: string;
+
+    searchResults?: SearchResult[] | null;
+    listMedicine?: any;
 
     actions: CalendarSchedulerEventAction[] = [
         {
@@ -107,6 +127,8 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
         private appService: AppService, 
         private dateAdapter: DateAdapter, 
         private modalService: BsModalService,
+        private http: HttpClient,
+        private toastService: ToastrService,
         private zone: NgZone) {
 
         this.locale = locale;
@@ -125,6 +147,21 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
 
     ngOnInit(): void {
         this.appService.getEvents(this.actions).then((events: CalendarSchedulerEvent[]) => this.events = events);
+        this.getMedicalByClinic();
+    }
+
+    async getMedicalByClinic() {
+        this.http.get<any>(`${BASE_URL}/medicine/list?clinic-id=1`).subscribe(
+            (res) => {
+                this.listMedicine = res.data;
+            },
+            (err) => {}
+        );
+    }
+
+    viewDetail(descrition: string,template: TemplateRef<any>){
+        this.medicineDescription = descrition;
+        this.modalRef = this.modalService.show(template);
     }
 
     ngAfterViewChecked() {
