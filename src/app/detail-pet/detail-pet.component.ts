@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
 import { BASE_URL } from '../_common/constants/api';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 
 export interface PeriodicElement {
@@ -60,6 +61,27 @@ export class DetailPetComponent implements OnInit{
   recordPetList: any;
   descriptionHealth: any;
   healthHistory?: HealthHistory;
+  modalRef?: BsModalRef;
+
+
+  medications: any;
+  nutrition: any;
+  examination_date: any;
+  symptom_description: any;
+  symptoms_time: any;
+  body_temperature: any;
+  test_results: any;
+  re_examination: any;
+
+  vaccine: any;
+  descriptionVacineHistory: any;
+  injection_date: any;
+  urlVaccineImage: any;
+
+  listVacinationHistory: any;
+
+
+
 
   async ngAfterViewInit() {
     const routerUrl = window.location.href
@@ -87,14 +109,27 @@ export class DetailPetComponent implements OnInit{
 
   constructor(
     private http: HttpClient,
+    private modalService: BsModalService,
+    private fireStorage:AngularFireStorage
   ){
   }
 
   ngOnInit(): void {    
     setTimeout(() => {
+      this.getVacinationHistory();
       this.getHeathPet();
       this.getRecordPet();
     }, 1000)
+  }
+
+
+  getVacinationHistory(){
+    this.http.get<any>(`${BASE_URL}/vacinationHistory/list?pet-id=${this.petId}`).subscribe(
+      (res) => {
+        this.listVacinationHistory = res.data;
+      },
+      (err) => {}
+    );
   }
 
 
@@ -166,6 +201,33 @@ export class DetailPetComponent implements OnInit{
 
   openInjectionhHistory(){
     this.profiltTabStatus = 3;
+  }
+
+  viewDetail(i: any, template: TemplateRef<any>){
+
+    this.medications = i.medications;
+    this.nutrition = i.nutrition;
+    this.examination_date = i.examination_date;
+    this.symptom_description = i.symptom_description;
+    this.symptoms_time = i.symptoms_time;
+    this.body_temperature = i.body_temperature;
+    this.test_results = i.test_results;
+    this.re_examination = i.re_examination;
+
+    this.modalRef = this.modalService.show(template);
+  }
+
+  async onFileChangeVaccine(event:any){
+    const file = event.target.files[0]
+    if(file){
+      const path = `yt/${file.name}`
+      const uploadTask =await this.fireStorage.upload(path,file)
+      this.urlVaccineImage = await uploadTask.ref.getDownloadURL();
+    }
+  }
+
+  closeDialog(){
+    this.modalRef?.hide();
   }
 
 }
