@@ -39,7 +39,14 @@ import { ChatComponent } from './component/chat/chat.component';
 import { CreateDoctorComponent } from './create-doctor/create-doctor.component';
 import { MatSelectModule } from '@angular/material/select';
 import { AdminManagerComponent } from './admin-manager/admin-manager.component';
+import { Md5 } from 'ts-md5';
 
+import { MatListModule } from '@angular/material/list';
+
+
+import {AngularFireModule} from "@angular/fire/compat";
+import {AngularFireStorageModule} from "@angular/fire/compat/storage";
+import { environment } from 'src/environments/environments'; 
 
 @NgModule({
   declarations: [
@@ -67,6 +74,7 @@ import { AdminManagerComponent } from './admin-manager/admin-manager.component';
     HttpClientModule,
     MatIconModule,
     MatFormFieldModule,
+    MatListModule,
     MatSelectModule,
     ModalModule.forRoot(),
     CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory,}),
@@ -76,8 +84,11 @@ import { AdminManagerComponent } from './admin-manager/admin-manager.component';
       positionClass: 'toast-bottom-left',
       preventDuplicates: false,
     }),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireStorageModule
   ],
   providers: [
+    Md5,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     AuthGuard,
     RoleGuard,

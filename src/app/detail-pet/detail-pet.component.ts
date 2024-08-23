@@ -1,11 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
+import { BASE_URL } from '../_common/constants/api';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+
+
 
 export interface PeriodicElement {
   doctor: string;
   date: any;
   diagnose: string;
   detail: string;
+}
+
+class HealthHistory{
+  constructor(
+    public pet_id: number,
+    public description: string,
+  ) {}
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
@@ -26,7 +37,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './detail-pet.component.html',
   styleUrls: ['./detail-pet.component.scss'],
 })
-export class DetailPetComponent {
+export class DetailPetComponent implements OnInit{
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource123: any = ELEMENT_DATA;
 
@@ -37,6 +48,88 @@ export class DetailPetComponent {
   erecordBtn: string = "erecord-btn";
 
   transistionStatus: number = 1;
+
+  petId: number = 0;
+  petName: string = "";
+  petAge: string = "";
+  petGender: string = "";
+  petSpecies: string = "";
+  petIdentifying: string = "";
+  imagePet: string = "";
+  healthPetList: any;
+  recordPetList: any;
+  descriptionHealth: any;
+  healthHistory?: HealthHistory;
+
+  async ngAfterViewInit() {
+    const routerUrl = window.location.href
+    console.log("routerUrl",routerUrl);
+    const urlObj = new URL(routerUrl);
+
+    this.petId = Number(urlObj.searchParams.get('petId') || '');
+    const name = urlObj.searchParams.get('name') || '';
+    const age = urlObj.searchParams.get('age') || ''; 
+    const gender = urlObj.searchParams.get('gender') || '';
+    const species = urlObj.searchParams.get('species') || '';
+    const identifying = urlObj.searchParams.get('identifying') || '';
+    const image = urlObj.searchParams.get('image') || '';
+    console.log("this.petId",this.petId);
+
+    setTimeout(() => {
+        this.petName = decodeURIComponent(name);
+        this.petAge = decodeURIComponent(age);
+        this.petGender = decodeURIComponent(gender);
+        this.petSpecies = decodeURIComponent(species);
+        this.petIdentifying = decodeURIComponent(identifying);
+        this.imagePet = image;
+      }, 500)
+  }
+
+  constructor(
+    private http: HttpClient,
+  ){
+  }
+
+  ngOnInit(): void {    
+    setTimeout(() => {
+      this.getHeathPet();
+      this.getRecordPet();
+    }, 1000)
+  }
+
+
+  getHeathPet(){
+    this.http.get<any>(`${BASE_URL}/healthHistory/list?pet-id=${this.petId}`).subscribe(
+      (res) => {
+        this.healthPetList = res.data;
+      },
+      (err) => {}
+    );
+  }
+
+  getRecordPet(){
+    this.http.get<any>(`${BASE_URL}/petRecord/list?pet-id=${this.petId}`).subscribe(
+      (res) => {
+        this.recordPetList = res.data;
+      },
+      (err) => {}
+    );
+  }
+
+  addHealthHistory(){
+    this.healthHistory = new HealthHistory(this.petId, this.descriptionHealth);
+    console.log("123",this.healthHistory);
+    this.http.post<any>(`${BASE_URL}/healthHistory/add`,this.healthHistory).subscribe(
+      (res) => {
+        console.log("res",JSON.stringify(res));
+        this.getHeathPet();
+        this.descriptionHealth = "";
+      },
+      (err) => {
+        
+      }
+    );
+  }
 
 
   openProfile(){

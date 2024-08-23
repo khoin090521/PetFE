@@ -13,84 +13,67 @@
 </div>
 
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  
-    <!-- Position Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Họ và tên </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-  
-    <!-- Name Column -->
-    <ng-container matColumnDef="gmail">
-      <th mat-header-cell *matHeaderCellDef> Gmail </th>
-      <td mat-cell *matCellDef="let element"> {{element.gmail}} </td>
-    </ng-container>
-  
-    <!-- Weight Column -->
-    <ng-container matColumnDef="phone">
-      <th mat-header-cell *matHeaderCellDef> Số điện thoại </th>
-      <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
-    </ng-container>
-  
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef> Chức vụ </th>
-      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-    </ng-container>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Tên</th>
+      <th scope="col">Gmail</th>
+      <th scope="col">Số điện thoại</th>
+      <th scope="col">Chức vụ</th>
+      <th scope="col">Cấm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of listAccount">
+      <td>{{ i.full_name }}</td>
+      <td>{{ i.gmail }}</td>
+      <td>{{ i.phone_number }}</td>
+      <td>{{ i.roles[0] }}</td>
+      <td>
+        <button mat-fab class="mat-fab" (click)="tranformStatus(i.gmail, i.status)">
+          <mat-icon>transform</mat-icon>
+        </button>      
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> Cấm </th>
-      <td mat-cell *matCellDef="let element"> {{element.status}} - {{element.id}}</td>
-    </ng-container>
-
-    
-    <ng-container matColumnDef="id">
-        <th hidden mat-header-cell *matHeaderCellDef> Symbol </th>
-        <td hidden mat-cell *matCellDef="let element"> {{element.id}} </td>
-    </ng-container>
-
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
   
   <ng-template #createHostForm>
     <form ngNativeValidate>
       <div class="modal-header">
         <b><h1 class="modal-title pull-left">Tạo host</h1></b>
-        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Tên phòng khám"
-            >
+          <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Tên phòng khám" [(ngModel)] = "name_clinic"
+          [ngModelOptions]="{standalone: true}">
         </div>
         <div class="form-group">
-            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Họ và tên"
-              >
+            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Họ và tên" [(ngModel)] = "full_name"
+            [ngModelOptions]="{standalone: true}">
         </div>
         <div class="form-group">
-            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Email"
-              >
+            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Email" [(ngModel)] = "gmail"
+            [ngModelOptions]="{standalone: true}">
         </div>
         <div class="form-group">
-            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Số điện thoaị"
-              >
+            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Số điện thoaị" [(ngModel)] = "phone_number"
+            [ngModelOptions]="{standalone: true}">
         </div>
         <div class="form-group">
-            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Địa chỉ"
-              >
+            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Địa chỉ" [(ngModel)] = "address"
+            [ngModelOptions]="{standalone: true}">
         </div>
         <div class="form-group">
-            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Mật khẩu"
-              >
+            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Mật khẩu" [(ngModel)] = "password"
+            [ngModelOptions]="{standalone: true}">
         </div>
       </div>
       <div class="modal-footer">
         <div class="operate-btn">
           <button type="button" class="btn btn-danger mt-3">Huỷ</button>
-          <button type="button" class="btn btn-warning mt-3">Đăng ký</button>
+          <button type="button" class="btn btn-warning mt-3" (click)="registerClinic()">Đăng ký</button>
         </div>
       </div>
     </form>

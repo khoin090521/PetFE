@@ -14,11 +14,26 @@
             <mat-icon class="account-icon">account_circle</mat-icon>
         </button>
         <!-- <button mat-raised-button (click)="redirectToBooking()">Đặt lịch</button> -->
-        <button mat-fab class="mat-fab" (click)="redirectToBooking()">
+        <button *ngIf="user_role" mat-fab class="mat-fab" (click)="redirectToBooking(chooseClinic)">
           <mat-icon class="account-icon">calendar_today</mat-icon>
       </button>
     </div>
 </mat-toolbar>
+
+
+<ng-template #chooseClinic>
+    <div class="modal-header">
+      <b><h1 class="modal-title pull-left">Danh sách phòng khám</h1></b>
+    </div>
+    <div class="modal-body">
+      <mat-selection-list class="custom-scroll-bar" *ngFor="let i of clinicList" (click)="onClinicClick(i)">
+        <mat-list-item>
+          {{i.name}}
+        </mat-list-item>
+      </mat-selection-list>
+    </div>
+</ng-template>
+
 
 <ng-template #logoutForm>
   <form *ngIf="openProfile == false">
@@ -160,17 +175,15 @@
         </div>
       </div>
       <div class="modal-header">
-        <!-- <b><h1 class="modal-title pull-left">Nhập mã xác thực</h1></b> -->
-        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <input type="email" autocomplete="off" required class="form-control mt-1" id="email" placeholder="Nhập mã xác thực">
+          <input type="email" autocomplete="off" required class="form-control mt-1" [(ngModel)]="sms" [ngModelOptions]="{standalone: true}" placeholder="Nhập mã xác thực">
         </div>
       </div>
       <div class="modal-footer">
         <div class="operate-btn">
-          <button type="button" class="btn btn-warning mt-3">Xác thực</button>
+          <button type="button" class="btn btn-warning mt-3" (click)="verifySMS()">Xác thực</button>
         </div>
       </div>
     </form>

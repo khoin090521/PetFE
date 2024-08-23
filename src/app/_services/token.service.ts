@@ -17,6 +17,10 @@ export class TokenService {
   saveUserId(userId: any){
     localStorage.setItem('user_id', userId);
   }
+
+  saveClinicId(clinicId: any){
+    localStorage.setItem('clinic_id', clinicId);
+  }
   
   getAccessToken() {
     return localStorage.getItem('access_token');
@@ -41,6 +45,6 @@ export class TokenService {
   }
 
   doLogout() {
-    ['access_token', 'user_profile', 'user_role'].forEach(key => localStorage.removeItem(key));
+    ['access_token', 'user_profile', 'user_role', 'user_id', 'clinic_id'].forEach(key => localStorage.removeItem(key));
   }
 }

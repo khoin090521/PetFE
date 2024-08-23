@@ -28,7 +28,7 @@ const routes: Routes = [
     path: 'detail-pet',  component: DetailPetComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: { 
-      role: UserRole.ROLE_DOCTOR,
+      role: UserRole.ROLE_USER,
     },
   },
   {

@@ -31,28 +31,16 @@
 <div class="basic-profile" *ngIf="profiltTabStatus === 1">
     <div class="left-group">
         <div class="form-group">
-            <!-- <label for="username"></label> -->
-            <input autocomplete="off" required class="form-control mt-1" placeholder="Tên">
+            <input autocomplete="off" required class="form-control mt-1" placeholder="Tên" [(ngModel)]="petName">
         </div>
         <div class="form-group mt-3">
-            <!-- <label for="password"></label> -->
-            <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Loài">
+            <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Loài" [(ngModel)]="petSpecies">
         </div>
         <div class="form-group mt-3">
-            <!-- <label for="password"></label> -->
-            <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Giống">
+            <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Ngày sinh" [(ngModel)]="petAge">
         </div>
         <div class="form-group mt-3">
-            <!-- <label for="password"></label> -->
-            <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Giới tính">
-        </div>
-        <div class="form-group mt-3">
-            <!-- <label for="password"></label> -->
-            <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Ngày sinh">
-        </div>
-        <div class="form-group mt-3">
-            <!-- <label for="password"></label> -->
-            <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Màu sắc">
+            <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Ngày sinh" [(ngModel)]="petIdentifying">
         </div>
     </div>
 
@@ -60,9 +48,9 @@
         <form>
             <label class="file-upload">
                 <div class="update-right">
-                    <img class="update-avatar" src="https://i.pinimg.com/474x/d7/70/33/d7703333ad8ba85827b60fccf42f9c25.jpg" alt=""><br>
+                    <img style="height: 150px;width: 150px" class="update-avatar" src="{{ imagePet }}" alt=""><br>
                     <!-- <input type="file" (change)="onChange($event)"/> -->
-                    <button class="update-btn" mat-fab extended (click)="openProfile()">Cập nhật</button>
+                    <!-- <button class="update-btn" mat-fab extended (click)="openProfile()">Cập nhật</button> -->
                 </div>
                 <!-- <div *ngIf="myImage">
                     <img [src]="myImage" alt="">
@@ -73,19 +61,23 @@
     </div>
 </div>
 
+
 <div class="basic-profile" *ngIf="profiltTabStatus === 2">
-    <div class="left-group">
+    <div class="left-group health-history">
+        <form *ngFor="let i of healthPetList">
+            <textarea class="form-control" id="" rows="5" cols="50" value="{{ i.description }}"></textarea>
+        </form>
         <form>
-            <textarea class="form-control" id="" rows="5" cols="50"></textarea>
+            <textarea class="form-control" id="" rows="5" cols="50" [(ngModel)]="descriptionHealth" [ngModelOptions]="{standalone: true}"></textarea>
         </form>
     </div>
     <div class="right-group">
         <form>
             <div class="update-right">
-                <button mat-fab class="openTextArea">
+                <!-- <button mat-fab class="openTextArea">
                     <mat-icon>add</mat-icon>
-                </button><br><br>
-                <button mat-fab extended>Cập nhật</button>
+                </button><br><br> -->
+                <button mat-fab extended (click)="addHealthHistory()">Cập nhật</button>
             </div>
         </form>
     </div>
@@ -112,29 +104,26 @@
 
 
 <div class="erecord-tab" *ngIf="!statusTab">
-    <table mat-table [dataSource]="dataSource123" class="mat-elevation-z8">
-
-        <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef> Ngày khám </th>
-          <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-        </ng-container>
-      
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Bác sĩ </th>
-          <td mat-cell *matCellDef="let element"> {{element.doctor}} </td>
-        </ng-container>
-      
-        <ng-container matColumnDef="weight">
-          <th mat-header-cell *matHeaderCellDef> Chẩn đoán sơ bộ  </th>
-          <td mat-cell *matCellDef="let element"> {{element.diagnose}} </td>
-        </ng-container>
-      
-        <ng-container matColumnDef="symbol">
-          <th mat-header-cell *matHeaderCellDef> Chi tiết </th>
-          <td mat-cell *matCellDef="let element"> {{element.detail}} </td>
-        </ng-container>
-      
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>      
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Ngày khám</th>
+            <th scope="col">Bác sĩ</th>
+            <th scope="col">Chuẩn đoán sơ bộ </th>
+            <th scope="col">Thông tin chi tiết </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of recordPetList">
+            <td>{{ i.examination_date }}</td>
+            <td>{{ i.doctorDto.user_name }}</td>
+            <td>{{ i.test_results }}</td>
+            <td>
+              <button mat-fab class="mat-fab">
+                <mat-icon>brush</mat-icon>
+              </button>        
+            </td>
+          </tr>
+        </tbody>
+      </table>
 </div>

@@ -1,9 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BASE_URL } from '../_common/constants/api';
 import { HeaderComponent } from '../header/header.component';
-
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 
 export interface Diagnostic {
   id: number;
@@ -31,12 +32,30 @@ const SCHEDULE_DATA: Schedule[] = [
 ];
 
 interface SearchResult {
+  id: number;
   gmail: string;
   full_name: string;
   address: string;
   phone_number: string;
   roles: string[];
   status: number;
+}
+
+class PetRecord{
+  constructor(
+    public pet_id: number,
+    public doctor_id: number,
+    public examination_date: string,
+    public symptom_description: string,
+    public symptoms_time: string,
+    public body_temperature: number,
+    public external_examinationd: string,
+    public test_results: string,
+    public preliminary_diagnosis: string,
+    public medications: string,
+    public nutrition: string,
+    public re_examination: string,
+  ) {}
 }
 
 @Component({
@@ -48,11 +67,16 @@ export class ChatDoctorComponent implements OnInit{
 
   constructor(
     private http: HttpClient,
-    private headerComponent: HeaderComponent
+    private headerComponent: HeaderComponent,
+    private modalService: BsModalService,
+    private toastService: ToastrService,
   ){
   }
 
+  modalRef?: BsModalRef;
   openContactScreen: any = true;
+  selectPetState: any = false;
+  openContactScreenPet: any = true;
   openAddRecord: any = false;
   openSchedule: any = false;
   displayedDiagnostic: string[] = ['position', 'date', 'name', 'diagnostic','id'];
@@ -61,21 +85,83 @@ export class ChatDoctorComponent implements OnInit{
   displayedSchedule: string[] = ['schedule', 'detail', 'status', 'id'];
   dataSourceSchedule = SCHEDULE_DATA;
 
-  // dataSourceSchedule = null;
-
   profileBtn: string = "profile-btn";
   erecordBtn: string = "erecord-btn";
   searchResults?: SearchResult[] | null;
+  bookingSchedule: any;
 
   transistionStatus: number = 1;
+  listPetByUserId: any;
+  idVerify: any;
+  textOTP: any;
+  listPetRecordOTP: boolean = false;
+  getPetRecord: any;
+  userName: any;
+  userGmail: any;
+  userAddress: any;
+  userPhone: any;
+
+  petName: any;
+  petAge: any;
+
+  petRecord?: PetRecord;
+
+
+  pet_id: number = 0;
+  doctor_id: number = 0;
+  examination_date: string = "";
+  symptom_description: string = "";
+  symptoms_time: string = "";
+  body_temperature: number = 0;
+  external_examinationd: string = "";
+  test_results: string = "";
+  preliminary_diagnosis: string = "";
+  medications: string = "";
+  nutrition: string = "";
+  re_examination: string = "";
+
+
+
+  petNameDetail: string = "";
+  petAgeDetail: string = "";
+  symptom_descriptionDetail: string = "";
+  symptoms_timeDetail: string = "";
+  body_temperatureDetail: string = "";
+  test_resultsDetail: string = "";
+  external_examinationdDetail: string = "";
+  medicationsDetail: string = "";
+  nutritionDetail: string = "";
+  re_examinationDetail: string = "";
+
+
 
   ngOnInit(): void {
-    this.getSchedule();
+    this.getScheduleByDoctorId(); 
   }
 
   async onSearch() {
     const response = await this.http.get<SearchResult[]>(`${BASE_URL}/search/user?search=${this.headerComponent.searchName}`).toPromise();
     this.searchResults = response;
+    console.log("searchResults",this.searchResults);
+  }
+
+  async verifyBooking(id: any){
+    const response = await this.http.get<any>(`${BASE_URL}/booking/update?booking-id=${id}&status=1`).toPromise();
+    this.searchResults = response;
+    console.log("searchResults",this.searchResults);
+  }
+
+  async rejectBooking(id: any){
+    const response = await this.http.get<any>(`${BASE_URL}/booking/update?booking-id=${id}&status=-1`).toPromise();
+    this.searchResults = response;
+    console.log("searchResults",this.searchResults);
+  }
+
+  async getScheduleByDoctorId() {
+    const doctor_id = Number(localStorage.getItem('user_id'));
+    const response = await this.http.get<any>(`${BASE_URL}/booking/list?doctor-id=${doctor_id}`).toPromise();
+    this.bookingSchedule = response.data;
+    console.log("bookingSchedule",this.bookingSchedule);
   }
 
   @HostListener('document:keydown.enter', ['$event'])
@@ -86,11 +172,11 @@ export class ChatDoctorComponent implements OnInit{
     }
   }
 
-  async getSchedule(){
-    const response = await this.http.get<any>(`${BASE_URL}/booking/list?doctor-id=1`).toPromise();
-    console.log("response",response.data);
-    this.dataSourceSchedule = response;
-  }
+  // async getSchedule(){
+  //   const response = await this.http.get<any>(`${BASE_URL}/booking/list?doctor-id=1`).toPromise();
+  //   console.log("response",response.data);
+  //   this.dataSourceSchedule = response;
+  // }
 
   contact(){
     this.openContactScreen = true;
@@ -130,4 +216,111 @@ export class ChatDoctorComponent implements OnInit{
     }
   }
 
+  async selectPetByUserId(user: any, template: TemplateRef<any>){
+    this.idVerify = user.id;
+    this.userName = user.full_name;
+    this.userAddress = user.address;
+    this.userPhone = user.phone_number;
+    this.userGmail = user.gmail;
+    const response = await this.http.get<any>(`${BASE_URL}/pet/list?index-page=1&size=10&customer-id=`+user.id).toPromise();
+    this.listPetByUserId = response.data.content;
+    console.log("this.listPetByUserId",this.listPetByUserId);
+    this.selectPetState = true;
+    this.modalRef = this.modalService.show(template);
+  }
+
+  async sendOTP(pet: any){
+
+    this.pet_id = pet.id;
+    this.petAge = pet.age;
+    this.petName = pet.name;
+
+    this.selectPetState = false;
+    const response = await this.http.get<any>(`${BASE_URL}/email/sendCode?user-id=`+this.idVerify).toPromise();    
+    if(response.status === 1){
+        this.toastService.success('Đã gửi mã đến gmail');
+    }else{
+      this.toastService.success('Không gửi được mã đến gmail');
+    }
+  }
+
+  async verifyOTP(){
+    if(this.textOTP){
+      const response = await this.http.get<any>(`${BASE_URL}/email/checkCode?code=${this.textOTP}&user-id=${this.idVerify}`).toPromise();    
+      console.log("response",JSON.stringify(response));
+      if(response.data === "True"){
+          this.toastService.success('Xác thực thành công');
+          this.listPetRecordOTP = true;
+          this.modalRef?.hide();
+      }else{
+        this.toastService.success('Xác thực thất bại');
+      }
+      const responseRecord = await this.http.get<any>(`${BASE_URL}/petRecord/list?pet-id=${this.pet_id}`).toPromise();
+      this.getPetRecord = responseRecord.data;
+    }
+  }
+
+  viewDetailPetRecord(petRecord: any, template: TemplateRef<any>){
+    console.log("petRecord123",JSON.stringify(petRecord));
+    this.symptom_descriptionDetail = petRecord.symptom_description;
+    this.symptoms_timeDetail = petRecord.symptoms_time;
+    this.body_temperatureDetail = petRecord.body_temperature;
+    this.test_resultsDetail = petRecord.test_results;
+    this.external_examinationdDetail = petRecord.external_examination;
+    this.re_examinationDetail = petRecord.re_examination;
+    this.nutritionDetail = petRecord.nutrition;
+    this.medicationsDetail = petRecord.medications;
+
+    this.modalRef = this.modalService.show(template);
+  }
+
+  openAddPetRecordForm(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
+
+  async createPetRecord(){
+
+    this.doctor_id = Number(localStorage.getItem('user_id'));
+    const currentDate = new Date();
+    this.examination_date = currentDate.getFullYear() + '-' +
+    ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' +
+    ('0' + currentDate.getDate()).slice(-2);
+
+    this.petRecord = new PetRecord(
+      this.pet_id, this.doctor_id, this.examination_date, this.symptom_description, 
+      this.symptoms_time, this.body_temperature, this.external_examinationd,
+      this.test_results, this.preliminary_diagnosis, this.medications,this.nutrition, this.re_examination);
+      await this.http.post<any>(`${BASE_URL}/petRecord/add`, this.petRecord).subscribe(
+      (res) => {
+        this.toastService.success('Thêm bệnh án thành công');
+        this.modalRef?.hide();
+      },
+      (err) => {
+        this.toastService.success('Thêm bệnh án thất bại');
+        this.modalRef?.hide();
+      }
+    );
+    const response = await this.http.get<any>(`${BASE_URL}/petRecord/list?pet-id=${this.pet_id}`).toPromise();
+    this.getPetRecord = response.data;
+  }
+
+  closeDialog(){
+    this.modalRef?.hide();
+  }
+
+
 }
+
+
+// public pet_id: number,
+//     public doctor_id: number,
+//     public examination_date: string,
+//     public symptom_description: string,
+//     public symptoms_time: string,
+//     public body_temperature: number,
+//     public external_examinationd: string,
+//     public test_results: string,
+//     public preliminary_diagnosis: string,
+//     public medications: string,
+//     public nutrition: string,
+//     public re_examination: string,

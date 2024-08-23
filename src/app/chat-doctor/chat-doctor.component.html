@@ -3,12 +3,9 @@
 
 <div class="detail-bar">
     <div class="infor-detail">
-        <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
         <h3 class="name-detail">Bác sĩ 1</h3>
-        <!-- <div class="option-detail"> -->
           <button [ngClass]="profileBtn" mat-fab extended (click)="openProfile()">Hồ sơ</button>
           <button [ngClass]="erecordBtn" mat-fab extended (click)="openERecord()">Bệnh án điện tử</button>
-        <!-- </div> -->
     </div>
 </div>
 
@@ -106,103 +103,222 @@
   </div>
 </div>
   
-<div class="add-record-screen" *ngIf="openAddRecord">
-
+<div class="add-record-screen" *ngIf="openAddRecord && !listPetRecordOTP">
   <div class="container" *ngIf="searchResults">
     <div *ngFor="let i of searchResults" class="item">
         <div class="avatar">
             <img src="https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg">
         </div>
         <div class="nick-name">
-            <!-- <h2>Husky</h2> -->
-            <button mat-fab extended>{{i.full_name}}</button>
+            <button (click) = "selectPetByUserId(i, selectPet)" mat-fab extended>{{i.full_name}}</button>
         </div>
     </div>
   </div>
-
-  <!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef> Ngày </th>
-      <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Tên bác sĩ </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="diagnostic">
-      <th mat-header-cell *matHeaderCellDef> Chẩn đoán sơ bộ </th>
-      <td mat-cell *matCellDef="let element"> {{element.diagnostic}} </td>
-    </ng-container>
-    
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef> Xem chi tiết </th>
-      <td mat-cell *matCellDef="let element"> {{element.diagnostic}} </td>
-    </ng-container> 
-  
-    <tr mat-header-row *matHeaderRowDef="displayedDiagnostic"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedDiagnostic;"></tr>
-  </table> -->
-
 </div>
+
 
 <div class="add-record-screen" *ngIf="openSchedule">
-  <table mat-table [dataSource]="dataSourceSchedule" class="mat-elevation-z8">
-
-    <ng-container matColumnDef="schedule">
-      <th mat-header-cell *matHeaderCellDef> Thời gian khám </th>
-      <td mat-cell *matCellDef="let element"> {{element.schedule}} </td>
-    </ng-container>
-  
-    <!-- Name Column -->
-    <ng-container matColumnDef="detail">
-      <th mat-header-cell *matHeaderCellDef> Chi tiết </th>
-      <td mat-cell *matCellDef="let element"> {{element.detail}} </td>
-    </ng-container>
-  
-    <!-- Weight Column -->
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
-      <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-    </ng-container>
-
-    <!-- <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
-      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-      <button mat-stroked-button>Basic</button>
-      <button mat-flat-button>Basic</button>
-
-      <mat-cell *matCellDef="let row">
-        <button mat-stroked-button>Basic</button>
-        <button mat-flat-button>Basic</button>
-      </mat-cell>
-
-    </ng-container> -->
-
-    <ng-container matColumnDef="id" style="width: 100%;">
-      <th mat-header-cell *matHeaderCellDef>Duyệt</th>
-      <!-- <th mat-cell *matCellDef="let row">
-        <button >Basic</button>
-        <button mat-flat-button>Basic</button>
-      </th> -->
-      <mat-cell *matCellDef="let row">
-        <button mat-fab color="warn" aria-label="Edit Row">
-          <mat-icon>done_outline</mat-icon>
-        </button>
-        <button mat-fab color="success" aria-label="Edit Row">
-          <mat-icon>close</mat-icon>
-        </button>
-    </mat-cell>
-    </ng-container>
-  
-    <tr mat-header-row *matHeaderRowDef="displayedSchedule"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedSchedule;"></tr>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Lịch hẹn</th>
+        <th scope="col">Người đặt lịch</th>
+        <th scope="col">Thông tin</th>
+        <!-- <th scope="col">Trạng thái</th> -->
+        <th scope="col">Chấp nhận lịch hẹn</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of bookingSchedule" >
+          <td *ngIf="i.status === 0">{{ i.start }}</td>
+          <td *ngIf="i.status === 0">{{ i.customerDto?.customer_name }}</td>
+          <td *ngIf="i.status === 0">{{ i.content }}</td>
+          <!-- <td>{{ i.status }}</td> -->
+          <td *ngIf="i.status === 0">
+            <div class="verifySchedule">
+              <button mat-fab class="mat-fab" (click)="rejectBooking(i.id)">
+                Từ chối
+              </button>      
+              <button mat-fab class="mat-fab" (click)="verifyBooking(i.id)">
+                Xác nhận
+              </button>
+            </div>
+          </td>        
+      </tr>
+    </tbody>
   </table>
 </div>
+
+
+
+<div class="add-record-screen" *ngIf="getPetRecord && listPetRecordOTP">
+
+  <button mat-fab (click)="openAddPetRecordForm(addPetRecordForm)">
+    <mat-icon>add_circle_outline</mat-icon>
+  </button>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Ngày</th>
+        <th scope="col">Tên bác sĩ</th>
+        <th scope="col">Triệu chứng</th>
+        <th scope="col">Xem chi tiết</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of getPetRecord">
+        <td>{{ i.examination_date }}</td>
+        <td>{{ i.doctorDto.user_name }}</td>
+        <td>{{ i.symptom_description }}</td>
+        <td>
+          <button mat-fab class="mat-fab" (click)="viewDetailPetRecord(i, viewDetail)">
+            <mat-icon>remove_red_eye</mat-icon>
+          </button>      
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #viewDetail>
+  <div>
+    <div class="modal-header">
+      <b><h1 class="modal-title pull-left">Xem chi tiết bênh án</h1></b>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Tên thú cưng" [(ngModel)]="petNameDetail" [disabled]="true">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Tuổi" [(ngModel)]="petAgeDetail" [disabled]="true">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Triệu chứng mô tả" [(ngModel)]="symptom_descriptionDetail" [disabled]="true">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Thời gian bị bệnh" [(ngModel)]="symptoms_timeDetail"> [disabled]="true"
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Cơ thể nhiệt độ" [(ngModel)]="body_temperatureDetail" [disabled]="true">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Kết quả test" [(ngModel)]="test_resultsDetail" [disabled]="true">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Sơ bộ-chẩn đoán" [(ngModel)]="external_examinationdDetail" [disabled]="true">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Thuốc" [(ngModel)]="medicationsDetail" [disabled]="true">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Nutrition" [(ngModel)]="nutritionDetail" [disabled]="true">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Kiểm tra lại" [(ngModel)]="re_examinationDetail" [disabled]="true">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="operate-btn">
+        <button type="submit" class="btn btn-danger mt-3">Đóng</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #addPetRecordForm>
+  <div>
+    <div class="modal-header">
+      <b><h1 class="modal-title pull-left">Danh sách pet của bạn {{selectPetState}}</h1></b>
+    </div>
+    <div class="modal-body">
+      <h1>1. Thông Tin Chủ Thú Cưng</h1>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Họ và tên chủ nuôi" [(ngModel)]="userName" [disabled]="true" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Số điện thoại" [(ngModel)]="userPhone" [disabled]="true" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Địa chỉ" [(ngModel)]="userAddress" [disabled]="true" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Email" [(ngModel)]="userGmail" [disabled]="true" [ngModelOptions]="{standalone: true}">
+      </div>
+
+      <h1>2. Thông Tin Thú Cưng</h1>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Tên thú cưng" [(ngModel)]="petName" [disabled]="true" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Tuổi" [(ngModel)]="petAge" [disabled]="true" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Triệu chứng mô tả" [(ngModel)]="symptom_description" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Thời gian bị bệnh" [(ngModel)]="symptoms_time" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Cơ thể nhiệt độ" [(ngModel)]="body_temperature" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Kết quả test" [(ngModel)]="test_results" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Sơ bộ-chẩn đoán" [(ngModel)]="external_examinationd" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Thuốc" [(ngModel)]="medications" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Nutrition" [(ngModel)]="nutrition" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group">
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Kiểm tra lại" [(ngModel)]="re_examination" [ngModelOptions]="{standalone: true}">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="operate-btn">
+        <button type="submit" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+        <button type="submit" class="btn btn-primary mt-3" (click)="createPetRecord()">Tạo</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #selectPet>
+  <div *ngIf="selectPetState">
+    <div class="modal-header">
+      <b><h1 class="modal-title pull-left">Danh sách pet của bạn {{selectPetState}}</h1></b>
+    </div>
+    <div class="modal-body">
+      <mat-selection-list class="custom-scroll-bar" *ngFor="let i of listPetByUserId" (click)="sendOTP(i)">
+        <mat-list-item>
+          {{i.name}}
+        </mat-list-item>
+      </mat-selection-list>
+    </div>
+  </div>
+
+  <div *ngIf="!selectPetState">
+    <div class="modal-header">
+      <b><h1 class="modal-title pull-left">Đã gửi mãi Otp về gmail chủ thú cưng</h1></b>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mt-3">
+        <h1>Nhập mã</h1>
+        <input autocomplete="off" required type="text" class="form-control mt-1" [(ngModel)]="textOTP" >
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="operate-btn">
+        <button type="submit" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+        <button type="submit" class="btn btn-primary mt-3" (click)="verifyOTP()">Đồng ý</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -3,13 +3,12 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AuthService, UserRole } from '../_services/auth.service';
 import { TokenService } from '../_services/token.service'; 
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BASE_URL } from '../_common/constants/api';
 import { Observable, catchError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-// import { SharedService } from '../_services/shared.service';
-
+import { Md5 } from 'ts-md5';
 
 export class UserProfile {
   private gmail: any;
@@ -100,8 +99,11 @@ export class HeaderComponent implements OnInit{
   passwordRegister: any = "";
   addressRegister: any = "";
   phoneRegister: any = "";
+  sms: any = "";
+  hashSMS: any = "";
 
   searchResults?: SearchResult[] | null;
+  clinicList: any;
  
   
   constructor(
@@ -113,20 +115,48 @@ export class HeaderComponent implements OnInit{
     private formBuilder: FormBuilder,
     private toastService: ToastrService,
     private http: HttpClient,
+    private md5: Md5
   ){
     this.userProfileInfor = new UserProfile(this.nameInfor, this.gmailInfor, this.address, this.phoneInfor);
     this.password = new Password(this.oldPassword, this.newPassword, this.retypePassword);
     this.userRegister = new UserRegister(this.fullnameRegister, this.gmailRegister, this.passwordRegister, this.addressRegister, this.phoneRegister);
   }
 
-  ngOnInit(): void {
-    this.username = this.tokenService.getUserProfile();
+  user_role: any = "";
 
+  ngOnInit(): void {
+    this.user_role = localStorage.getItem('user_role');
+    this.username = this.tokenService.getUserProfile();
     this.formLogin = this.formBuilder.group({
       gmail: [null, []],
       password: [null, []],
     });
+    this.getClinic();
   }
+
+
+  getClinic(){
+    //https://petapi.developvn.click/api/search/clinic?search=a
+    this.http.get<any>(`${BASE_URL}/search/clinic?search=a`).subscribe(
+      (res) => {
+        this.clinicList = res;
+      },
+      (err) => {
+        
+      }
+    );
+  }
+
+  onClinicClick(clinic: any) {
+    this.modalRef?.hide();
+    const navigationExtras: NavigationExtras = {
+      queryParams: { clinicId: clinic.id, clinicName: clinic.name }
+    };
+    this.router.navigate(['/customer-booking'], navigationExtras);
+    // this.router.navigateByUrl('/customer-booking');
+    // console.log('Clinic clicked:', clinic);
+  }
+
 
   openLoginForm(templateLogin: TemplateRef<any>, templateLogout: TemplateRef<any>) {
     if(!this.tokenService.getUserProfile()){
@@ -173,19 +203,15 @@ export class HeaderComponent implements OnInit{
       this.addressRegister,
       this.phoneRegister
     );
-
-    // const response = await this.http.post<any>(`https://petapi.developvn.click/api/auth/register`, this.userRegister);
-    //   this.toastService.success('Gửi mã xác nhận thành công');
-    // }
-
   
     this.sendRegister(this.userRegister).subscribe(
       (res) => {
+        this.hashSMS = Md5.hashStr("password");
         console.log("res",JSON.stringify(res.code));
+        console.log("hash",this.hashSMS);
+        this.toastService.success('Đã gửi mã xác nhận đến email của bạn');
       },
       (err) => {  
-        console.log("???",err);
-        console.log("???",err?.text);
         if (err.status === 400) {
           this.toastService.error('Yêu cầu không hợp lệ');
         } else if (err.status === 500) {
@@ -195,6 +221,12 @@ export class HeaderComponent implements OnInit{
         }
       }
     );
+  }
+
+  verifySMS(){
+    console.log("Md5.hashStr(this.sms)",Md5.hashStr(this.sms));
+    console.log("this.hashSMS",this.hashSMS);
+    
   }
   
 
@@ -224,6 +256,7 @@ export class HeaderComponent implements OnInit{
         this.tokenService.saveAccessToken(accessToken);
         this.tokenService.saveRole(res.roles);
         this.tokenService.saveUserId(res.id);
+        this.tokenService.saveClinicId(res.clinic_id);
         this.userProfile = decodedToken.sub; // Access data from decodedToken
         this.tokenService.saveUserProfile(this.userProfile);
   
@@ -241,7 +274,7 @@ export class HeaderComponent implements OnInit{
   getRedirectURLbyRole(role: UserRole) {
     switch (role[0]) {
       case UserRole.ROLE_ADMIN:
-        return '/home-customer';
+        return '/admin-manager';
       case UserRole.ROLE_HOST:
         return '/create-doctor';
       case UserRole.ROLE_USER:
@@ -254,6 +287,7 @@ export class HeaderComponent implements OnInit{
   }
 
   openMyProfile(){
+    // this.username = this.tokenService.getUserProfile();
     this.openFormProfile = true;
     this.openProfile = true;
     this.authService.getProfile().subscribe(
@@ -274,7 +308,7 @@ export class HeaderComponent implements OnInit{
 
   sendSMS(){
     this.authService.sendSMS(this.gmail).subscribe(
-      (res) => {  
+      (res) => {   
         
       }
     );
@@ -284,13 +318,23 @@ export class HeaderComponent implements OnInit{
     this.userProfileInfor = new UserProfile(this.nameInfor, this.gmailInfor, this.address, this.phoneInfor);
     this.changeProfile(this.userProfileInfor).subscribe(
       (res) => {  
-        this.toastService.error('Cập nhật thông tin thành công');
+        this.toastService.success('Cập nhật thông tin thành công');
         this.modalRef?.hide();
       },
       (err) => {
-        this.toastService.error('Cập nhật thông tin thất bại');
+        this.toastService.success('Cập nhật thông tin thành công');
       }
     );
+    this.authService.getProfile().subscribe(
+      (res) => {  
+        console.log("???",res.gmail);
+        this.gmailInfor = res.gmail;
+        this.nameInfor = res.full_name;
+        this.address = res.address;
+        this.phoneInfor = res.phone_number;
+      }
+    );
+    this.modalRef?.hide();
   }
 
   changeProfile(userProfileInfor: UserProfile): Observable<any>{
@@ -310,10 +354,13 @@ export class HeaderComponent implements OnInit{
         this.modalRef?.hide();
       }
     );
+    this.oldPassword = "";
+    this.newPassword = "";
+    this.retypePassword = "";
   }
 
-  redirectToBooking(){
-    this.router.navigateByUrl('/customer-booking');
+  redirectToBooking(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
   }
 
 }

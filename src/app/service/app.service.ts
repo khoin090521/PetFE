@@ -13,131 +13,88 @@ import {
     subMinutes,
     addMinutes
 } from 'date-fns';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BASE_URL } from '../_common/constants/api';
+import { Observable, catchError } from 'rxjs';
+
 
 @Injectable()
 export class AppService {
-    getEvents(actions: CalendarSchedulerEventAction[]): Promise<CalendarSchedulerEvent[]> {
-        const events = [
-            <CalendarSchedulerEvent>{
-                id: '1',
-                start: addDays(startOfHour(new Date()), 1),
-                end: addDays(addHours(startOfHour(new Date()), 1), 1),
-                title: 'Event 1',
-                content: 'IMPORTANT EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
+
+    constructor(
+        private http: HttpClient,
+    ){}
+
+    // async getDoctorByClinic(){
+    //     const customerId = localStorage.getItem("user_id");
+    //     return await this.http.get<any>(`${BASE_URL}/booking/listbycustomer?customer-id=${customerId}`).toPromise();
+    // }
+
+    async getDoctorByClinic(){
+        const customerId = localStorage.getItem("user_id");
+        const response = await this.http.get<any>(`${BASE_URL}/booking/listbycustomer?customer-id=${customerId}`).toPromise();
+        return response.data;
+    }
+
+    async getEvents(actions: CalendarSchedulerEventAction[]): Promise<CalendarSchedulerEvent[]> {
+        // const events = [
+        //     <CalendarSchedulerEvent>{
+        //         // id: '7',
+        //         // start: addDays(startOfHour(setHours(new Date(), 14)), 4),
+        //         // end: addDays(addDays(startOfHour(setHours(new Date(), 14)), 4), 2),
+        //         // title: 'Event 7',
+        //         // content: 'THREE DAYS EVENT',
+        //         // color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
+        //         // actions: actions,
+        //         // status: 'ok' as CalendarSchedulerEventStatus,
+        //         // isClickable: true,
+        //         // isDisabled: false
+        //     },
+        // ];
+
+        const customerId = localStorage.getItem("user_id");
+        const response = await this.http.get<any>(`${BASE_URL}/booking/listbycustomer?customer-id=${customerId}`).toPromise();
+        const data = response.data;
+
+        const events = data.map((item: any) => {
+
+            const targetStartDate = new Date(item.start);
+            const targetEndDate = new Date(item.end);
+
+            const today = new Date();
+
+            const daysDiff = Math.floor((targetStartDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+
+            const startHour = targetStartDate.getHours(); // 12
+            const startMinutes = targetStartDate.getMinutes(); // 30
+            const startDecimal = startHour + startMinutes / 60;
+
+            const endHour = targetEndDate.getHours(); // 12
+            const endMinutes = targetEndDate.getMinutes(); // 30
+            const endDecimal = endHour + endMinutes / 60;
+
+            const start = addDays(startOfHour(setHours(new Date(), startDecimal)), daysDiff);
+            const end = addDays(startOfHour(setHours(new Date(), endDecimal)), daysDiff);
+
+            console.log("startDecimal",startDecimal)
+            console.log("endDecimal",endDecimal)
+
+
+            return <CalendarSchedulerEvent>{
+                id: item.id,
+                start: start,
+                end: end,
+                title: item.content,
+                content: item.content,
+                color: { primary: '#E0E0E0', secondary: '#EEEEEE' }, // Customize based on your needs
                 actions: actions,
-                status: 'danger' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false,
-                draggable: true,
-                resizable: {
-                    beforeStart: true,
-                    afterEnd: true
-                }
-            },
-            <CalendarSchedulerEvent>{
-                id: '2',
-                start: subHours(addDays(startOfHour(new Date()), 1), 1),
-                end: subHours(addDays(addHours(startOfHour(new Date()), 1), 1), 1),
-                title: 'Event 12',
-                content: 'IMPORTANT EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'danger' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false,
-                draggable: true,
-                resizable: {
-                    beforeStart: true,
-                    afterEnd: true
-                }
-            },
-            <CalendarSchedulerEvent>{
-                id: '2',
-                start: addDays(startOfHour(new Date()), 2),
-                end: subMinutes(addDays(addHours(startOfHour(new Date()), 2), 2), 15),
-                title: 'Event 2',
-                content: 'LESS IMPORTANT EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'warning' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false
-            },
-            <CalendarSchedulerEvent>{
-                id: '3',
-                start: addDays(startOfHour(new Date()), 3),
-                end: addDays(addHours(startOfHour(new Date()), 3), 3),
-                title: 'Event 3',
-                content: 'NOT IMPORTANT EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'ok' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false
-            },
-            <CalendarSchedulerEvent>{
-                id: '4',
-                start: startOfHour(addHours(new Date(), 2)),
-                end: addHours(startOfHour(addHours(new Date(), 2)), 2),
-                title: 'Event 4',
-                content: 'TODAY EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'ok' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false
-            },
-            <CalendarSchedulerEvent>{
-                id: '5',
-                start: addDays(startOfHour(setHours(new Date(), 6)), 2),
-                end: addHours(addDays(startOfHour(setHours(new Date(), 6)), 2), 1),
-                title: 'Event 5',
-                content: 'EARLY EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'ok' as CalendarSchedulerEventStatus,
+                status: item.status === 0 ? 'ok' as CalendarSchedulerEventStatus : 'cancelled' as CalendarSchedulerEventStatus, // Example status mapping
                 isClickable: true,
                 isDisabled: false
-            },
-            
-            <CalendarSchedulerEvent>{
-                id: '6',
-                start: addHours(addDays(startOfHour(setHours(new Date(), 6)), 2), 2),
-                end: addMinutes(addHours(addDays(startOfHour(setHours(new Date(), 6)), 2), 2), 30),
-                title: 'Event 6',
-                content: 'TWO DAYS EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'ok' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false
-            },
-            <CalendarSchedulerEvent>{
-                id: '7',
-                start: addDays(startOfHour(setHours(new Date(), 14)), 4),
-                end: addDays(addDays(startOfHour(setHours(new Date(), 14)), 4), 2),
-                title: 'Event 7',
-                content: 'THREE DAYS EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'ok' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false
-            },
-            <CalendarSchedulerEvent>{
-                id: '8',
-                start: startOfHour(addHours(new Date(), 2)),
-                end: addHours(startOfHour(addHours(new Date(), 2)), 3),
-                title: 'Event 8',
-                content: 'CONCURRENT EVENT',
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' },
-                actions: actions,
-                status: 'ok' as CalendarSchedulerEventStatus,
-                isClickable: true,
-                isDisabled: false
-            }
-        ];
+            };
+        });
+
 
         return new Promise(resolve => setTimeout(() => resolve(events), 3000));
     }
