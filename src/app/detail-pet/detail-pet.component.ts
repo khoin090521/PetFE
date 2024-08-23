@@ -128,7 +128,7 @@ export class DetailPetComponent implements OnInit{
       (res) => {
         this.listVacinationHistory = res.data;
       },
-      (err) => {}
+      (err) => {} 
     );
   }
 
