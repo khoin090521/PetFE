@@ -4,6 +4,7 @@ import { BASE_URL } from '../_common/constants/api';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { ToastrService } from 'ngx-toastr';
 
 
 export interface PeriodicElement {
@@ -17,6 +18,16 @@ class HealthHistory{
   constructor(
     public pet_id: number,
     public description: string,
+  ) {}
+}
+
+class VaccineHistory{
+  constructor(
+    public pet_id: number,
+    public description: string,
+    public vaccin_image: string,
+    public name: string,
+    public injection_date: string,
   ) {}
 }
 
@@ -79,6 +90,7 @@ export class DetailPetComponent implements OnInit{
   urlVaccineImage: any;
 
   listVacinationHistory: any;
+  vaccineHistory?: VaccineHistory;
 
 
 
@@ -110,18 +122,23 @@ export class DetailPetComponent implements OnInit{
   constructor(
     private http: HttpClient,
     private modalService: BsModalService,
-    private fireStorage:AngularFireStorage
+    private fireStorage:AngularFireStorage,
+    private toastService: ToastrService,
   ){
   }
 
   ngOnInit(): void {    
+
+    this.healthHistoryst = "noHighlightBtn";
+    this.injectionHistory = "noHighlightBtn";
+    this.basicDetail = "highlightBtn";
+
     setTimeout(() => {
       this.getVacinationHistory();
       this.getHeathPet();
       this.getRecordPet();
     }, 1000)
   }
-
 
   getVacinationHistory(){
     this.http.get<any>(`${BASE_URL}/vacinationHistory/list?pet-id=${this.petId}`).subscribe(
@@ -131,7 +148,6 @@ export class DetailPetComponent implements OnInit{
       (err) => {} 
     );
   }
-
 
   getHeathPet(){
     this.http.get<any>(`${BASE_URL}/healthHistory/list?pet-id=${this.petId}`).subscribe(
@@ -166,7 +182,6 @@ export class DetailPetComponent implements OnInit{
     );
   }
 
-
   openProfile(){
     this.profiltTabStatus = 1;
     this.statusTab = true;
@@ -180,6 +195,11 @@ export class DetailPetComponent implements OnInit{
   }
 
   openERecord(){
+
+    this.healthHistoryst = "noHighlightBtn";
+    this.injectionHistory = "noHighlightBtn";
+    this.basicDetail = "highlightBtn";
+
     this.profiltTabStatus = 0;
     this.statusTab = false;
     if(this.transistionStatus == 0){
@@ -191,16 +211,31 @@ export class DetailPetComponent implements OnInit{
     }
   }
 
+  // stateSwitch: number = 0;
+
+  basicDetail: any;
+  healthHistoryst: any;
+  injectionHistory: any;
+
   openBasicDetail(){
     this.profiltTabStatus = 1;
+    this.healthHistoryst = "noHighlightBtn";
+    this.injectionHistory = "noHighlightBtn";
+    this.basicDetail = "highlightBtn";
   }
 
   openHealthHistory(){
     this.profiltTabStatus = 2;
+    this.basicDetail = "noHighlightBtn";
+    this.injectionHistory = "noHighlightBtn";
+    this.healthHistoryst = "highlightBtn";
   }
 
   openInjectionhHistory(){
     this.profiltTabStatus = 3;
+    this.healthHistoryst = "noHighlightBtn";
+    this.basicDetail = "noHighlightBtn";
+    this.injectionHistory = "highlightBtn";
   }
 
   viewDetail(i: any, template: TemplateRef<any>){
@@ -221,9 +256,27 @@ export class DetailPetComponent implements OnInit{
     const file = event.target.files[0]
     if(file){
       const path = `yt/${file.name}`
-      const uploadTask =await this.fireStorage.upload(path,file)
+      const uploadTask = await this.fireStorage.upload(path,file)
       this.urlVaccineImage = await uploadTask.ref.getDownloadURL();
     }
+  }
+
+  openAddVacination(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
+
+  addVaccinateHistory(){
+    this.vaccineHistory = new VaccineHistory(this.petId, this.descriptionVacineHistory, this.urlVaccineImage, this.vaccine, this.injection_date);
+    this.http.post<any>(`${BASE_URL}/vacinationHistory/add`, this.vaccineHistory).subscribe(
+      (res) => {
+        setTimeout(() => {
+          this.getVacinationHistory();
+        }, 1000)
+        this.toastService.success('Thêm lịch sử tiêm vaccine thành công');
+        this.modalRef?.hide();
+      },
+      (err) => {}
+    );
   }
 
   closeDialog(){

@@ -12,31 +12,35 @@
     </div>
 </div>
 
+<div class="accountTable">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Tên</th>
+        <th scope="col">Gmail</th>
+        <th scope="col">Số điện thoại</th>
+        <th scope="col">Chức vụ</th>
+        <th scope="col">Trạng thái</th>
+        <th scope="col">Cấm</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of listAccount">
+        <td>{{ i.full_name }}</td>
+        <td>{{ i.gmail }}</td>
+        <td>{{ i.phone_number }}</td>
+        <td>{{ i.roles[0] }}</td>
+        <td> {{ i.status === 1 ? "Đang hoạt động" : "Đã bị cấm"}}</td>
+        <td>
+          <button mat-fab class="mat-fab" (click)="tranformStatus(i.gmail, i.status)">
+            <mat-icon>transform</mat-icon>
+          </button>      
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Tên</th>
-      <th scope="col">Gmail</th>
-      <th scope="col">Số điện thoại</th>
-      <th scope="col">Chức vụ</th>
-      <th scope="col">Cấm</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let i of listAccount">
-      <td>{{ i.full_name }}</td>
-      <td>{{ i.gmail }}</td>
-      <td>{{ i.phone_number }}</td>
-      <td>{{ i.roles[0] }}</td>
-      <td>
-        <button mat-fab class="mat-fab" (click)="tranformStatus(i.gmail, i.status)">
-          <mat-icon>transform</mat-icon>
-        </button>      
-      </td>
-    </tr>
-  </tbody>
-</table>
 
   
   <ng-template #createHostForm>

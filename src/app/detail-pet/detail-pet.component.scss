@@ -105,6 +105,20 @@ table {
     display: flex;
     justify-content: center;
     margin-top: 2%;
+    margin-left: 5%;
+}
+
+.sub-basic-profile{
+    display: flex;
+    flex-direction: column;
+}
+
+.erecord-tab{
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+    margin-left: 5%;
 }
 
 .update-avatar {
@@ -136,4 +150,12 @@ table {
     display: flex;
     flex-direction: column;
     row-gap: 20px;
+}
+
+.noHighlightBtn{
+    background-color: #fff;
+}
+
+.highlightBtn{
+    background-color: #104cac;
 }

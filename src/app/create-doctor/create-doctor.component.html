@@ -111,7 +111,7 @@
     </form>
   </ng-template>
 
-
+<div class="medicineDoctor">
   <table class="table">
     <thead>
       <tr>
@@ -131,16 +131,20 @@
         <td>{{ i.price }}</td>
         <td>{{ i.descrition }}</td>
         <td>
-          <button mat-fab class="mat-fab" (click)="openDelete(deleteMedicine, i.id, i.name)">
-            <mat-icon>delete</mat-icon>
-          </button>
-          <button mat-fab class="mat-fab" (click)="openUpdate(editMedicine, i)">
-            <mat-icon>brush</mat-icon>
-          </button>        
+          <div class="btnModify">
+            <button mat-fab class="mat-fab" (click)="openDelete(deleteMedicine, i.id, i.name)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-fab class="mat-fab" (click)="openUpdate(editMedicine, i)">
+              <mat-icon>brush</mat-icon>
+            </button> 
+          </div>  
         </td>
       </tr>
     </tbody>
   </table>
+</div>
+  
 
 
 

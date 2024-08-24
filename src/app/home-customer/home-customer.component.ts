@@ -127,9 +127,9 @@ export class HomeCustomerComponent implements OnInit{
     this.getListPetByUserId();
   }
 
-  getListPetByUserId(){
+  async getListPetByUserId(){
     var userId = localStorage.getItem('user_id');
-    this.http.get<any>(`${BASE_URL}/pet/list?index-page=1&size=100&customer-id=`+userId).subscribe(
+    await this.http.get<any>(`${BASE_URL}/pet/list?index-page=1&size=100&customer-id=`+userId).subscribe(
       (res) => {
         this.petList = res.data.content
         console.log("petList",this.petList);
@@ -254,7 +254,7 @@ export class HomeCustomerComponent implements OnInit{
     this.http.post<any>(`${BASE_URL}/vacinationHistory/add`, this.vaccineHistory).subscribe(
       (res) => {
         this.getListPetByUserId();
-        this.toastService.success('Thêm thú cưng thành công');
+        this.toastService.success('Thêm lịch sử tiêm vaccine thành công');
       },
       (err) => {}
     );
