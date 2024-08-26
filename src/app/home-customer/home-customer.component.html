@@ -3,6 +3,8 @@
 
 <!-- <input type="file" (change)="onFileChange($event)"> -->
 
+<!-- <mat-spinner></mat-spinner> -->
+
 <div class="container" *ngIf="!searchResults">
     <div class="item">
         <div class="avatar">
@@ -22,13 +24,17 @@
                                 <div class="form-group">
                                     <form>
                                         <label class="file-upload">
-                                            <div *ngIf="!urlPetImage">
+                                            <div *ngIf="!urlPetImage && !loadingStatusAvatar">
                                                 <img src="https://i.pinimg.com/474x/d7/70/33/d7703333ad8ba85827b60fccf42f9c25.jpg" alt="">
                                                 <input type="file" (change)="onFileChange($event)" [(ngModel)]="transfer_contract" [ngModelOptions]="{standalone: true}">
                                             </div>
-                                            <div *ngIf="urlPetImage">
+                                            <div *ngIf="urlPetImage && !loadingStatusAvatar">
+                                                <!-- <mat-spinner></mat-spinner> -->
                                                 <img style="width: 120px;height: 120px" [src]="urlPetImage" alt="">
-                                                <input type="file" (change)="onChange($event)"/>
+                                                <input type="file" (change)="onFileChange($event)"/>
+                                            </div>
+                                            <div *ngIf="loadingStatusAvatar">
+                                                <mat-spinner></mat-spinner>
                                             </div>
                                         </label>
                                     </form>
@@ -48,10 +54,13 @@
                                     <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Đặc điểm nhận dạng" [(ngModel)] = "identifying" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
-                                    <input (change)="onFileChangeCertificate($event)" autocomplete="off" required type="file" class="form-control mt-1" [(ngModel)] = "origin_certificate" [ngModelOptions]="{standalone: true}">
+                                    <input (change)="onFileChangeCertificate($event)" autocomplete="off" required type="file" class="form-control mt-1" [disabled]="loadingStatusFile">
+                                </div>
+                                <div class="form-group mt-3" *ngIf="loadingStatusFile">
+                                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                                 </div>
                             </div>
-                            <button mat-fab class="mat-fab" *ngIf="rightPopupIndex===1" (click)="nextRecord()">
+                            <button  mat-fab class="mat-fab" *ngIf="rightPopupIndex===1" (click)="nextRecord()" [disabled]="areAllFieldsFilledRecord()">
                                 <mat-icon class="arrow-forward">arrow_forward</mat-icon>
                             </button>
                         </div>
@@ -61,7 +70,7 @@
                                     <textarea class="form-control" id="" rows="20" cols="50" [(ngModel)]="descriptionHealthHistory" [ngModelOptions]="{standalone: true}"></textarea>
                                 </form>
                             </div>
-                            <button mat-fab class="mat-fab" *ngIf="rightPopupIndex===2" (click)="nextRecord()">
+                            <button  mat-fab class="mat-fab" *ngIf="rightPopupIndex===2" (click)="nextRecord()" [disabled]="descriptionHealthHistory ? false : true">
                                 <mat-icon class="arrow-forward">arrow_forward</mat-icon>
                             </button>
                         </div>
@@ -78,11 +87,14 @@
                                         <input autocomplete="off" required type="date" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)] = "injection_date" [ngModelOptions]="{standalone: true}">
                                     </div>
                                     <div class="form-group">
-                                        <input autocomplete="off" (change)="onFileChangeVaccine($event)" required type="file" class="form-control mt-1" placeholder="Tên vaccine">
+                                        <input autocomplete="off" (change)="onFileChangeVaccine($event)" required type="file" class="form-control mt-1" placeholder="Tên vaccine" [disabled]="loadingStatusFileVaccination">
+                                    </div>
+                                    <div class="form-group mt-3" *ngIf="loadingStatusFileVaccination">
+                                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                                     </div>
                                 </form>
                             </div>
-                            <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3" (click)="addVaccinateHistory()">
+                            <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3" (click)="addVaccinateHistory()" [disabled]="vaccine && descriptionVacineHistory && injection_date && urlVaccineImage ? false : true">
                                 Lưu
                             </button>
                         </div>
@@ -112,17 +124,30 @@
 <div class="container" *ngIf="searchResults">
     <div *ngFor="let i of searchResults" class="item">
         <div class="avatar">
-            <button mat-mini-fab class="cancel">
-                <mat-icon>clear</mat-icon>
-            </button>
             <img src="https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg">
         </div>
         <div class="nick-name">
-            <!-- <h2>Husky</h2> -->
-            <button mat-fab extended>{{i.full_name}}</button>
+            <button mat-fab extended (click)="changePetForCustomer(i, changePet)">{{i.full_name}}</button>
         </div>
     </div>
 </div>
+
+
+<ng-template #changePet>
+    <div class="modal-header">
+        <b><h1 class="modal-title pull-left">Danh sách pet chuyển nhượng</h1></b>
+      </div>
+      <div class="modal-body">
+        <mat-selection-list class="custom-scroll-bar" *ngFor="let i of myPets" (click)="onChangePetAction(i)">
+          <mat-list-item>
+            {{i.name}}
+          </mat-list-item>
+        </mat-selection-list>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+      </div>
+</ng-template>
 
 <ng-template #removeForm>
     <form ngNativeValidate>
@@ -131,6 +156,7 @@
         </div>
         <div class="modal-footer">
           <div class="operate-btn">
+            <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
             <button type="submit" class="btn btn-primary mt-3" (click)="removePetAccept()">Đồng ý</button>
           </div>
         </div>

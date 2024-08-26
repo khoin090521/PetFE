@@ -7,20 +7,22 @@
 <app-header></app-header>
 <router-outlet></router-outlet>
 
-<div class="tab">
+<div class="tab"> 
     <div class="tab-container">
         <button mat-fab class="mat-fab" (click)="openCalendar()">
             <mat-icon>calendar_today</mat-icon>
         </button>
         <button mat-fab class="mat-fab" (click)="openMedical()">
             <!-- <mat-icon>add</mat-icon> -->
-            <img style="width: 50px;height:50px;margin-top: 15px;" src="https://static-00.iconduck.com/assets.00/medical-symbol-icon-2048x2048-t5g00ol5.png" alt="">
+            <!-- <img style="width: 50px;height:50px;margin-top: 15px;" src="https://static-00.iconduck.com/assets.00/medical-symbol-icon-2048x2048-t5g00ol5.png" alt=""> -->
+            <img style="width: 50px;height:50px;margin-top: 15px;" src="assets/medicine.png" alt="Logo">
         </button>
     </div>
 </div>
 
-<h2 *ngIf="decodedClinicName">Bạn đang đặt lịch của {{decodedClinicName}}</h2>
+
 <div class="calendar-container" *ngIf="events && calendar">
+  <h2 *ngIf="decodedClinicName">Bạn đang đặt lịch của {{decodedClinicName}}</h2>
     <div class="row mt-4">
         <div class="col-md-4 text-left">
         </div>
@@ -104,9 +106,9 @@
 <div class="medical-container" *ngIf="!calendar">
     <div class="body" >
         <div class="container" >
-          <div *ngFor="let i of listMedicine">
+          <div *ngFor="let i of listMedicine"> 
             <div class="item">
-              <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
+              <img [src]="i.medicine_image">
                 <!-- <h2>{{ i.name }}</h2> -->
                 <button style="border-radius: 20px;" mat-stroked-button (click)="viewDetail(i.descrition,viewDetailForm)">{{ i.name }}</button>
                 <h2>{{ i.price }}</h2>

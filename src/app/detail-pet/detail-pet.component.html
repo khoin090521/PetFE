@@ -201,7 +201,10 @@
                             <input autocomplete="off" required type="date" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)] = "injection_date" [ngModelOptions]="{standalone: true}">
                         </div>
                         <div class="form-group">
-                            <input autocomplete="off" (change)="onFileChangeVaccine($event)" required type="file" class="form-control mt-1" placeholder="Tên vaccine">
+                            <input autocomplete="off" (change)="onFileChangeVaccine($event)" required type="file" class="form-control mt-1" placeholder="Tên vaccine" [disabled]="loadingStatusFileVaccination">
+                        </div>
+                        <div class="form-group mt-3" *ngIf="loadingStatusFileVaccination">
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                         </div>
                     </form>
                 </div>
@@ -219,6 +222,10 @@
     <form ngNativeValidate>
       <div class="modal-header">
         <b><h1 class="modal-title pull-left">Xem chi tiết bệnh án điện tử</h1></b>
+        <div class="form-group">
+            <!-- <a [href]="meeting">Meeting với bác sĩ</a> -->
+            <a [href]="meeting" target="_blank">Meeting với bác sĩ</a>
+        </div>
       </div>
       <div class="modal-body">
         <div class="form-group">
@@ -253,6 +260,10 @@
         <div class="form-group">
             <label for="username">Kết quả test lại</label>
             <input [disabled]="true" class="form-control mt-1" [(ngModel)]="re_examination" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group">
+            <!-- <label for="username">Meeting với bác sĩ</label> -->
+            <!-- <input [disabled]="true" class="form-control mt-1" [(ngModel)]="meeting" [ngModelOptions]="{standalone: true}"> -->
         </div>
     </div>
     <div class="modal-footer">

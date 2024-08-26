@@ -12,9 +12,6 @@
 
 <div class="profile-tab">
     <div class="profile-tab-container">
-        <button mat-fab extended (click)="contact()">
-            Liên hệ
-        </button>
         <button mat-fab extended (click)="add_record()">
             Thêm bệnh án điện tử
         </button>
@@ -24,85 +21,9 @@
     </div>
 </div>
 
-<div class="contact-screen" *ngIf="openContactScreen">
-  <div class="user-chat">
-    <div class="infor-chat">
-      <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-      <h2 class="name-detail">User 1</h2>
-    </div>
 
-    <div class="infor-chat">
-      <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-      <h2 class="name-detail">User 2</h2>
-    </div>
-
-    <div class="infor-chat">
-      <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-      <h2 class="name-detail">User 3</h2>
-    </div>
-
-    <div class="infor-chat">
-      <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-      <h2 class="name-detail">User 4</h2>
-    </div>
-
-    <div class="infor-chat">
-      <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-      <h2 class="name-detail">User 5</h2>
-    </div>
-
-    <div class="infor-chat">
-      <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-      <h2 class="name-detail">User 6</h2>
-    </div>
-
-    <div class="infor-chat">
-      <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-      <h2 class="name-detail">User 7</h2>
-    </div>
-
-    <div class="infor-chat">
-      <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-      <h2 class="name-detail">User 8</h2>
-    </div>
-
-    <div class="infor-chat">
-      <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-      <h2 class="name-detail">User 9</h2>
-    </div>
-
-    <div class="infor-chat">
-      <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-      <h2 class="name-detail">User 10</h2>
-    </div>
-  </div>
-    
-  <div class="chat_window">
-    <div class="top_menu">
-      <div class="title">
-        WhatsApp
-      </div>
-    </div>
-    <ul class="messages">
-      <li class="message right">
-        <div class="avatar"></div>
-        <div class="text_wrapper">
-          <div class="text">Hola</div>
-        </div>
-      </li>
-    </ul>
-    <div class="bottom_wrapper clearfix">
-      <div class="message_input_wrapper">
-        <input class="message_input" placeholder="Message..." />
-      </div>
-      <div class="send_message">
-        <div class="icon"></div>
-        <div class="text">Send</div>
-      </div>
-    </div>
-  </div>
-</div>
   
+<!-- <div class="add-record-screen" *ngIf="openAddRecord && !listPetRecordOTP"> -->
 <div class="add-record-screen" *ngIf="openAddRecord && !listPetRecordOTP">
   <div class="container" *ngIf="searchResults">
     <div *ngFor="let i of searchResults" class="item">
@@ -116,7 +37,6 @@
   </div>
 </div>
 
-
 <div class="add-record-screen" *ngIf="openSchedule">
   <table class="table">
     <thead>
@@ -124,7 +44,6 @@
         <th scope="col">Lịch hẹn</th>
         <th scope="col">Người đặt lịch</th>
         <th scope="col">Thông tin</th>
-        <!-- <th scope="col">Trạng thái</th> -->
         <th scope="col">Chấp nhận lịch hẹn</th>
       </tr>
     </thead>
@@ -133,7 +52,6 @@
           <td *ngIf="i.status === 0">{{ i.start }}</td>
           <td *ngIf="i.status === 0">{{ i.customerDto?.customer_name }}</td>
           <td *ngIf="i.status === 0">{{ i.content }}</td>
-          <!-- <td>{{ i.status }}</td> -->
           <td *ngIf="i.status === 0">
             <div class="verifySchedule">
               <button mat-fab class="mat-fab" (click)="rejectBooking(i.id)">
@@ -149,42 +67,43 @@
   </table>
 </div>
 
-
-
 <div class="add-record-screen" *ngIf="getPetRecord && listPetRecordOTP">
 
   <button mat-fab (click)="openAddPetRecordForm(addPetRecordForm)">
     <mat-icon>add_circle_outline</mat-icon>
   </button>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Ngày</th>
-        <th scope="col">Tên bác sĩ</th>
-        <th scope="col">Triệu chứng</th>
-        <th scope="col">Xem chi tiết</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let i of getPetRecord">
-        <td>{{ i.examination_date }}</td>
-        <td>{{ i.doctorDto.user_name }}</td>
-        <td>{{ i.symptom_description }}</td>
-        <td>
-          <button mat-fab class="mat-fab" (click)="viewDetailPetRecord(i, viewDetail)">
-            <mat-icon>remove_red_eye</mat-icon>
-          </button>      
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Ngày</th>
+          <th scope="col">Tên bác sĩ</th>
+          <th scope="col">Triệu chứng</th>
+          <th scope="col">Xem chi tiết</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of getPetRecord">
+          <td>{{ i.examination_date }}</td>
+          <td>{{ i.doctorDto.user_name }}</td>
+          <td>{{ i.symptom_description }}</td>
+          <td>
+            <button mat-fab class="mat-fab" (click)="viewDetailPetRecord(i, viewDetail)">
+              <mat-icon>remove_red_eye</mat-icon>
+            </button>      
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
 </div>
 
 <ng-template #viewDetail>
   <div>
     <div class="modal-header">
-      <b><h1 class="modal-title pull-left">Xem chi tiết bênh án</h1></b>
+      <b><h1 class="modal-title pull-left">Xem chi tiết bệnh án</h1></b>
     </div>
     <div class="modal-body">
       <div class="form-group">
@@ -197,7 +116,7 @@
         <input autocomplete="off" required class="form-control mt-1" placeholder="Triệu chứng mô tả" [(ngModel)]="symptom_descriptionDetail" [disabled]="true">
       </div>
       <div class="form-group">
-        <input autocomplete="off" required class="form-control mt-1" placeholder="Thời gian bị bệnh" [(ngModel)]="symptoms_timeDetail"> [disabled]="true"
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Thời gian bị bệnh" [(ngModel)]="symptoms_timeDetail" [disabled]="true"> 
       </div>
       <div class="form-group">
         <input autocomplete="off" required class="form-control mt-1" placeholder="Cơ thể nhiệt độ" [(ngModel)]="body_temperatureDetail" [disabled]="true">
@@ -220,7 +139,7 @@
     </div>
     <div class="modal-footer">
       <div class="operate-btn">
-        <button type="submit" class="btn btn-danger mt-3">Đóng</button>
+        <button type="submit" class="btn btn-danger mt-3" (click)="closeDialog()">Đóng</button>
       </div>
     </div>
   </div>
@@ -230,7 +149,7 @@
 <ng-template #addPetRecordForm>
   <div>
     <div class="modal-header">
-      <b><h1 class="modal-title pull-left">Danh sách pet của bạn {{selectPetState}}</h1></b>
+      <b><h1 class="modal-title pull-left">Thông tin pet của bạn</h1></b>
     </div>
     <div class="modal-body">
       <h1>1. Thông Tin Chủ Thú Cưng</h1>
@@ -293,7 +212,7 @@
 <ng-template #selectPet>
   <div *ngIf="selectPetState">
     <div class="modal-header">
-      <b><h1 class="modal-title pull-left">Danh sách pet của bạn {{selectPetState}}</h1></b>
+      <b><h1 class="modal-title pull-left">Danh sách pet của bạn</h1></b>
     </div>
     <div class="modal-body">
       <mat-selection-list class="custom-scroll-bar" *ngFor="let i of listPetByUserId" (click)="sendOTP(i)">

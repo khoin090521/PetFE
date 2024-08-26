@@ -184,11 +184,12 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
 
     ngOnInit(): void {
         this.appService.getEvents(this.actions).then((events: CalendarSchedulerEvent[]) => this.events = events);
-        this.getMedicalByClinic();
         const routerUrl = window.location.href
         const urlObj = new URL(routerUrl);
         const clinicId = urlObj.searchParams.get('clinicId') || '';
         this.getDoctorByClinic(clinicId);
+        this.getMedicalByClinic(clinicId);
+
     }
 
     async getDoctorByClinic(clinicId: any){
@@ -264,10 +265,11 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
         );
     }
 
-    async getMedicalByClinic() {
-        this.http.get<any>(`${BASE_URL}/medicine/list?clinic-id=1`).subscribe(
+    async getMedicalByClinic(clinicId: any) {
+        this.http.get<any>(`${BASE_URL}/medicine/list?clinic-id=${clinicId}`).subscribe(
             (res) => {
                 this.listMedicine = res.data;
+                console.log("this.listMedicine",JSON.stringify(this.listMedicine));
             },
             (err) => {}
         );

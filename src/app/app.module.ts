@@ -47,6 +47,9 @@ import { MatListModule } from '@angular/material/list';
 import {AngularFireModule} from "@angular/fire/compat";
 import {AngularFireStorageModule} from "@angular/fire/compat/storage";
 import { environment } from 'src/environments/environments'; 
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+
 
 @NgModule({
   declarations: [
@@ -85,7 +88,9 @@ import { environment } from 'src/environments/environments';
       preventDuplicates: false,
     }),
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule
   ],
   providers: [
     Md5,

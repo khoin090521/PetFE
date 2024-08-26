@@ -29,6 +29,7 @@ class Host{
     public address: string,
     public phone_number: string,
     public name_clinic: string,
+    public address_clinic: string
   ) {}
 }
 
@@ -63,6 +64,7 @@ export class AdminManagerComponent implements OnInit{
   address: string = "";
   phone_number: string = "";
   name_clinic: string = "";
+  address_clinic: string = "";
   host?: Host;
 
   createHost(template: TemplateRef<any>){
@@ -82,28 +84,35 @@ export class AdminManagerComponent implements OnInit{
     );
   }
 
-  tranformStatus(gmail: any, status: any){
+  async tranformStatus(gmail: any, status: any){
     console.log("status",status);
     if(status === 1){
-      const response = this.http.get<any>(`${BASE_URL}/account/ban-account?gmail=${gmail}`).toPromise();
+      await this.http.get<any>(`${BASE_URL}/account/ban-account?email=${gmail}`).toPromise();
       this.getAccount()
       this.toastService.success('Cấm tài khoản thành công');
     }else{
-      const response = this.http.get<any>(`${BASE_URL}/account/active-account?gmail=${gmail}`).toPromise();
+      await this.http.get<any>(`${BASE_URL}/account/active-account?email=${gmail}`).toPromise();
       this.getAccount()
       this.toastService.success('Mở tài khoản thành công');
     }
   }
 
-  registerClinic(){
-    this.host = new Host(this.gmail, this.password, this.full_name, this.address, this.phone_number, this.name_clinic)
-    this.http.post<any>(`${BASE_URL}/account/create-host-account`,this.host).subscribe(
+  async registerClinic(){
+    
+    this.host = new Host(this.gmail, this.password, this.full_name, this.address, this.phone_number, this.name_clinic, this.address_clinic)
+    console.log("this.host",this.host);
+    await this.http.post<any>(`${BASE_URL}/account/create-host-account`,this.host).subscribe(
       (res) => {
-          this.toastService.success('Đặt lịch thành công');
+        if(res){
+          this.toastService.success('Tạo host thành công');
           this.modalRef?.hide();
+        }  
       },
-      (err) => {}
     );
+  }
+
+  closeDialog(){
+    this.modalRef?.hide();
   }
 
 }

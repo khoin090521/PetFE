@@ -80,6 +80,8 @@ export class CreateDoctorComponent implements OnInit{
   quantity: number = 0;
   created_date: string = "";
   price: number = 0;
+  type: string = "";
+  trade_mark: string = "";
   description: string = "";
   delete_medicine_name: string = "";
   delete_medicine_id: string = "";
@@ -91,9 +93,11 @@ export class CreateDoctorComponent implements OnInit{
 
   medicine_name_add: string = "";
   image_add: string = "";
-  quantity_add: number = 0;
-  price_add: number = 0;
+  quantity_add: string = "";
+  price_add: string = "";
   description_add: string = "";
+  type_add: string = "";
+  trademark_add: string = "";
 
 
   foods: Food[] = [
@@ -169,57 +173,82 @@ export class CreateDoctorComponent implements OnInit{
   openUpdate(template: TemplateRef<any>, medicine: any){
     this.modalRef = this.modalService.show(template);
 
+    console.log("medicine",medicine);
+
     this.id = medicine.id;
     this.medicine_name = medicine.name;
     this.quantity = medicine.quantity;
     this.price = medicine.price;
-    this.description = medicine.description;
+    this.description = medicine.descrition;
+    this.trade_mark = medicine.trademark;
+    this.type = medicine.type;
   }
 
+  
 
-  deleteAction(){
+
+  async deleteAction(){
     const clinicId = localStorage.getItem("clinic_id");
     try {
-        const response = this.http.delete<any>(`${BASE_URL}/medicine/delete?medicine-id=`+Number(this.delete_medicine_id)).toPromise();
-
-        // if (response.state === true) {
-        //     this.toastService.success('Xoá thuốc thành công');
-        // } else {
-        //     this.toastService.error('Xoá thuốc thất bại');
-        // }
+      await this.http.get<any>(`${BASE_URL}/medicine/delete?medicine-id=${Number(this.delete_medicine_id)}`).toPromise();
+      this.modalRef?.hide();
+      this.getMedicineByClinicId();
     } catch (error) {
         this.toastService.error('Xoá thuốc thất bại');
     } finally {
-        this.modalRef?.hide();
-        this.getMedicineByClinicId();
+        
     }
   }
 
-
-  async onFileChangeUpdate(event:any){
-    const file = event.target.files[0]
-    if(file){
-      const path = `yt/${file.name}`
-      const uploadTask =await this.fireStorage.upload(path,file)
-      this.image = await uploadTask.ref.getDownloadURL();
+  loadingStatusFileUpdate: boolean = false;
+  async onFileChangeUpdate(event: any) {
+    this.loadingStatusFile = true;
+    const file = event.target.files[0];
+    if (file) {
+      const path = `yt/${file.name}`;
+      try {
+        const uploadTask = await this.fireStorage.upload(path, file);
+        this.image = await uploadTask.ref.getDownloadURL();
+      } catch (error) {
+        console.error("Error uploading:", error);
+      } finally {
+        this.loadingStatusFileUpdate = false;
+      }
+    } else {
+      this.loadingStatusFileUpdate = false;
     }
   }
 
+  loadingStatusFile: boolean = false;
   async onFileChangeAdd(event:any){
-    const file = event.target.files[0]
-    if(file){
-      const path = `yt/${file.name}`
-      const uploadTask =await this.fireStorage.upload(path,file)
-      this.image_add = await uploadTask.ref.getDownloadURL();
+    this.loadingStatusFile = true;
+    const file = event.target.files[0];
+    if (file) {
+      const path = `yt/${file.name}`;
+      try {
+        const uploadTask = await this.fireStorage.upload(path, file);
+        this.image_add = await uploadTask.ref.getDownloadURL();
+      } catch (error) {
+        console.error("Error uploading:", error);
+      } finally {
+        this.loadingStatusFile = false;
+      }
+    } else {
+      this.loadingStatusFile = false;
     }
   }
 
-  updateAction(){
+  // activeBtnAdd(){
+  //   this.medicine_name_add, Number(this.quantity_add), Number(this.price_add), this.type_add, this.trademark_add,this.description_add, Number(clinicId), this.image_add
+  // }
+
+  async updateAction(){
     const clinicId = localStorage.getItem("clinic_id");
-    this.medicine = new Medicine(this.id, this.medicine_name, this.quantity, this.price, "class 1", "identifying", this.description, Number(clinicId), this.image);
-    this.http.put<any>(`${BASE_URL}/medicine/update`, this.medicine).subscribe(
+    this.medicine = new Medicine(this.id, this.medicine_name, this.quantity, this.price, this.type, this.trade_mark, this.description, Number(clinicId), this.image);
+    await this.http.post<any>(`${BASE_URL}/medicine/update`, this.medicine).subscribe(
       (res) => {
         this.toastService.success('Sửa thông tin thuốc thành công');
+        this.getMedicineByClinicId();
         this.modalRef?.hide();
       },
       (err) => {
@@ -230,17 +259,28 @@ export class CreateDoctorComponent implements OnInit{
 
   addAction(){
     const clinicId = localStorage.getItem("clinic_id");
-    this.medicineAdd = new MedicineAdd(this.medicine_name_add, this.quantity_add, this.price_add, "class 1", "identifying",this.description_add, Number(clinicId), this.image_add);
+    this.medicineAdd = new MedicineAdd(this.medicine_name_add, Number(this.quantity_add), Number(this.price_add), this.type_add, this.trademark_add,this.description_add, Number(clinicId), this.image_add);
     this.http.post<any>(`${BASE_URL}/medicine/add`, this.medicineAdd).subscribe(
       (res) => {
         this.toastService.success('Thêm thông tin thuốc thành công');
         this.getMedicineByClinicId();
         this.modalRef?.hide();
+        this.medicine_name_add = "";
+        this.quantity_add= "";
+        this.price_add = "";
+        this.type_add = "";
+        this.trademark_add = "";
+        this.description_add = "";
+        this.image_add = "";
       },
       (err) => {
           this.toastService.error('Thêm thông tin thuốc thất bại');
       }
     );
+  }
+
+  closeDialog(){
+    this.modalRef?.hide();
   }
 
 }

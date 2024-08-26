@@ -216,7 +216,8 @@ export class DetailPetComponent implements OnInit{
   basicDetail: any;
   healthHistoryst: any;
   injectionHistory: any;
-
+  meeting: any;
+ 
   openBasicDetail(){
     this.profiltTabStatus = 1;
     this.healthHistoryst = "noHighlightBtn";
@@ -239,7 +240,7 @@ export class DetailPetComponent implements OnInit{
   }
 
   viewDetail(i: any, template: TemplateRef<any>){
-
+    console.log("i",JSON.stringify(i));
     this.medications = i.medications;
     this.nutrition = i.nutrition;
     this.examination_date = i.examination_date;
@@ -248,18 +249,19 @@ export class DetailPetComponent implements OnInit{
     this.body_temperature = i.body_temperature;
     this.test_results = i.test_results;
     this.re_examination = i.re_examination;
+    this.meeting = i.link_meet;
 
     this.modalRef = this.modalService.show(template);
   }
 
-  async onFileChangeVaccine(event:any){
-    const file = event.target.files[0]
-    if(file){
-      const path = `yt/${file.name}`
-      const uploadTask = await this.fireStorage.upload(path,file)
-      this.urlVaccineImage = await uploadTask.ref.getDownloadURL();
-    }
-  }
+  // async onFileChangeVaccine(event:any){
+  //   const file = event.target.files[0]
+  //   if(file){
+  //     const path = `yt/${file.name}`
+  //     const uploadTask = await this.fireStorage.upload(path,file)
+  //     this.urlVaccineImage = await uploadTask.ref.getDownloadURL();
+  //   }
+  // }
 
   openAddVacination(template: TemplateRef<any>){
     this.modalRef = this.modalService.show(template);
@@ -277,6 +279,34 @@ export class DetailPetComponent implements OnInit{
       },
       (err) => {}
     );
+  }
+
+  loadingStatusFileVaccination: any;
+  async onFileChangeVaccine(event:any){
+    // const file = event.target.files[0]
+    // if(file){
+    //   const path = `yt/${file.name}`
+    //   const uploadTask =await this.fireStorage.upload(path,file)
+    //   this.urlVaccineImage = await uploadTask.ref.getDownloadURL();
+    // }
+
+    this.loadingStatusFileVaccination = true;
+
+    const file = event.target.files[0];
+    if (file) {
+      const path = `yt/${file.name}`;
+      try {
+        const uploadTask = await this.fireStorage.upload(path, file);
+        this.urlVaccineImage = await uploadTask.ref.getDownloadURL();
+      } catch (error) {
+        console.error("Error uploading certificate:", error);
+      } finally {
+        this.loadingStatusFileVaccination = false;
+      }
+    } else {
+      this.loadingStatusFileVaccination = false;
+    }
+
   }
 
   closeDialog(){

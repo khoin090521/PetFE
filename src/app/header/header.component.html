@@ -13,10 +13,9 @@
         <button mat-fab class="mat-fab" (click)="openLoginForm(loginForm, logoutForm)">
             <mat-icon class="account-icon">account_circle</mat-icon>
         </button>
-        <!-- <button mat-raised-button (click)="redirectToBooking()">Đặt lịch</button> -->
-        <button *ngIf="user_role" mat-fab class="mat-fab" (click)="redirectToBooking(chooseClinic)">
+        <button *ngIf="user_role === 'customer'" mat-fab class="mat-fab" (click)="redirectToBooking(chooseClinic)">
           <mat-icon class="account-icon">calendar_today</mat-icon>
-      </button>
+        </button>
     </div>
 </mat-toolbar>
 
@@ -31,6 +30,9 @@
           {{i.name}}
         </mat-list-item>
       </mat-selection-list>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
     </div>
 </ng-template>
 

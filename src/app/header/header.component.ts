@@ -137,9 +137,9 @@ export class HeaderComponent implements OnInit{
 
   getClinic(){
     //https://petapi.developvn.click/api/search/clinic?search=a
-    this.http.get<any>(`${BASE_URL}/search/clinic?search=a`).subscribe(
+    this.http.get<any>(`${BASE_URL}/auth/listAllClinic`).subscribe(
       (res) => {
-        this.clinicList = res;
+        this.clinicList = res.data;
       },
       (err) => {
         
@@ -153,8 +153,6 @@ export class HeaderComponent implements OnInit{
       queryParams: { clinicId: clinic.id, clinicName: clinic.name }
     };
     this.router.navigate(['/customer-booking'], navigationExtras);
-    // this.router.navigateByUrl('/customer-booking');
-    // console.log('Clinic clicked:', clinic);
   }
 
 

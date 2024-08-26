@@ -139,10 +139,9 @@ export class ChatDoctorComponent implements OnInit{
     this.getScheduleByDoctorId(); 
   }
 
-  async onSearch() {
-    const response = await this.http.get<SearchResult[]>(`${BASE_URL}/search/user?search=${this.headerComponent.searchName}`).toPromise();
+  async onSearch(searchKey: any) {
+    const response = await this.http.get<SearchResult[]>(`${BASE_URL}/search/customer?search=${searchKey}`).toPromise();
     this.searchResults = response;
-    console.log("searchResults",this.searchResults);
   }
 
   async verifyBooking(id: any){
@@ -168,20 +167,11 @@ export class ChatDoctorComponent implements OnInit{
   onKeydownHandler(event: KeyboardEvent) {
     const inputElement = event.target as HTMLInputElement; // Type assertion
     if (inputElement && inputElement.classList.contains('search-input')) {
-      this.onSearch();
+      const searchKey = inputElement.value;
+      this.openAddRecord = true;
+      this.listPetRecordOTP = false;
+      this.onSearch(searchKey);
     }
-  }
-
-  // async getSchedule(){
-  //   const response = await this.http.get<any>(`${BASE_URL}/booking/list?doctor-id=1`).toPromise();
-  //   console.log("response",response.data);
-  //   this.dataSourceSchedule = response;
-  // }
-
-  contact(){
-    this.openContactScreen = true;
-    this.openAddRecord = false;
-    this.openSchedule = false;
   }
 
   add_record(){
@@ -206,6 +196,7 @@ export class ChatDoctorComponent implements OnInit{
     }
   }
 
+  eRecordScreen: boolean = false;
   openERecord(){
     if(this.transistionStatus == 0){
       this.erecordBtn = "erecord-btn";
@@ -214,6 +205,7 @@ export class ChatDoctorComponent implements OnInit{
       this.erecordBtn = "profile-btn";
       this.profileBtn = "erecord-btn";
     }
+    this.eRecordScreen = true;
   }
 
   async selectPetByUserId(user: any, template: TemplateRef<any>){
@@ -222,9 +214,8 @@ export class ChatDoctorComponent implements OnInit{
     this.userAddress = user.address;
     this.userPhone = user.phone_number;
     this.userGmail = user.gmail;
-    const response = await this.http.get<any>(`${BASE_URL}/pet/list?index-page=1&size=10&customer-id=`+user.id).toPromise();
+    const response = await this.http.get<any>(`${BASE_URL}/pet/list?index-page=1&size=10&customer-id=${user.customer_id}`).toPromise();
     this.listPetByUserId = response.data.content;
-    console.log("this.listPetByUserId",this.listPetByUserId);
     this.selectPetState = true;
     this.modalRef = this.modalService.show(template);
   }
@@ -292,6 +283,7 @@ export class ChatDoctorComponent implements OnInit{
       this.test_results, this.preliminary_diagnosis, this.medications,this.nutrition, this.re_examination);
       await this.http.post<any>(`${BASE_URL}/petRecord/add`, this.petRecord).subscribe(
       (res) => {
+        //??
         this.toastService.success('Thêm bệnh án thành công');
         this.modalRef?.hide();
       },
@@ -300,8 +292,8 @@ export class ChatDoctorComponent implements OnInit{
         this.modalRef?.hide();
       }
     );
-    const response = await this.http.get<any>(`${BASE_URL}/petRecord/list?pet-id=${this.pet_id}`).toPromise();
-    this.getPetRecord = response.data;
+    // const response = await this.http.get<any>(`${BASE_URL}/petRecord/list?pet-id=${this.pet_id}`).toPromise();
+    // this.getPetRecord = response.data;
   }
 
   closeDialog(){

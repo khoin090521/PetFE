@@ -9,8 +9,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, NavigationExtras } from '@angular/router';
 import { map, finalize } from "rxjs/operators";
 
-
-
 interface UserList {
   gmail: string;
   full_name: string;
@@ -78,7 +76,7 @@ export class HomeCustomerComponent implements OnInit{
   name: string = "";
   species: string = "";
   gender: boolean = true;
-  age: number = 0;
+  age: string = "";
   identifying: string = "";
   
   transfer_contract: string = "";
@@ -131,7 +129,8 @@ export class HomeCustomerComponent implements OnInit{
     var userId = localStorage.getItem('user_id');
     await this.http.get<any>(`${BASE_URL}/pet/list?index-page=1&size=100&customer-id=`+userId).subscribe(
       (res) => {
-        this.petList = res.data.content
+        this.petList = res.data.content;
+        this.myPets = res.data.content;
         console.log("petList",this.petList);
       },
       (err) => {
@@ -139,36 +138,103 @@ export class HomeCustomerComponent implements OnInit{
       }
     );
   }
-
+ 
+  loadingStatusAvatar: boolean = false;
   async onFileChange(event:any){
-    const file = event.target.files[0]
-    if(file){
-      const path = `yt/${file.name}`
-      const uploadTask =await this.fireStorage.upload(path,file)
-      this.urlPetImage = await uploadTask.ref.getDownloadURL();
+    // const file = event.target.files[0]
+    // if(file){
+    //   const path = `yt/${file.name}`
+    //   const uploadTask = await this.fireStorage.upload(path,file)
+    //   this.urlPetImage = await uploadTask.ref.getDownloadURL();
+    //   this.loadingStatusAvatar = true;
+    // }
+    this.loadingStatusAvatar = true;
+
+    const file = event.target.files[0];
+    if (file) {
+      const path = `yt/${file.name}`;
+      try {
+        const uploadTask = await this.fireStorage.upload(path, file);
+        this.urlPetImage = await uploadTask.ref.getDownloadURL();
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      } finally {
+        this.loadingStatusAvatar = false;
+      }
+    } else {
+      this.loadingStatusAvatar = false;
     }
   }
 
-  async onFileChangeCertificate(event:any){
-    const file = event.target.files[0]
-    if(file){
-      const path = `yt/${file.name}`
-      const uploadTask =await this.fireStorage.upload(path,file)
-      this.origin_certificate = await uploadTask.ref.getDownloadURL();
+  // loadingStatusFile: boolean = false;
+  // async onFileChangeCertificate(event:any){
+  //   const file = event.target.files[0]
+  //   if(file){
+  //     const path = `yt/${file.name}`
+  //     const uploadTask =await this.fireStorage.upload(path,file)
+  //     this.origin_certificate = await uploadTask.ref.getDownloadURL();
+  //   }
+  // }
+
+  loadingStatusFile: boolean = false;
+
+  fileName: any;
+  async onFileChangeCertificate(event: any) {
+    this.loadingStatusFile = true;
+
+    const file = event.target.files[0];
+    if (file) {
+      const path = `yt/${file.name}`;
+      this.fileName = file.name;
+      try {
+        const uploadTask = await this.fireStorage.upload(path, file);
+        this.origin_certificate = await uploadTask.ref.getDownloadURL();
+      } catch (error) {
+        console.error("Error uploading certificate:", error);
+      } finally {
+        this.loadingStatusFile = false;
+      }
+    } else {
+      this.loadingStatusFile = false;
     }
   }
 
+  areAllFieldsFilledRecord(): boolean {
+    // this.pet = new Pet(this.name, Number(this.age), this.gender, this.species, this.identifying, this.origin_certificate, this.urlPetImage, this.health_history_requests, this.customer_pet_requests);
+    return this.name && this.species && this.age && this.identifying && this.origin_certificate && this.urlPetImage ? false : true;
+    // return this.name ? true : false;
+  }
+
+  loadingStatusFileVaccination: any;
   async onFileChangeVaccine(event:any){
-    const file = event.target.files[0]
-    if(file){
-      const path = `yt/${file.name}`
-      const uploadTask =await this.fireStorage.upload(path,file)
-      this.urlVaccineImage = await uploadTask.ref.getDownloadURL();
+    // const file = event.target.files[0]
+    // if(file){
+    //   const path = `yt/${file.name}`
+    //   const uploadTask =await this.fireStorage.upload(path,file)
+    //   this.urlVaccineImage = await uploadTask.ref.getDownloadURL(); 
+    // }
+
+    this.loadingStatusFileVaccination = true;
+
+    const file = event.target.files[0];
+    if (file) {
+      const path = `yt/${file.name}`;
+      try {
+        const uploadTask = await this.fireStorage.upload(path, file);
+        this.urlVaccineImage = await uploadTask.ref.getDownloadURL();
+      } catch (error) {
+        console.error("Error uploading certificate:", error);
+      } finally {
+        this.loadingStatusFileVaccination = false;
+      }
+    } else {
+      this.loadingStatusFileVaccination = false;
     }
+
   }
   
-  async onSearch() {
-    const response = await this.http.get<SearchResult[]>(`${BASE_URL}/search/user?search=${this.headerComponent.searchName}`).toPromise();
+  async onSearch(searchKey: any) {
+    const response = await this.http.get<SearchResult[]>(`${BASE_URL}/search/user?search=${searchKey}`).toPromise();
     this.searchResults = response;
     console.log("searchResults",JSON.stringify(this.searchResults));
   }
@@ -177,12 +243,28 @@ export class HomeCustomerComponent implements OnInit{
   onKeydownHandler(event: KeyboardEvent) {
     const inputElement = event.target as HTMLInputElement; // Type assertion
     if (inputElement && inputElement.classList.contains('search-input')) {
-      this.onSearch();
+      console.log("inputElement",inputElement.value);
+      const searchKey = inputElement.value;
+      this.onSearch(searchKey);
     }
   }
 
   addRecord(){
 
+  }
+
+  closeDialog(){
+    this.modalRef?.hide();
+  }
+
+  myPets: any;
+  changePetForCustomer(customerPet: any, template: TemplateRef<any>){
+    console.log("customerPet",customerPet);
+    this.modalRef = this.modalService.show(template);
+  }
+
+  onChangePetAction(pet: any){
+    
   }
 
   insertRecord(template: TemplateRef<any>) {
@@ -238,7 +320,7 @@ export class HomeCustomerComponent implements OnInit{
         status:"sdashdsajgda ???"
       };
 
-      this.pet = new Pet(this.name, this.age, this.gender, this.species, this.identifying, this.origin_certificate, this.urlPetImage, this.health_history_requests, this.customer_pet_requests);
+      this.pet = new Pet(this.name, Number(this.age), this.gender, this.species, this.identifying, this.origin_certificate, this.urlPetImage, this.health_history_requests, this.customer_pet_requests);
       this.http.post<any>(`${BASE_URL}/pet/add`, this.pet).subscribe(
         (res) => {
           this.petId = res.data.id
@@ -277,8 +359,9 @@ export class HomeCustomerComponent implements OnInit{
   }
 
   removePetAccept(){
-    this.http.delete<any>(`${BASE_URL}/pet/delete?pet-id=`+this.petRemoveId).subscribe(
+    this.http.get<any>(`${BASE_URL}/pet/delete?pet-id=`+this.petRemoveId).subscribe(
       (res) => {
+        this.getListPetByUserId();
         this.modalRef?.hide();
         this.toastService.success('Xoá thành công');
       },
