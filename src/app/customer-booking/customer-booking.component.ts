@@ -114,7 +114,7 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
     medicineDescription?: string;
     image?: string;
     quantity?: string;
-    price?: string;
+    price: string = "";
     name?: string;
     type?: string;
     trademark?: string;
@@ -206,6 +206,10 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
             },
             (err) => {}
           );
+    }
+
+    formatPrice(price: string | number ): string {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
     async ngAfterViewInit() {

@@ -99,16 +99,37 @@ export class AdminManagerComponent implements OnInit{
 
   async registerClinic(){
     
+    // const response = await this.http.post<any>(`${BASE_URL}/account/create-host-account`,this.host).toPromise();
+
+
     this.host = new Host(this.gmail, this.password, this.full_name, this.address, this.phone_number, this.name_clinic, this.address_clinic)
     console.log("this.host",this.host);
-    await this.http.post<any>(`${BASE_URL}/account/create-host-account`,this.host).subscribe(
-      (res) => {
-        if(res){
-          this.toastService.success('Tạo host thành công');
-          this.modalRef?.hide();
-        }  
-      },
-    );
+    // const createHost = await this.http.post<any>(`${BASE_URL}/account/create-host-account`,this.host).subscribe(
+    //   (res) => {
+    //     if(res){
+    //       this.toastService.success('Tạo host thành công');
+    //       this.modalRef?.hide();
+    //     }  
+    //   },(err) => {
+    //     this.toastService.success(err.message);
+    //     this.modalRef?.hide();
+    //   }
+    // );
+
+    const response = await this.http.post<any>(`${BASE_URL}/account/create-host-account`,this.host).toPromise();
+    if(response.status === 1){
+      this.toastService.success('Tạo host thành công');
+      this.modalRef?.hide();
+      this.gmail = "";
+      this.password = "";
+      this.full_name = "";
+      this.address = "";
+      this.phone_number = "";
+      this.name_clinic = "";
+      this.address_clinic = "";
+    }else{
+      this.toastService.success('Đã xảy ra lỗi');
+    }
   }
 
   closeDialog(){

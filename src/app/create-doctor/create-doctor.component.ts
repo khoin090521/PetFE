@@ -130,6 +130,10 @@ export class CreateDoctorComponent implements OnInit{
     );
   }
 
+  formatPrice(price: string | number ): string {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
   openCreateDoctor(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }

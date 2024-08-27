@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, TemplateRef, Injectable } from '@angular/core';
+import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BASE_URL } from '../_common/constants/api';
 import { HeaderComponent } from '../header/header.component';

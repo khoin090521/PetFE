@@ -139,7 +139,7 @@
         <td>{{ i.name }}</td>
         <td><img style="width: 100px;height: 100px" [src]="i.medicine_image[0]?.image" alt="Vaccine Image"></td>
         <td>{{ i.quantity }}</td>
-        <td>{{ i.price }}</td>
+        <td>{{ formatPrice(i.price) }} VND</td>
         <td>{{ i.trademark }}</td>
         <td>{{ i.type }}</td>
         <td>{{ i.descrition }}</td>

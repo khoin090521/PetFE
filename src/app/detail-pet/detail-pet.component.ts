@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
 import { BASE_URL } from '../_common/constants/api';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -195,6 +195,29 @@ export class DetailPetComponent implements OnInit{
       this.loadingStatusAvatar = false;
     }
   }
+
+
+  async onSearch(searchKey: any) {
+    this.petId;
+    
+    const response = await this.http.get<any>(`${BASE_URL}/vacinationHistory/search?pet-id=${this.petId}&vacciname=${searchKey}`).toPromise();
+    this.listVacinationHistory = response.data;
+    console.log("searchResults",JSON.stringify(response.data));
+  }
+
+  searchKeyWord: any;
+  @HostListener('document:keydown.enter', ['$event'])
+  onKeydownHandler(event: KeyboardEvent) {
+    const inputElement = event.target as HTMLInputElement;
+    if (inputElement && inputElement.classList.contains('sub-search-input')) {
+      const searchKey = inputElement.value;
+      this.searchKeyWord = searchKey;
+      console.log("searchKey",searchKey);
+      console.log("this.petId;",this.petId);
+      this.onSearch(searchKey);
+    }
+  }
+
 
   deleteHealth(healthPet: any){
     this.http.get<any>(`${BASE_URL}/healthHistory/delete?healthhistory-id=${healthPet.id}`).subscribe(

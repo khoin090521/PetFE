@@ -107,7 +107,13 @@
 
 <div class="basic-profile sub-basic-profile" *ngIf="profiltTabStatus === 3">
     <div class="add-btn">
-        <button type="button" mat-fab class="insert" data-toggle="modal" (click)="openAddVacination(addVacinationForm)"><mat-icon>add</mat-icon></button>
+        <div class="sub-add-btn">
+            <button type="button" mat-fab class="insert" data-toggle="modal" (click)="openAddVacination(addVacinationForm)"><mat-icon>add</mat-icon></button>
+        </div>
+        <div class="search-container">
+            <input class="sub-search-input" type="text" placeholder="Tìm kiếm lịch sử tiêm vaccine...">
+            <mat-icon class="search-icon">search</mat-icon>
+          </div>
     </div>
 
     <div class="table-field">
