@@ -3,8 +3,8 @@
 
 <div class="detail-bar">
     <div class="infor-detail">
-        <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-        <h3 class="name-detail">Husky</h3>
+        <!-- <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
+        <h3 class="name-detail">Husky</h3> -->
         <!-- <div class="option-detail"> -->
             <!-- <button class="profile-btn" mat-fab extended (click)="openProfile()">Hồ sơ</button>
             <button class="erecord-btn" mat-fab extended (click)="openERecord()">Bệnh án điện tử</button> -->
@@ -32,31 +32,49 @@
 <!-- <div class="basic-profile" *ngIf="profiltTabStatus === 1">     -->
     <div class="left-group">
         <div class="form-group">
+            <h3>Tên thú cưng</h3>
             <input autocomplete="off" required class="form-control mt-1" placeholder="Tên" [(ngModel)]="petName">
         </div>
         <div class="form-group mt-3">
+            <h3>Loài</h3>
             <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Loài" [(ngModel)]="petSpecies">
         </div>
         <div class="form-group mt-3">
-            <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Ngày sinh" [(ngModel)]="petAge">
+            <h3>Tuổi thú cưng</h3>
+            <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Tuổi" [(ngModel)]="petAge">
         </div>
         <div class="form-group mt-3">
-            <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Ngày sinh" [(ngModel)]="petIdentifying">
+            <h3>Nhận dạng</h3>
+            <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Nhận dạng" [(ngModel)]="petIdentifying">
+        </div>
+        <div class="form-group mt-3 certificatePet">
+            <h3>Giấy chứng nhận nguồn gốc</h3>
+            <label class="certificatePet">
+                <div *ngIf="!urlCertificate">
+                    <img style="height: 200px;width: 300px" class="update-certificate" src="{{ certificatePet }}" alt=""><br>
+                    <input type="file" (change)="onFileChangeCertificate($event)" >
+                </div>
+                <div *ngIf="urlCertificate">
+                    <input type="file" (change)="onFileChangeCertificate($event)" >
+                    <img style="height: 200px;width: 300px" class="update-certificate" src="{{ certificatePet }}" alt=""><br>
+                </div>
+            </label>
         </div>
     </div>
 
     <div class="right-group">
         <form>
             <label class="file-upload">
-                <div class="update-right">
-                    <img style="height: 150px;width: 150px" class="update-avatar" src="{{ imagePet }}" alt=""><br>
-                    <!-- <input type="file" (change)="onChange($event)"/> -->
-                    <!-- <button class="update-btn" mat-fab extended (click)="openProfile()">Cập nhật</button> -->
+                <div *ngIf="!urlPetImage">
+                    <img class="imgDev" style="height: 150px;width: 150px" class="update-avatar" src="{{ imagePet }}" alt=""><br>
+                    <input type="file" (change)="onFileChange($event)" >
+                    <button class="update-btn" mat-fab extended (click)="updatePet()">Cập nhật</button>
                 </div>
-                <!-- <div *ngIf="myImage">
-                    <img [src]="myImage" alt="">
-                    <input type="file" (change)="onChange($event)"/>
-                </div> -->
+                <div *ngIf="urlPetImage">
+                    <input type="file" (change)="onFileChange($event)" >
+                    <img style="height: 150px;width: 150px" class="update-avatar" src="{{ imagePet }}" alt=""><br>
+                    <button style="display: flex;margin-left: 50%;" class="update-btn" mat-fab extended (click)="updatePet()">Cập nhật</button>
+                </div>
             </label>
         </form>
     </div>
@@ -66,7 +84,12 @@
 <div class="basic-profile" *ngIf="profiltTabStatus === 2">
     <div class="left-group health-history">
         <form *ngFor="let i of healthPetList">
-            <textarea class="form-control" id="" rows="5" cols="50" value="{{ i.description }}" [disabled]="true"></textarea>
+            <div style="display: flex; align-items: center;">
+                <textarea class="form-control" id="" rows="5" cols="50" value="{{ i.description }}" [disabled]="true"></textarea>
+                <button mat-fab style="margin-left: 10px;" (click)="deleteHealth(i)">
+                    <mat-icon>delete_forever</mat-icon>
+                </button>
+            </div>
         </form>
         <form>
             <textarea class="form-control" id="" rows="5" cols="50" [(ngModel)]="descriptionHealth" [ngModelOptions]="{standalone: true}"></textarea>
@@ -75,9 +98,6 @@
     <div class="right-group">
         <form>
             <div class="update-right">
-                <!-- <button mat-fab class="openTextArea">
-                    <mat-icon>add</mat-icon>
-                </button><br><br> -->
                 <button mat-fab extended (click)="addHealthHistory()">Cập nhật</button>
             </div>
         </form>
@@ -98,6 +118,7 @@
                 <th scope="col">Mô tả</th>
                 <th scope="col">Ảnh</th>
                 <th scope="col">Ngày tiêm</th>
+                <th scope="col">Xoá lịch sử tiêm phòng</th>
               </tr>
             </thead>
             <tbody>
@@ -106,6 +127,11 @@
                 <td>{{ i.description }}</td>
                 <td><img style="width: 100px;height: 100px" [src]="i.vaccin_image" alt="Vaccine Image"></td>
                 <td>{{ i.injection_date }}</td>
+                <td>
+                    <button mat-fab style="margin-left: 10px;" (click)="deleteInjection(i)">
+                        <mat-icon>delete_forever</mat-icon>
+                    </button>
+                </td>
               </tr>
             </tbody>
         </table>

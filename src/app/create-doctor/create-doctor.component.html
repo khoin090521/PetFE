@@ -137,7 +137,7 @@
     <tbody>
       <tr *ngFor="let i of listMedicine">
         <td>{{ i.name }}</td>
-        <td><img style="width: 100px;height: 100px" [src]="i.medicine_image[0].image" alt="Vaccine Image"></td>
+        <td><img style="width: 100px;height: 100px" [src]="i.medicine_image[0]?.image" alt="Vaccine Image"></td>
         <td>{{ i.quantity }}</td>
         <td>{{ i.price }}</td>
         <td>{{ i.trademark }}</td>
@@ -189,7 +189,7 @@
           <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Tên thuốc" [(ngModel)]="medicine_name" [ngModelOptions]="{standalone: true}">
         </div>
         <div class="form-group mt-3">
-          <input autocomplete="off" (change)="onFileChangeUpdate($event)" required type="file" class="form-control mt-1" placeholder="Hình ảnh" [(ngModel)]="image" [ngModelOptions]="{standalone: true}" [disabled]="loadingStatusFileUpdate">
+          <input autocomplete="off" (change)="onFileChangeUpdate($event)" required type="file" class="form-control mt-1" placeholder="Hình ảnh" [disabled]="loadingStatusFileUpdate">
         </div>
         <div class="form-group mt-3" *ngIf="loadingStatusFileUpdate">
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>

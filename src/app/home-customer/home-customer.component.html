@@ -1,10 +1,6 @@
 <app-header></app-header>
 <router-outlet></router-outlet>
 
-<!-- <input type="file" (change)="onFileChange($event)"> -->
-
-<!-- <mat-spinner></mat-spinner> -->
-
 <div class="container" *ngIf="!searchResults">
     <div class="item">
         <div class="avatar">
@@ -29,7 +25,6 @@
                                                 <input type="file" (change)="onFileChange($event)" [(ngModel)]="transfer_contract" [ngModelOptions]="{standalone: true}">
                                             </div>
                                             <div *ngIf="urlPetImage && !loadingStatusAvatar">
-                                                <!-- <mat-spinner></mat-spinner> -->
                                                 <img style="width: 120px;height: 120px" [src]="urlPetImage" alt="">
                                                 <input type="file" (change)="onFileChange($event)"/>
                                             </div>
@@ -42,7 +37,7 @@
                             </div>
                             <div class="right-col">
                                 <div class="form-group">
-                                    <input autocomplete="off" required class="form-control mt-1" placeholder="Tên" [(ngModel)] = "name" [ngModelOptions]="{standalone: true}">
+                                  <input autocomplete="off" required class="form-control mt-1" placeholder="Tên" [(ngModel)] = "name" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
                                     <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Loài" [(ngModel)] = "species" [ngModelOptions]="{standalone: true}">
@@ -54,6 +49,7 @@
                                     <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Đặc điểm nhận dạng" [(ngModel)] = "identifying" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
+                                  <h3 style="display: flex;margin-right: auto">Ảnh xác nhận nguồn gốc</h3>
                                     <input (change)="onFileChangeCertificate($event)" autocomplete="off" required type="file" class="form-control mt-1" [disabled]="loadingStatusFile">
                                 </div>
                                 <div class="form-group mt-3" *ngIf="loadingStatusFile">
@@ -67,7 +63,8 @@
                         <div class="modal-body" *ngIf="rightPopupIndex===2">
                             <div class="form-group">
                                 <form>
-                                    <textarea class="form-control" id="" rows="20" cols="50" [(ngModel)]="descriptionHealthHistory" [ngModelOptions]="{standalone: true}"></textarea>
+                                  <h3 style="display: flex;margin-right: auto">Lịch sử sức khoẻ</h3>
+                                    <textarea class="form-control" id="" placeholder="Lịch sử sức khoẻ" rows="20" cols="50" [(ngModel)]="descriptionHealthHistory" [ngModelOptions]="{standalone: true}"></textarea>
                                 </form>
                             </div>
                             <button  mat-fab class="mat-fab" *ngIf="rightPopupIndex===2" (click)="nextRecord()" [disabled]="descriptionHealthHistory ? false : true">
@@ -81,13 +78,14 @@
                                         <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)] = "vaccine" [ngModelOptions]="{standalone: true}">
                                     </div>
                                     <div class="form-group">
-                                        <textarea class="form-control" id="" rows="10" cols="50" [(ngModel)]="descriptionVacineHistory" [ngModelOptions]="{standalone: true}"></textarea>
+                                        <textarea class="form-control" id="" rows="10" cols="50" placeholder="Thêm mô tả thuốc" [(ngModel)]="descriptionVacineHistory" [ngModelOptions]="{standalone: true}"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <input autocomplete="off" required type="date" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)] = "injection_date" [ngModelOptions]="{standalone: true}">
+                                        <input autocomplete="off" required type="date" class="form-control mt-1" placeholder="" [(ngModel)] = "injection_date" [ngModelOptions]="{standalone: true}">
                                     </div>
                                     <div class="form-group">
-                                        <input autocomplete="off" (change)="onFileChangeVaccine($event)" required type="file" class="form-control mt-1" placeholder="Tên vaccine" [disabled]="loadingStatusFileVaccination">
+                                      <h3 style="display: flex;margin-right: auto">Giấy chứng nhận tiêm phòng</h3>
+                                        <input autocomplete="off" (change)="onFileChangeVaccine($event)" required type="file" class="form-control mt-1" [disabled]="loadingStatusFileVaccination">
                                     </div>
                                     <div class="form-group mt-3" *ngIf="loadingStatusFileVaccination">
                                         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -135,7 +133,7 @@
 
 <ng-template #changePet>
     <div class="modal-header">
-        <b><h1 class="modal-title pull-left">Danh sách pet chuyển nhượng</h1></b>
+        <b><h1 class="modal-title pull-left">Danh sách pet chuyển nhượng cho {{petMail}}</h1></b>
       </div>
       <div class="modal-body">
         <mat-selection-list class="custom-scroll-bar" *ngFor="let i of myPets" (click)="onChangePetAction(i)">
@@ -162,47 +160,3 @@
         </div>
       </form>
 </ng-template>
-
-    <!-- <div class="container demo">
-      <div class="text-center">
-        <button type="button" class="btn btn-demo" data-toggle="modal" data-target="#myModal2"> Right Sidebar Modal </button>
-      </div>
-      <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              Right Sidebar </div>
-            <div class="modal-body">
-              <p>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
-
-<!-- <ng-template #loginForm>
-    <form ngNativeValidate>
-        <div class="modal-header">
-          <b><h1 class="modal-title pull-left">Đăng nhập</h1></b>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="username">Tên tài khoản</label>
-            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Tên tài khoản"
-              >
-          </div>
-          <div class="form-group mt-3">
-            <label for="password">Mật khẩu</label>
-            <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
-              placeholder="Mật khẩu">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <div class="operate-btn">
-            <button type="submit" class="btn btn-primary mt-3">Đăng nhập</button>
-          </div>
-        </div>
-      </form>
-</ng-template> -->

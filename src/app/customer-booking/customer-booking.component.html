@@ -108,34 +108,12 @@
         <div class="container" >
           <div *ngFor="let i of listMedicine"> 
             <div class="item">
-              <img [src]="i.medicine_image">
-                <!-- <h2>{{ i.name }}</h2> -->
-                <button style="border-radius: 20px;" mat-stroked-button (click)="viewDetail(i.descrition,viewDetailForm)">{{ i.name }}</button>
-                <h2>{{ i.price }}</h2>
+              <img style="width: 200px;height: 200px;" [src]="i.medicine_image[0]?.image">
+                <button style="border-radius: 20px;" mat-stroked-button (click)="viewDetail(i,viewDetailForm)">{{ i.name }}</button>
+                <h2>{{ i.price }} - {{ i.medicine_image.length - 1 }}</h2>
             </div>
           </div>
         </div>
-          
-        <!-- <div class="pagination">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div> -->
-      
       </div>
 </div>
 
@@ -147,10 +125,15 @@
       </div>
       <div class="modal-body">
           <div class="form-group">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
+            <img [src]="image">
           </div>
           <div class="time">
-            Description: {{medicineDescription}}
+            Tên sản phẩm: {{ name }}<br>
+            Số lượng: {{ quantity }}<br>
+            Giá: {{ price }}<br>
+            Loại: {{ type }}<br>
+            Tên sản phẩm: {{ trademark }}<br>
+            Description: {{medicineDescription}}<br>
           </div>
       </div>
   </form>

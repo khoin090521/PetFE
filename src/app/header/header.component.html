@@ -1,16 +1,27 @@
 <mat-toolbar style="display: flex;">
-    <a class="home-router" routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page" >
+    <!-- <a class="home-router" routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="user_role ? true : null"
+    [ngClass]="{'disabled-link': user_role}" 
+    > -->
+    <!-- <a class="home-router" routerLink="/home-customer" routerLinkActive="active" ariaCurrentWhenActive="page" [attr.disabled]="user_role ? true : null"> -->
+    <a class="home-router" [routerLink]="routerLinkHome" (click)="onHomeLinkClick($event)" routerLinkActive="active" ariaCurrentWhenActive="page">
         <img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHzk11ew70ojpgPNU6wYKRY_o1DI_JRVkz3g-VIZpf35P8RB6itrtnEHWfAgDssDVBbZI&usqp=CAU" alt="">
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHzk11ew70ojpgPNU6wYKRY_o1DI_JRVkz3g-VIZpf35P8RB6itrtnEHWfAgDssDVBbZI&usqp=CAU" alt=""
+        >
     </a>
 
-    <div class="search-container" *ngIf="username">
+
+    <!-- <div class="search-container" *ngIf="username && !disabledSearch">
         <input class="search-input" type="text" placeholder="Tìm kiếm..." [(ngModel)]="searchName" [ngModelOptions]="{standalone: true}">
         <mat-icon class="search-icon">search</mat-icon>
-    </div>
+    </div> -->
+
+    <div class="search-container" *ngIf="username">
+      <input class="search-input" type="text" placeholder="Tìm kiếm..." [(ngModel)]="searchName" [ngModelOptions]="{standalone: true}">
+      <mat-icon class="search-icon">search</mat-icon>
+  </div>
     
     <div class="right-container">
-        <button mat-fab class="mat-fab" (click)="openLoginForm(loginForm, logoutForm)">
+        <button mat-fab class="mat-fab" (click)="openLoginForm(loginForm, logoutForm)" matTooltip="Đăng kí/Đăng nhập">
             <mat-icon class="account-icon">account_circle</mat-icon>
         </button>
         <button *ngIf="user_role === 'customer'" mat-fab class="mat-fab" (click)="redirectToBooking(chooseClinic)">
@@ -41,6 +52,7 @@
   <form *ngIf="openProfile == false">
     <div class="modal-header">
       <b><h1 class="modal-title pull-left">Chào {{username}}</h1></b>
+      <a *ngIf="meeting" [href]="meeting" target="_blank" rel="noopener noreferrer">Truy cập meeting</a>
     </div>
   
     <div class="modal-body">
@@ -103,34 +115,6 @@
 
 </ng-template>
 
-
-<!-- <ng-template #myProfile>
-  <form *ngIf="registerStatus == false" [formGroup]="formLogin" (ngSubmit)="onLogin()" ngNativeValidate>
-    <div class="modal-header">
-      <b><h1 class="modal-title pull-left">Hồ sơ cá nhân</h1></b>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <input autocomplete="off" required class="form-control mt-1" id="name" placeholder="Họ và tên" formControlName="gmail">
-      </div>
-      <div class="form-group">
-        <input type="email" autocomplete="off" required class="form-control mt-1" id="gmail" placeholder="Gmail" formControlName="gmail">
-      </div>
-      <div class="form-group">
-        <input autocomplete="off" required class="form-control mt-1" id="phone-number" placeholder="Số điện thoại" formControlName="phone-number">
-      </div>
-      <div class="form-group">
-        <input autocomplete="off" required class="form-control mt-1" id="addrres" placeholder="Địa chỉ" formControlName="addrres">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <div class="operate-btn">
-        <button type="submit" class="btn btn-primary mt-3">Xác nhận</button>
-      </div>
-    </div>
-  </form>
-</ng-template> -->
-
 <ng-template #loginForm>
     <form *ngIf="registerStatus == false" [formGroup]="formLogin" (ngSubmit)="onLogin()" ngNativeValidate>
       <div class="modal-header">
@@ -160,7 +144,6 @@
     <form *ngIf="registerStatus" ngNativeValidate>
       <div class="modal-header">
         <b><h1 class="modal-title pull-left">Đăng ký</h1></b>
-        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
       </div>
       <div class="modal-body">
         <div class="form-group">

@@ -53,6 +53,13 @@ class CustomerPetRequest {
   ){}
 }
 
+class CustomerPetChange {
+  constructor(
+    public customerID: number,
+    public petID: number,
+  ){}
+}
+
 interface SearchResult {
   gmail: string;
   full_name: string;
@@ -86,6 +93,7 @@ export class HomeCustomerComponent implements OnInit{
   vaccineHistory?: VaccineHistory;
   petList: any;
 
+  customerPetChange?: CustomerPetChange;
 
 
   descriptionHealthHistory: string = "";
@@ -141,13 +149,6 @@ export class HomeCustomerComponent implements OnInit{
  
   loadingStatusAvatar: boolean = false;
   async onFileChange(event:any){
-    // const file = event.target.files[0]
-    // if(file){
-    //   const path = `yt/${file.name}`
-    //   const uploadTask = await this.fireStorage.upload(path,file)
-    //   this.urlPetImage = await uploadTask.ref.getDownloadURL();
-    //   this.loadingStatusAvatar = true;
-    // }
     this.loadingStatusAvatar = true;
 
     const file = event.target.files[0];
@@ -165,16 +166,6 @@ export class HomeCustomerComponent implements OnInit{
       this.loadingStatusAvatar = false;
     }
   }
-
-  // loadingStatusFile: boolean = false;
-  // async onFileChangeCertificate(event:any){
-  //   const file = event.target.files[0]
-  //   if(file){
-  //     const path = `yt/${file.name}`
-  //     const uploadTask =await this.fireStorage.upload(path,file)
-  //     this.origin_certificate = await uploadTask.ref.getDownloadURL();
-  //   }
-  // }
 
   loadingStatusFile: boolean = false;
 
@@ -234,17 +225,19 @@ export class HomeCustomerComponent implements OnInit{
   }
   
   async onSearch(searchKey: any) {
-    const response = await this.http.get<SearchResult[]>(`${BASE_URL}/search/user?search=${searchKey}`).toPromise();
+    const response = await this.http.get<SearchResult[]>(`${BASE_URL}/search/customer?search=${searchKey}`).toPromise();
     this.searchResults = response;
     console.log("searchResults",JSON.stringify(this.searchResults));
   }
 
+  searchKeyWord: any;
   @HostListener('document:keydown.enter', ['$event'])
   onKeydownHandler(event: KeyboardEvent) {
     const inputElement = event.target as HTMLInputElement; // Type assertion
     if (inputElement && inputElement.classList.contains('search-input')) {
       console.log("inputElement",inputElement.value);
       const searchKey = inputElement.value;
+      this.searchKeyWord = searchKey;
       this.onSearch(searchKey);
     }
   }
@@ -258,13 +251,27 @@ export class HomeCustomerComponent implements OnInit{
   }
 
   myPets: any;
+  customerPetId: any;
+  petMail: any;
   changePetForCustomer(customerPet: any, template: TemplateRef<any>){
     console.log("customerPet",customerPet);
+    this.customerPetId = customerPet.customer_id;
+    this.petMail = customerPet.gmail;
     this.modalRef = this.modalService.show(template);
   }
 
   onChangePetAction(pet: any){
-    
+    this.customerPetChange = new CustomerPetChange(this.customerPetId, pet.id);
+    this.http.post<any>(`${BASE_URL}/pet/update-customer`,this.customerPetChange).subscribe(
+      (res) => {
+        this.onSearch(this.searchKeyWord);
+        this.toastService.success('Chuyển nhượng pet thành công');
+        this.modalRef?.hide();
+      },
+      (err) => {
+        this.toastService.success('Chuyển nhượng pet thất bại');
+      }
+    );
   }
 
   insertRecord(template: TemplateRef<any>) {
@@ -373,7 +380,8 @@ export class HomeCustomerComponent implements OnInit{
     this.modalRef?.hide();
     const navigationExtras: NavigationExtras = {
       queryParams: { petId: pet.id, name: pet.name, age: pet.age, gender: pet.gender, 
-        species: pet.species , identifying: pet.identifying, image: pet.transfer_contract}
+        species: pet.species , identifying: pet.identifying, image: pet.transfer_contract,
+        origin_certificate: pet.origin_certificate }
     };
     this.router.navigate(['/detail-pet'], navigationExtras);
   }

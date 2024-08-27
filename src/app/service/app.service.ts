@@ -30,11 +30,11 @@ export class AppService {
     //     return await this.http.get<any>(`${BASE_URL}/booking/listbycustomer?customer-id=${customerId}`).toPromise();
     // }
 
-    async getDoctorByClinic(){
-        const customerId = localStorage.getItem("user_id");
-        const response = await this.http.get<any>(`${BASE_URL}/booking/listbycustomer?customer-id=${customerId}`).toPromise();
-        return response.data;
-    }
+    // async getDoctorByClinic(){
+    //     const customerId = localStorage.getItem("user_id");
+    //     const response = await this.http.get<any>(`${BASE_URL}/booking/listbycustomer?customer-id=${customerId}`).toPromise();
+    //     return response.data;
+    // }
 
     async getEvents(actions: CalendarSchedulerEventAction[]): Promise<CalendarSchedulerEvent[]> {
         // const events = [
@@ -53,7 +53,14 @@ export class AppService {
         // ];
 
         const customerId = localStorage.getItem("user_id");
-        const response = await this.http.get<any>(`${BASE_URL}/booking/listbycustomer?customer-id=${customerId}`).toPromise();
+        const routerUrl = window.location.href
+        const urlObj = new URL(routerUrl);
+
+        const clinicId = Number(urlObj.searchParams.get('clinicId') || '');
+
+
+
+        const response = await this.http.get<any>(`${BASE_URL}/booking/listbycustomer?customer-id=${customerId}&clinic-id=${clinicId}`).toPromise();
         const data = response.data;
 
         const events = data.map((item: any) => {
@@ -77,19 +84,15 @@ export class AppService {
             const start = addDays(startOfHour(setHours(new Date(), startDecimal)), daysDiff);
             const end = addDays(startOfHour(setHours(new Date(), endDecimal)), daysDiff);
 
-            console.log("startDecimal",startDecimal)
-            console.log("endDecimal",endDecimal)
-
-
+            const statusBooking = item.status === 1 ?"Đã chấp nhận" : item.status === 0 ? "Đang chờ bác sĩ" : "Đã từ chối";
             return <CalendarSchedulerEvent>{
                 id: item.id,
-                start: start,
-                end: end,
+                start: targetStartDate,
+                end: targetEndDate,
                 title: item.content,
-                content: item.content,
-                color: { primary: '#E0E0E0', secondary: '#EEEEEE' }, // Customize based on your needs
+                content: statusBooking,
                 actions: actions,
-                status: item.status === 0 ? 'ok' as CalendarSchedulerEventStatus : 'cancelled' as CalendarSchedulerEventStatus, // Example status mapping
+                status: item.status === 1 ? 'ok' as CalendarSchedulerEventStatus : 'cancelled' as CalendarSchedulerEventStatus, // Example status mapping
                 isClickable: true,
                 isDisabled: false
             };

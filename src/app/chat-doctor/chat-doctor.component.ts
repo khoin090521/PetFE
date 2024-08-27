@@ -1,6 +1,5 @@
-import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
-import {MatTableModule} from '@angular/material/table';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit, HostListener, TemplateRef, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BASE_URL } from '../_common/constants/api';
 import { HeaderComponent } from '../header/header.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -79,8 +78,11 @@ export class ChatDoctorComponent implements OnInit{
   openContactScreenPet: any = true;
   openAddRecord: any = false;
   openSchedule: any = false;
+  closeRecord: any = true;
   displayedDiagnostic: string[] = ['position', 'date', 'name', 'diagnostic','id'];
   dataSource = DISAGNOSTIC_DATA;
+
+  initRecordDoctor: any = true;
 
   displayedSchedule: string[] = ['schedule', 'detail', 'status', 'id'];
   dataSourceSchedule = SCHEDULE_DATA;
@@ -112,15 +114,13 @@ export class ChatDoctorComponent implements OnInit{
   examination_date: string = "";
   symptom_description: string = "";
   symptoms_time: string = "";
-  body_temperature: number = 0;
+  body_temperature: string = "";
   external_examinationd: string = "";
   test_results: string = "";
   preliminary_diagnosis: string = "";
   medications: string = "";
   nutrition: string = "";
   re_examination: string = "";
-
-
 
   petNameDetail: string = "";
   petAgeDetail: string = "";
@@ -133,27 +133,69 @@ export class ChatDoctorComponent implements OnInit{
   nutritionDetail: string = "";
   re_examinationDetail: string = "";
 
-
-
   ngOnInit(): void {
-    this.getScheduleByDoctorId(); 
+    this.getScheduleByDoctorId();
+    setTimeout(() => {
+      this.listPetRecord();
+    }, 1000)
   }
 
   async onSearch(searchKey: any) {
     const response = await this.http.get<SearchResult[]>(`${BASE_URL}/search/customer?search=${searchKey}`).toPromise();
     this.searchResults = response;
+    this.openSchedule = true;
+    this.closeRecord = false;
+
+    this.initRecordDoctor = false;
+
+    // this.openSchedule = false;
+    // this.closeRecord = true;
+  }
+
+  viewDetailPet(petRecord: any, template: TemplateRef<any>){
+
+    this.symptom_descriptionDetail = petRecord.symptom_description;
+    this.symptoms_timeDetail = petRecord.symptoms_time;
+    this.body_temperatureDetail = petRecord.body_temperature;
+    this.test_resultsDetail = petRecord.test_results;
+    this.external_examinationdDetail = petRecord.external_examination;
+    this.re_examinationDetail = petRecord.re_examination;
+    this.nutritionDetail = petRecord.nutrition;
+    this.medicationsDetail = petRecord.medications;
+
+    this.modalRef = this.modalService.show(template);
+  }
+
+  petRecordByDoctorId: any;
+  async listPetRecord() {
+    const doctor_id = Number(localStorage.getItem('user_id'));
+    const response = await this.http.get<any>(`${BASE_URL}/petRecord/listByDoctorId?doctor-id=${doctor_id}`).toPromise();
+    this.petRecordByDoctorId = response.data;
+    console.log("this.searchResults",this.searchResults);
   }
 
   async verifyBooking(id: any){
     const response = await this.http.get<any>(`${BASE_URL}/booking/update?booking-id=${id}&status=1`).toPromise();
+    if(response.status === 1){
+      this.toastService.success('Đã chấp nhận lịch hẹn');
+    }else{
+      this.toastService.success('Đã có lỗi xảy ra');
+    }
     this.searchResults = response;
     console.log("searchResults",this.searchResults);
+    this.getScheduleByDoctorId(); 
   }
 
   async rejectBooking(id: any){
     const response = await this.http.get<any>(`${BASE_URL}/booking/update?booking-id=${id}&status=-1`).toPromise();
+    if(response.status === 1){
+      this.toastService.success('Đã từ chối lịch hẹn');
+    }else{
+      this.toastService.success('Đã có lỗi xảy ra');
+    }
     this.searchResults = response;
     console.log("searchResults",this.searchResults);
+    this.getScheduleByDoctorId(); 
   }
 
   async getScheduleByDoctorId() {
@@ -172,7 +214,7 @@ export class ChatDoctorComponent implements OnInit{
       this.listPetRecordOTP = false;
       this.onSearch(searchKey);
     }
-  }
+  } 
 
   add_record(){
     this.openAddRecord = true;
@@ -182,11 +224,24 @@ export class ChatDoctorComponent implements OnInit{
 
   open_schedule(){
     this.openSchedule = true;
-    this.openContactScreen = false;
-    this.openAddRecord = false;
+    this.closeRecord = true;
+    this.initRecordDoctor = 1;
+    this.listPetRecordOTP = false;
+
+    if(this.transistionStatus == 0){
+      this.erecordBtn = "erecord-btn";
+      this.profileBtn = "profile-btn";
+    }else if(this.transistionStatus == 1){
+      this.erecordBtn = "profile-btn";
+      this.profileBtn = "erecord-btn";
+    }
+    this.eRecordScreen = true;
   }
 
   openProfile(){
+    this.initRecordDoctor = true;
+    this.closeRecord = false;
+
     if(this.transistionStatus == 1){
       this.profileBtn = "profile-btn";
       this.erecordBtn = "erecord-btn";
@@ -216,6 +271,7 @@ export class ChatDoctorComponent implements OnInit{
     this.userGmail = user.gmail;
     const response = await this.http.get<any>(`${BASE_URL}/pet/list?index-page=1&size=10&customer-id=${user.customer_id}`).toPromise();
     this.listPetByUserId = response.data.content;
+    console.log("this.listPetByUserId",this.listPetByUserId);
     this.selectPetState = true;
     this.modalRef = this.modalService.show(template);
   }
@@ -240,11 +296,13 @@ export class ChatDoctorComponent implements OnInit{
       const response = await this.http.get<any>(`${BASE_URL}/email/checkCode?code=${this.textOTP}&user-id=${this.idVerify}`).toPromise();    
       console.log("response",JSON.stringify(response));
       if(response.data === "True"){
+          this.textOTP = "";
           this.toastService.success('Xác thực thành công');
           this.listPetRecordOTP = true;
+          this.initRecordDoctor = 1;
           this.modalRef?.hide();
       }else{
-        this.toastService.success('Xác thực thất bại');
+        this.toastService.warning('Xác thực thất bại');
       }
       const responseRecord = await this.http.get<any>(`${BASE_URL}/petRecord/list?pet-id=${this.pet_id}`).toPromise();
       this.getPetRecord = responseRecord.data;
@@ -252,7 +310,6 @@ export class ChatDoctorComponent implements OnInit{
   }
 
   viewDetailPetRecord(petRecord: any, template: TemplateRef<any>){
-    console.log("petRecord123",JSON.stringify(petRecord));
     this.symptom_descriptionDetail = petRecord.symptom_description;
     this.symptoms_timeDetail = petRecord.symptoms_time;
     this.body_temperatureDetail = petRecord.body_temperature;
@@ -279,40 +336,38 @@ export class ChatDoctorComponent implements OnInit{
 
     this.petRecord = new PetRecord(
       this.pet_id, this.doctor_id, this.examination_date, this.symptom_description, 
-      this.symptoms_time, this.body_temperature, this.external_examinationd,
+      this.symptoms_time, Number(this.body_temperature), this.external_examinationd,
       this.test_results, this.preliminary_diagnosis, this.medications,this.nutrition, this.re_examination);
       await this.http.post<any>(`${BASE_URL}/petRecord/add`, this.petRecord).subscribe(
       (res) => {
-        //??
         this.toastService.success('Thêm bệnh án thành công');
         this.modalRef?.hide();
+        this.examination_date = ""; 
+        this.symptom_description = ""; 
+        this.symptoms_time = ""; 
+        this.body_temperature = "";
+        this.external_examinationd = "";
+        this.test_results = "";
+        this.preliminary_diagnosis = "";
+        this.medications = "";
+        this.nutrition = ""; 
+        this.re_examination = "";
+        this.getPetRecordAfterAdd();
       },
       (err) => {
         this.toastService.success('Thêm bệnh án thất bại');
         this.modalRef?.hide();
       }
     );
-    // const response = await this.http.get<any>(`${BASE_URL}/petRecord/list?pet-id=${this.pet_id}`).toPromise();
-    // this.getPetRecord = response.data;
+    
+  }
+
+  async getPetRecordAfterAdd(){
+    const response = await this.http.get<any>(`${BASE_URL}/petRecord/list?pet-id=${this.pet_id}`).toPromise();
+    this.getPetRecord = response.data;
   }
 
   closeDialog(){
     this.modalRef?.hide();
   }
-
-
 }
-
-
-// public pet_id: number,
-//     public doctor_id: number,
-//     public examination_date: string,
-//     public symptom_description: string,
-//     public symptoms_time: string,
-//     public body_temperature: number,
-//     public external_examinationd: string,
-//     public test_results: string,
-//     public preliminary_diagnosis: string,
-//     public medications: string,
-//     public nutrition: string,
-//     public re_examination: string,

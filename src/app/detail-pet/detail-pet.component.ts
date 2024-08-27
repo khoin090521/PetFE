@@ -31,6 +31,25 @@ class VaccineHistory{
   ) {}
 }
 
+class Pet{
+  constructor(
+    public id: number,
+    public name: string,
+    public age: string,
+    public gender: boolean,
+    public species: string,
+    public identifying: string,
+    public originCertificate: string,
+    public transfer_contract: string,
+    public origin_certificate: string,
+    public health_history_requests: any,
+    public vacination_history_requests: any,
+    public customer_pet_requestes: any,
+
+  ) {}
+}
+
+
 const ELEMENT_DATA: PeriodicElement[] = [
   {date: '07-02-2024', doctor: 'Hydrogen', diagnose: "Nấm ở vùng lưng", detail: 'H'},
   {date: '07-02-2024', doctor: 'Helium', diagnose:  "Nấm ở vùng lưng", detail: 'He'},
@@ -68,6 +87,7 @@ export class DetailPetComponent implements OnInit{
   petSpecies: string = "";
   petIdentifying: string = "";
   imagePet: string = "";
+  certificatePet: string = "";
   healthPetList: any;
   recordPetList: any;
   descriptionHealth: any;
@@ -92,8 +112,7 @@ export class DetailPetComponent implements OnInit{
   listVacinationHistory: any;
   vaccineHistory?: VaccineHistory;
 
-
-
+  pet?: Pet;
 
   async ngAfterViewInit() {
     const routerUrl = window.location.href
@@ -107,7 +126,9 @@ export class DetailPetComponent implements OnInit{
     const species = urlObj.searchParams.get('species') || '';
     const identifying = urlObj.searchParams.get('identifying') || '';
     const image = urlObj.searchParams.get('image') || '';
+    const certificate = urlObj.searchParams.get('origin_certificate') || '';
     console.log("this.petId",this.petId);
+    console.log("certificate",certificate);
 
     setTimeout(() => {
         this.petName = decodeURIComponent(name);
@@ -116,6 +137,7 @@ export class DetailPetComponent implements OnInit{
         this.petSpecies = decodeURIComponent(species);
         this.petIdentifying = decodeURIComponent(identifying);
         this.imagePet = image;
+        this.certificatePet = certificate;
       }, 500)
   }
 
@@ -139,6 +161,86 @@ export class DetailPetComponent implements OnInit{
       this.getRecordPet();
     }, 1000)
   }
+
+  updatePet(){
+    this.pet = new Pet(Number(this.petId), this.petName, this.petAge, true, this.petSpecies, this.petIdentifying, this.certificatePet, this.imagePet, this.certificatePet, null, null, null);
+    this.http.post<any>(`${BASE_URL}/pet/update`,this.pet).subscribe(
+      (res) => {
+        this.listVacinationHistory = res.data;
+        this.toastService.success("Back lại trang trước và cập nhật lại trang này");
+      },
+      (err) => {
+        this.toastService.error("Cập nhật thất bại")
+      } 
+    );
+  }
+
+  urlPetImage: any = "";
+  loadingStatusAvatar: boolean = false;
+  async onFileChange(event:any){
+    this.loadingStatusAvatar = true;
+
+    const file = event.target.files[0];
+    if (file) {
+      const path = `yt/${file.name}`;
+      try {
+        const uploadTask = await this.fireStorage.upload(path, file);
+        this.imagePet = await uploadTask.ref.getDownloadURL();
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      } finally {
+        this.loadingStatusAvatar = false;
+      }
+    } else {
+      this.loadingStatusAvatar = false;
+    }
+  }
+
+  deleteHealth(healthPet: any){
+    this.http.get<any>(`${BASE_URL}/healthHistory/delete?healthhistory-id=${healthPet.id}`).subscribe(
+      (res) => {
+        this.getHeathPet();
+        this.toastService.success("Xoá lịch sử sức khoẻ thành công");
+      },
+      (err) => {
+        this.toastService.success("Xoá lịch sử sức khoẻ thất bại");
+      } 
+    );
+  }
+
+  deleteInjection(injectionPet: any){
+    this.http.get<any>(`${BASE_URL}/vacinationHistory/delete?vacinationhistory-id=${injectionPet.id}`).subscribe(
+      (res) => {
+        this.getVacinationHistory();
+        this.toastService.success("Xoá lịch sử tiêm phòng thành công");
+      },
+      (err) => {
+        this.toastService.success("Xoá lịch sử tiêm phòng thành công");
+      } 
+    );
+  }
+
+  urlCertificate: any = "";
+  async onFileChangeCertificate(event:any){
+    this.loadingStatusAvatar = true;
+
+    const file = event.target.files[0];
+    if (file) {
+      const path = `yt/${file.name}`;
+      try {
+        const uploadTask = await this.fireStorage.upload(path, file);
+        this.certificatePet = await uploadTask.ref.getDownloadURL();
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      } finally {
+        this.loadingStatusAvatar = false;
+      }
+    } else {
+      this.loadingStatusAvatar = false;
+    }
+  }
+
+
 
   getVacinationHistory(){
     this.http.get<any>(`${BASE_URL}/vacinationHistory/list?pet-id=${this.petId}`).subscribe(
@@ -249,19 +351,11 @@ export class DetailPetComponent implements OnInit{
     this.body_temperature = i.body_temperature;
     this.test_results = i.test_results;
     this.re_examination = i.re_examination;
-    this.meeting = i.link_meet;
+    this.meeting = i.doctorDto.link_meet;
+    console.log("this.meeting",this.meeting);
 
     this.modalRef = this.modalService.show(template);
   }
-
-  // async onFileChangeVaccine(event:any){
-  //   const file = event.target.files[0]
-  //   if(file){
-  //     const path = `yt/${file.name}`
-  //     const uploadTask = await this.fireStorage.upload(path,file)
-  //     this.urlVaccineImage = await uploadTask.ref.getDownloadURL();
-  //   }
-  // }
 
   openAddVacination(template: TemplateRef<any>){
     this.modalRef = this.modalService.show(template);
@@ -283,15 +377,8 @@ export class DetailPetComponent implements OnInit{
 
   loadingStatusFileVaccination: any;
   async onFileChangeVaccine(event:any){
-    // const file = event.target.files[0]
-    // if(file){
-    //   const path = `yt/${file.name}`
-    //   const uploadTask =await this.fireStorage.upload(path,file)
-    //   this.urlVaccineImage = await uploadTask.ref.getDownloadURL();
-    // }
 
     this.loadingStatusFileVaccination = true;
-
     const file = event.target.files[0];
     if (file) {
       const path = `yt/${file.name}`;

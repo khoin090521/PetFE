@@ -158,4 +158,25 @@ table {
 
 .highlightBtn{
     background-color: #104cac;
+    color: #fff;
+}
+
+.file-upload input{
+    display: none;
+}
+.file-upload{
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    padding: 28px 10px;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.certificatePet input{
+    display: none;
+}
+
+.certificatePet{
+    cursor: pointer;
 }

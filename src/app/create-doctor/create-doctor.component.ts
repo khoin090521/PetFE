@@ -202,7 +202,7 @@ export class CreateDoctorComponent implements OnInit{
 
   loadingStatusFileUpdate: boolean = false;
   async onFileChangeUpdate(event: any) {
-    this.loadingStatusFile = true;
+    this.loadingStatusFileUpdate = true;
     const file = event.target.files[0];
     if (file) {
       const path = `yt/${file.name}`;
@@ -245,6 +245,7 @@ export class CreateDoctorComponent implements OnInit{
   async updateAction(){
     const clinicId = localStorage.getItem("clinic_id");
     this.medicine = new Medicine(this.id, this.medicine_name, this.quantity, this.price, this.type, this.trade_mark, this.description, Number(clinicId), this.image);
+    console.log("this.image",this.image);
     await this.http.post<any>(`${BASE_URL}/medicine/update`, this.medicine).subscribe(
       (res) => {
         this.toastService.success('Sửa thông tin thuốc thành công');

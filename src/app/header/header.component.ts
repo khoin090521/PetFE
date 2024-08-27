@@ -1,14 +1,16 @@
-import { Component, OnInit, ViewChild, TemplateRef, NgZone, ElementRef, HostListener, Injectable } from '@angular/core';
+import { Component, OnInit, TemplateRef, NgZone, Injectable } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AuthService, UserRole } from '../_services/auth.service';
 import { TokenService } from '../_services/token.service'; 
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Router, NavigationExtras } from '@angular/router';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BASE_URL } from '../_common/constants/api';
-import { Observable, catchError } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Md5 } from 'ts-md5';
+// import { ChatDoctorComponent } from '../chat-doctor/chat-doctor.component'; 
+
 
 export class UserProfile {
   private gmail: any;
@@ -115,7 +117,8 @@ export class HeaderComponent implements OnInit{
     private formBuilder: FormBuilder,
     private toastService: ToastrService,
     private http: HttpClient,
-    private md5: Md5
+    private md5: Md5,
+    // private chatDoctorComponent: ChatDoctorComponent,
   ){
     this.userProfileInfor = new UserProfile(this.nameInfor, this.gmailInfor, this.address, this.phoneInfor);
     this.password = new Password(this.oldPassword, this.newPassword, this.retypePassword);
@@ -124,19 +127,50 @@ export class HeaderComponent implements OnInit{
 
   user_role: any = "";
 
+  routerLinkHome: any;
   ngOnInit(): void {
     this.user_role = localStorage.getItem('user_role');
+
+    if(this.user_role === "customer"){
+      this.routerLinkHome = "/home-customer";
+    }else if(this.user_role === "doctor"){
+      this.routerLinkHome = "/chat-doctor/:userId";
+    }else{
+      
+    }
+
     this.username = this.tokenService.getUserProfile();
     this.formLogin = this.formBuilder.group({
       gmail: [null, []],
       password: [null, []],
     });
     this.getClinic();
+    this.meetingForDoctor();
+  }
+
+  disabledSearch(){
+    const routerUrl = window.location.href
+    if(routerUrl.includes("detail-pet")){
+      return true;
+    }
+    return false;
+  }
+
+  role = localStorage.getItem('role');
+  // meeting: any = this.role === "doctor" ? "" : null; 
+  meeting: any;
+  async meetingForDoctor() {
+    const doctor_id = Number(localStorage.getItem('user_id'));
+    const role = localStorage.getItem('user_role');
+    if(role === "doctor"){
+      const response = await this.http.get<any>(`${BASE_URL}/petRecord/listByDoctorId?doctor-id=${doctor_id}`).toPromise();
+      this.searchResults = response;
+      this.meeting = response.data[0].doctorDto.link_meet;
+    }
   }
 
 
   getClinic(){
-    //https://petapi.developvn.click/api/search/clinic?search=a
     this.http.get<any>(`${BASE_URL}/auth/listAllClinic`).subscribe(
       (res) => {
         this.clinicList = res.data;
@@ -149,10 +183,13 @@ export class HeaderComponent implements OnInit{
 
   onClinicClick(clinic: any) {
     this.modalRef?.hide();
-    const navigationExtras: NavigationExtras = {
-      queryParams: { clinicId: clinic.id, clinicName: clinic.name }
-    };
-    this.router.navigate(['/customer-booking'], navigationExtras);
+    const clinicId = clinic.id;
+    const clinicName = encodeURIComponent(clinic.name); // Encode the clinic name to handle special characters
+    console.log("clinicId",clinicId);
+    console.log("clinicName",clinicName);
+    const url = `/customer-booking?clinicId=${clinicId}&clinicName=${clinicName}`;
+    // this.router.navigateByUrl(url);
+    window.location.href = url;
   }
 
 
@@ -202,11 +239,9 @@ export class HeaderComponent implements OnInit{
       this.phoneRegister
     );
   
-    this.sendRegister(this.userRegister).subscribe(
+    await this.sendRegister(this.userRegister).subscribe(
       (res) => {
-        this.hashSMS = Md5.hashStr("password");
-        console.log("res",JSON.stringify(res.code));
-        console.log("hash",this.hashSMS);
+        this.hashSMS  = res.code;
         this.toastService.success('Đã gửi mã xác nhận đến email của bạn');
       },
       (err) => {  
@@ -222,14 +257,18 @@ export class HeaderComponent implements OnInit{
   }
 
   verifySMS(){
-    console.log("Md5.hashStr(this.sms)",Md5.hashStr(this.sms));
-    console.log("this.hashSMS",this.hashSMS);
-    
+    if(this.sms === this.hashSMS){
+      this.toastService.success('Bạn đã tạo tài khoản thành công, đăng nhập lại để truy cập hệ thống');
+      this.modalRef?.hide();
+      // this.router.navigateByUrl("/home-customer");
+    }else{
+      this.toastService.warning('Mã không hợp lệ');
+    }
   }
   
 
   sendRegister(userRegister: UserRegister): Observable<any> {
-    return this.http.post<any>(`https://petapi.developvn.click/api/auth/register`, userRegister);
+    return this.http.post<any>(`${BASE_URL}/auth/register`, userRegister);
   }
 
   findAccount(){
@@ -240,7 +279,6 @@ export class HeaderComponent implements OnInit{
   closeLoginForm() {
     this.forgotPasswordStatus = false;
     this.registerStatus = null;
-    // this.modalRef?.hide();
   }
 
   onLogin() {
@@ -279,6 +317,7 @@ export class HeaderComponent implements OnInit{
         return '/home-customer';
       case UserRole.ROLE_DOCTOR:
         return 'chat-doctor/:userId';
+        // return 'chat-doctor';
       default:
         return '/';
     }
@@ -359,6 +398,18 @@ export class HeaderComponent implements OnInit{
 
   redirectToBooking(template: TemplateRef<any>){
     this.modalRef = this.modalService.show(template);
+  }
+
+  onHomeLinkClick(event: any){
+
+    // this.chatDoctorComponent.openSchedule = true;
+    // this.chatDoctorComponent.closeRecord = false;
+
+    console.log("event",event);
+    const role = localStorage.getItem('user_role');
+    if(role === "doctor"){
+      console.log("event",event.value);
+    }
   }
 
 }

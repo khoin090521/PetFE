@@ -54,6 +54,7 @@ class Booking{
     constructor(
         public customer_id: number,
         public doctor_id: number,
+        public clinic_id: number,
         public content: string,
         public status: number,
         public check_in: string,
@@ -111,6 +112,12 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
     nextBtnDisabled: boolean = false;
     calendar: boolean = true;
     medicineDescription?: string;
+    image?: string;
+    quantity?: string;
+    price?: string;
+    name?: string;
+    type?: string;
+    trademark?: string;
 
     searchResults?: SearchResult[] | null;
     listMedicine?: any;
@@ -253,7 +260,8 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
         var customer_id = localStorage.getItem('user_id');
 
         const endTime = this.addMinutes(this.bookingDate, 60);
-        this.booking = new Booking(Number(customer_id), this.doctor_id, this.content, 0, this.convertDate(this.bookingDate), this.convertDate(endTime));
+        this.booking = new Booking(Number(customer_id), this.doctor_id, Number(clinicId), this.content, 0, this.convertDate(this.bookingDate), this.convertDate(endTime));
+        this.content = "";
         
         this.http.post<any>(`${BASE_URL}/booking/add`,this.booking).subscribe(
             (res) => {
@@ -275,8 +283,14 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
         );
     }
 
-    viewDetail(descrition: string,template: TemplateRef<any>){
-        this.medicineDescription = descrition;
+    viewDetail(medicine: any,template: TemplateRef<any>){
+        this.medicineDescription = medicine.descrition;
+        this.image = medicine.medicine_image[0].image;
+        this.quantity = medicine.quantity;
+        this.price = medicine.price;
+        this.name = medicine.name;
+        this.type = medicine.type;
+        this.trademark = medicine.trademark;
         this.modalRef = this.modalService.show(template);
     }
 

@@ -111,3 +111,14 @@ img{
     display: flex;
     gap: 20px;
 }
+
+.disabled-link {
+    pointer-events: none; /* Disables clicking */
+    color: gray; /* Or any color indicating it's disabled */
+    text-decoration: none; /* Remove underline for better indication */
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: column;
+}
