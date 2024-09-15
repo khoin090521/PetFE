@@ -305,7 +305,11 @@
 <ng-template #selectPet>
   <div *ngIf="selectPetState">
     <div class="modal-header">
+<<<<<<< HEAD
       <b><h1 class="modal-title pull-left">Danh sách pet của bạn</h1></b>
+=======
+      <b><h1 class="modal-title pull-left">Danh sách pet của bạn {{selectPetState}}</h1></b>
+>>>>>>> 28ed1d4ac5e0d9443d647abf97c8681b57f55ebe
     </div>
     <div class="modal-body">
       <mat-selection-list class="custom-scroll-bar" *ngFor="let i of listPetByUserId" (click)="sendOTP(i)">
