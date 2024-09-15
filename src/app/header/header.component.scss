@@ -15,12 +15,11 @@ body{
 }
 
 .search-container {
-    max-width: 600px;
     margin: 20px auto;
     padding: 10px;
     border-radius: 25px;
     display: flex;
-    width: 80%;
+    width: 70%;
     margin-top: 35px;
 }
   
@@ -49,9 +48,16 @@ img{
     height: 60px;
 }
 
-.right-container{
-    display: flex;
-    float: right;
+// .right-container{
+//     display: flex;
+//     float: right;
+// }
+
+.right-container {
+    // display: flex;
+    // justify-content: flex-end;
+    margin-left: auto;
+    margin-right: 10px;
 }
 
 .mat-icon.mat-icon.notranslate.search-icon.material-icons.mat-ligature-font.mat-icon-no-color {
@@ -95,6 +101,23 @@ img{
     // flex-direction: column;
 }
 
-// .operate-btn .mt-3{
-//     width: fit-content;
-// }
+.btn-option{
+    display: flex;
+    gap: 20px;
+}
+
+.right-container{
+    display: flex;
+    gap: 20px;
+}
+
+.disabled-link {
+    pointer-events: none; /* Disables clicking */
+    color: gray; /* Or any color indicating it's disabled */
+    text-decoration: none; /* Remove underline for better indication */
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: column;
+}

@@ -30,7 +30,7 @@ body{
 .container{
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 1em; /* Adjust the gap between items as needed */
+    gap: 1em;
     padding: 1em;
 }
 
@@ -59,6 +59,15 @@ img{
 .item h2 {
     margin: 0.5em 0 0; /* Space between image and text */
 }
+
+.truncate-button {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    width: 200px;
+    max-width: 100%;
+  }
 
 .pagination{
     justify-content: center;

@@ -23,9 +23,10 @@
 .option-detail{
     display: flex;
     justify-content: center;
+    text-align: center;
     gap: 100px;
     margin-right: auto;
-    margin-left: 30%;
+    // margin-left: 30%;
 }
 
 .profile-btn{
@@ -59,6 +60,42 @@ a{
     gap: 100px;
 }
 
+@media (max-width: 715px) {
+    .profile-tab-container{
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        gap: 10px;
+    }
+
+    .profile-tab{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        background-color: #e0dcdc;
+        gap: 50px;
+        height: 200px;
+        margin: auto;
+    }
+}
+//715
+// .profile-tab-container{
+//     display: flex;
+//     flex-direction: column;
+//     margin: auto;
+//     gap: 10px;
+// }
+
+// .profile-tab{
+//     display: flex;
+//     justify-content: center;
+//     width: 100%;
+//     background-color: #e0dcdc;
+//     gap: 50px;
+//     height: 200px;
+//     margin: auto;
+// }
+
 table {
     width: 100%;
 }
@@ -68,13 +105,26 @@ table {
     display: flex;
     justify-content: center;
     margin-top: 2%;
+    margin-left: 5%;
+}
+
+.sub-basic-profile{
+    display: flex;
+    flex-direction: column;
+}
+
+.erecord-tab{
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+    margin-left: 5%;
 }
 
 .update-avatar {
     width: 30%;
     height: auto;
-    border-radius: 100px; /* Optional: rounded corners for the image */
-    // margin-left: 100px;
+    border-radius: 100px;
     margin-top: 50px;
 }
 
@@ -95,3 +145,66 @@ table {
 .openTextArea{
     background-color: #e0dcdc;
 }
+
+.health-history {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.noHighlightBtn{
+    background-color: #fff;
+}
+
+.highlightBtn{
+    background-color: #104cac;
+    color: #fff;
+}
+
+.file-upload input{
+    display: none;
+}
+.file-upload{
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    padding: 28px 10px;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.certificatePet input{
+    display: none;
+}
+
+.certificatePet{
+    cursor: pointer;
+}
+
+.add-btn{
+    display: flex;
+    flex-direction: row;
+}
+
+.search-container {
+    width: 60%;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    margin-left: auto;
+  }
+  
+  .sub-search-input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 5px;
+    border-radius: 50px;
+  }
+  
+  .search-icon {
+    cursor: pointer;
+    color: gray;
+  }

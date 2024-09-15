@@ -7,18 +7,22 @@
 <app-header></app-header>
 <router-outlet></router-outlet>
 
-<div class="tab">
+<div class="tab"> 
     <div class="tab-container">
         <button mat-fab class="mat-fab" (click)="openCalendar()">
             <mat-icon>calendar_today</mat-icon>
         </button>
         <button mat-fab class="mat-fab" (click)="openMedical()">
-            <mat-icon>add</mat-icon>
+            <!-- <mat-icon>add</mat-icon> -->
+            <!-- <img style="width: 50px;height:50px;margin-top: 15px;" src="https://static-00.iconduck.com/assets.00/medical-symbol-icon-2048x2048-t5g00ol5.png" alt=""> -->
+            <img style="width: 50px;height:50px;margin-top: 15px;" src="assets/medicine.png" alt="Logo">
         </button>
     </div>
 </div>
 
+
 <div class="calendar-container" *ngIf="events && calendar">
+  <h2 *ngIf="decodedClinicName">Bạn đang đặt lịch của {{decodedClinicName}}</h2>
     <div class="row mt-4">
         <div class="col-md-4 text-left">
         </div>
@@ -100,112 +104,62 @@
 
 
 <div class="medical-container" *ngIf="!calendar">
-    <div class="body">
-        <div class="container">
-          <div class="item">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
-              <h2>MICETYN</h2>
-              <h2>đ24.000</h2>
-          </div>
-          <div class="item">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
-              <h2>MICETYN</h2>
-              <h2>đ24.000</h2>
-          </div>
-          <div class="item">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
-              <h2>MICETYN</h2>
-              <h2>đ24.000</h2>
-          </div>
-          <div class="item">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
-              <h2>MICETYN</h2>
-              <h2>đ24.000</h2>
-          </div>
-          <div class="item">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
-              <h2>MICETYN</h2>
-              <h2>đ24.000</h2>
-          </div>
-          <div class="item">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
-              <h2>MICETYN</h2>
-              <h2>đ24.000</h2>
-          </div>
-          <div class="item">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
-              <h2>MICETYN</h2>
-              <h2>đ24.000</h2>
-          </div>
-          <div class="item">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
-              <h2>MICETYN</h2>
-              <h2>đ24.000</h2>
-          </div>
-          <div class="item">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
-              <h2>MICETYN</h2>
-              <h2>đ24.000</h2>
-          </div>
-          <div class="item">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
-              <h2>MICETYN</h2>
-              <h2>đ24.000</h2>
-          </div>
-          <div class="item">
-            <img src="https://www.petmart.vn/wp-content/uploads/2013/03/thuoc-xit-tri-ve-ran-cho-cho-meo-merial-frontline-spray-treatment.jpg">
-              <h2>MICETYN</h2>
-              <h2>đ24.000</h2>
+    <div class="body" >
+        <div class="container" >
+          <div *ngFor="let i of listMedicine"> 
+            <div class="item">
+              <img style="width: 200px;height: 200px;" [src]="i.medicine_image[0]?.image">
+                <button class="truncate-button" style="border-radius: 20px;" mat-stroked-button (click)="viewDetail(i,viewDetailForm)">{{ i.name }}</button>
+                <h2>Giá: {{ formatPrice(i.price) }} VND</h2>
+            </div>
           </div>
         </div>
-      
-      
-        <div class="pagination">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      
       </div>
 </div>
 
-
+<ng-template #viewDetailForm>
+    <form ngNativeValidate>
+      <div class="modal-header">
+          <b><h1 class="modal-title pull-left">Thông tin thuốc</h1></b>
+          <button class="btn-close" aria-label="Close" (click)="closeForm()"></button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+            <img [src]="image">
+          </div>
+          <div class="time">
+            Tên sản phẩm: {{ name }}<br>
+            Số lượng: {{ quantity }}<br>
+            Giá: {{ formatPrice(price) }} VND<br>
+            Loại: {{ type }}<br>
+            Tên sản phẩm: {{ trademark }}<br>
+            Mô tả: {{medicineDescription}}<br>
+          </div>
+      </div>
+  </form>
+</ng-template>
 
 <ng-template #viewScheduleForm>
     <form ngNativeValidate>
-
         <div class="modal-header">
             <b><h1 class="modal-title pull-left">Đặt lịch</h1></b>
             <button class="btn-close" aria-label="Close" (click)="closeForm()"></button>
         </div>
-
         <div class="modal-body">
             <div class="form-group">
               <label for="title">Thêm tiêu đề</label>
-              <input autocomplete="off" required class="form-control mt-1" id="title" placeholder="">
+              <input autocomplete="off" required class="form-control mt-1" id="title" placeholder="" [(ngModel)]="content" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="form-group">
                 <label for="doctor">Chọn bác sĩ</label>
-                <input autocomplete="off" required class="form-control mt-1" id="doctor" placeholder="">
+                <!-- <input autocomplete="off" required class="form-control mt-1" id="doctor" placeholder=""> -->
+                <select class="form-select" aria-label="Default select example" (change)="onSelectChange($event)">
+                  <option selected value="0">Chọn bác sĩ</option>
+                  <option *ngFor="let doctor of doctorList" [value]="doctor?.id">{{ doctor?.user_name }}</option>
+                </select>
             </div>
             <div class="time">
                 <label for="username">Thời gian tới khám</label>
-                <!-- <input type="datetime-local" autocomplete="off" required class="form-control mt-1" id="time"> -->
-                <!-- <input type="text" [(ngModel)]="bookingDate"> -->
                 <input autocomplete="off" disabled required class="form-control mt-1" id="doctor" placeholder="" [(ngModel)]="bookingDate" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="form-group">
@@ -216,7 +170,7 @@
 
         <div class="modal-footer">
             <div class="operate-btn">
-              <button type="button" class="btn btn-primary mt-3">Đặt lịch</button>
+              <button type="button" class="btn btn-primary mt-3" (click)="addbooking()">Đặt lịch</button>
             </div>
         </div>
     </form>

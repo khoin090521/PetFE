@@ -32,7 +32,44 @@ import {
 } from 'date-fns';
 import { AppService } from '../service/app.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { Observable, catchError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BASE_URL } from '../_common/constants/api';
+import { ToastrService } from 'ngx-toastr';
 
+
+interface SearchResult {
+    id: number,
+    name: string,
+    quantity: number,
+    price: 12000,
+    type: string,
+    trademark: string,
+    descrition: string,
+    clinicId: number,
+    medicine_image: []
+}
+
+class Booking{
+    constructor(
+        public customer_id: number,
+        public doctor_id: number,
+        public clinic_id: number,
+        public content: string,
+        public status: number,
+        public check_in: string,
+        public check_out: string,
+    ){}
+}
+
+export interface Doctor {
+    id: string;
+    user: string,
+    user_name: string,
+    role_id: number,
+    clinic_id: number,
+    link_meet: string,
+}
 
 @Component({
   selector: 'app-customer-booking',
@@ -74,6 +111,33 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
     prevBtnDisabled: boolean = false;
     nextBtnDisabled: boolean = false;
     calendar: boolean = true;
+    medicineDescription?: string;
+    image?: string;
+    quantity?: string;
+    price: string = "";
+    name?: string;
+    type?: string;
+    trademark?: string;
+
+    searchResults?: SearchResult[] | null;
+    listMedicine?: any;
+    decodedClinicName?: any = "";
+
+    booking: any;
+    customer_id: number = 0;
+    doctor_id: number = 0;
+    content: string = "";
+    check_in: string = "";
+    doctorList: any = "";
+
+    doctorId: number | null = null;
+    doctors = [
+        { id: 1, user_name: 'Nguyễn Văn Công' },
+        { id: 2, user_name: 'Lê Văn Tài' },
+        { id: 3, user_name: 'Nguyễn Quang Khôi' }
+    ];
+
+    // doctors: Doctor[] = [];
 
     actions: CalendarSchedulerEventAction[] = [
         {
@@ -107,6 +171,8 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
         private appService: AppService, 
         private dateAdapter: DateAdapter, 
         private modalService: BsModalService,
+        private http: HttpClient,
+        private toastService: ToastrService,
         private zone: NgZone) {
 
         this.locale = locale;
@@ -125,6 +191,111 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
 
     ngOnInit(): void {
         this.appService.getEvents(this.actions).then((events: CalendarSchedulerEvent[]) => this.events = events);
+        const routerUrl = window.location.href
+        const urlObj = new URL(routerUrl);
+        const clinicId = urlObj.searchParams.get('clinicId') || '';
+        this.getDoctorByClinic(clinicId);
+        this.getMedicalByClinic(clinicId);
+
+    }
+
+    async getDoctorByClinic(clinicId: any){
+        await this.http.get<any>(`${BASE_URL}/host/listDoctorByClinic?clinic-id=${clinicId}`).subscribe(
+            (res) => {
+              this.doctorList = res.data;
+            },
+            (err) => {}
+          );
+    }
+
+    formatPrice(price: string | number ): string {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    async ngAfterViewInit() {
+        const routerUrl = window.location.href
+        const urlObj = new URL(routerUrl);
+
+        const clinicName = urlObj.searchParams.get('clinicName') || '';
+
+        setTimeout(() => {
+            this.decodedClinicName = decodeURIComponent(clinicName);
+          }, 500)
+    }
+
+    onSelectChange(event: Event): void {
+        this.doctor_id = Number((event.target as HTMLSelectElement).value.toString());
+        console.log('Selected value:', this.doctor_id);
+    }
+
+    addMinutes(dateTime: string, minutes: number): string {
+        const [datePart, timePart] = dateTime.split(' ');
+        const [year, month, day] = datePart.split('/').map(Number);
+        const [hour, minute] = timePart.split(':').map(Number);
+
+        const date = new Date(year, month - 1, day, hour, minute);
+
+        date.setMinutes(date.getMinutes() + minutes);
+
+        const newYear = date.getFullYear();
+        const newMonth = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+        const newDay = String(date.getDate()).padStart(2, '0');
+        const newHour = String(date.getHours()).padStart(2, '0');
+        const newMinute = String(date.getMinutes()).padStart(2, '0');
+
+        return `${newYear}/${newMonth}/${newDay} ${newHour}:${newMinute}`;
+    }
+
+    convertDate(dateTime: any){
+        const [date, time] = dateTime.split(' ');
+        const formattedDate = date.replace(/\//g, '-');
+        const isoDateTime = `${formattedDate}T${time}:00`;
+        return isoDateTime;
+    }
+
+    addbooking(){
+        const routerUrl = window.location.href
+        console.log("routerUrl",routerUrl);
+        const urlObj = new URL(routerUrl);
+
+        const clinicId = urlObj.searchParams.get('clinicId') || '';
+
+        this.getDoctorByClinic(clinicId);
+        var customer_id = localStorage.getItem('user_id');
+
+        const endTime = this.addMinutes(this.bookingDate, 60);
+        this.booking = new Booking(Number(customer_id), this.doctor_id, Number(clinicId), this.content, 0, this.convertDate(this.bookingDate), this.convertDate(endTime));
+        this.content = "";
+        
+        this.http.post<any>(`${BASE_URL}/booking/add`,this.booking).subscribe(
+            (res) => {
+                this.toastService.success('Đặt lịch thành công');
+                this.modalRef?.hide();
+                this.appService.getEvents(this.actions).then((events: CalendarSchedulerEvent[]) => this.events = events);
+            },
+            (err) => {}
+        );
+    }
+
+    async getMedicalByClinic(clinicId: any) {
+        this.http.get<any>(`${BASE_URL}/medicine/list?clinic-id=${clinicId}`).subscribe(
+            (res) => {
+                this.listMedicine = res.data;
+                console.log("this.listMedicine",JSON.stringify(this.listMedicine));
+            },
+            (err) => {}
+        );
+    }
+
+    viewDetail(medicine: any,template: TemplateRef<any>){
+        this.medicineDescription = medicine.descrition;
+        this.image = medicine.medicine_image[0].image;
+        this.quantity = medicine.quantity;
+        this.price = medicine.price;
+        this.name = medicine.name;
+        this.type = medicine.type;
+        this.trademark = medicine.trademark;
+        this.modalRef = this.modalService.show(template);
     }
 
     ngAfterViewChecked() {

@@ -3,3 +3,15 @@ th[mat-column-def="id"], td[mat-column-def="id"] {
     display: none;
   }
   
+.operate-btn{
+  display: flex;
+  gap: 10px;
+}
+
+.accountTable{
+  width: 90%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+    margin-left: 5%;
+}

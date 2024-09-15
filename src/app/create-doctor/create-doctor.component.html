@@ -6,46 +6,97 @@
         <button mat-fab class="mat-fab" (click)="openCreateDoctor(createDoctor)">
             <mat-icon>supervisor_account</mat-icon>
         </button>
-        <button mat-fab class="mat-fab" (click)="openMedicine()">
-            <mat-icon>add</mat-icon>
-        </button>
-        <button mat-fab class="mat-fab" (click)="openCreateMeeting(createMeeting)">
-            <mat-icon>camera_enhance</mat-icon>
+        <button mat-fab class="mat-fab" (click)="openMedicine(createMedicine)">
+            <!-- <img style="width: 50px;height:50px;" src="https://static-00.iconduck.com/assets.00/medical-symbol-icon-2048x2048-t5g00ol5.png" alt=""> -->
+            <!-- <img style="width: 50px;height:50px;" src="/Users/nguyenthanhlong/Desktop/PetFE/PetFE/src/assets/medicine.png" alt=""> -->
+            <img style="width: 50px;height:50px;" src="assets/medicine.png" alt="Logo">
         </button>
     </div>
 </div>
+
+<ng-template #createMedicine>
+  <form ngNativeValidate>
+    <div class="modal-header">
+      <b><h1 class="modal-title pull-left">Thêm thông tin thuốc</h1></b>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="medicine_name_add">Tên thuốc</label>
+        <input autocomplete="off" required class="form-control mt-1" id="medicine_name_add" placeholder="Tên thuốc" [(ngModel)]="medicine_name_add" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group mt-3">
+        <label for="image_add">Hình ảnh</label>
+        <input  type="file" accept=".jpg, .jpeg, .png, .pdf" (change)="onFileChangeAdd($event)" autocomplete="off" id="image_add" required class="form-control mt-1" [(ngModel)]="image_add" [ngModelOptions]="{standalone: true}" [disabled]="loadingStatusFile">
+      </div>
+      <div class="form-group mt-3" *ngIf="loadingStatusFile">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      <div class="form-group mt-3">
+          <label for="quantity_add">Số lượng</label>
+          <input autocomplete="off" id="quantity_add" required type="text" class="form-control mt-1"placeholder="Số lượng" [(ngModel)]="quantity_add" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group mt-3">
+        <label for="price_add">Giá sản phẩm</label>
+        <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Giá sản phẩm" [(ngModel)]="price_add" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group mt-3">
+        <label for="trademark_add">Nhãn hiệu</label>
+        <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Nhãn hiệu" [(ngModel)]="trademark_add" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group mt-3">
+        <label for="type_add">Loại</label>
+        <input autocomplete="off" id="type_add" required type="text" class="form-control mt-1" placeholder="Loại" [(ngModel)]="type_add" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="form-group mt-3">
+        <label for="description_add">Mô tả</label>
+        <input autocomplete="off" id="description_add" required type="text" class="form-control mt-1" placeholder="Mô tả" [(ngModel)]="description_add" [ngModelOptions]="{standalone: true}">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="operate-btn">
+        <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+        <button type="button" class="btn btn-warning mt-3" (click)="addAction()">Lưu</button>
+      </div>
+    </div>
+  </form>
+</ng-template>
 
 <ng-template #createDoctor>
     <form ngNativeValidate>
       <div class="modal-header">
         <b><h1 class="modal-title pull-left">Tạo bác sĩ</h1></b>
-        <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Họ và tên">
+          <label for="full_name">Họ và tên</label>
+          <input autocomplete="off" id="full_name" required class="form-control mt-1" placeholder="Họ và tên" [(ngModel)]="full_name" [ngModelOptions]="{standalone: true}">
         </div>
         <div class="form-group mt-3">
-          <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
-            placeholder="Email">
+          <label for="gmail">Email</label>
+          <input autocomplete="off" id="gmail" required type="text" class="form-control mt-1" placeholder="Email" [(ngModel)]="gmail" [ngModelOptions]="{standalone: true}">
         </div>
         <div class="form-group mt-3">
-            <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
-              placeholder="Số điện thoại">
-          </div>
-          <div class="form-group mt-3">
-            <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
-              placeholder="Địa chỉ">
-          </div>
-          <div class="form-group mt-3">
-            <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
-              placeholder="Mật khẩu">
-          </div>
+          <label for="phone_number">Số điện thoại</label>
+            <input autocomplete="off" id="phone_number" required type="text" class="form-control mt-1"placeholder="Số điện thoại" [(ngModel)]="phone_number" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group mt-3">
+          <label for="address">Địa chỉ</label>
+          <input autocomplete="off" id="address" required type="text" class="form-control mt-1" placeholder="Địa chỉ" [(ngModel)]="address" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group mt-3">
+          <label for="password">Mật khẩu</label>
+          <input autocomplete="off" id="password" required type="password" class="form-control mt-1" placeholder="Mật khẩu" [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group mt-3">
+          <label for="link_meet">Link meet</label>
+          <input autocomplete="off" id="link_meet" required type="text" class="form-control mt-1" placeholder="Link meet" [(ngModel)]="link_meet" [ngModelOptions]="{standalone: true}">
+        </div>
       </div>
       <div class="modal-footer">
         <div class="operate-btn">
-          <button type="button" class="btn btn-danger mt-3">Huỷ</button>
-          <button type="button" class="btn btn-warning mt-3">Tạo</button>
+          <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+          <button type="button" class="btn btn-warning mt-3" (click)="createDoctorAPI()">Tạo</button>
         </div>
       </div>
     </form>
@@ -56,7 +107,7 @@
     <form ngNativeValidate>
       <div class="modal-header">
         <b><h1 class="modal-title pull-left">Tạo meeting cho bác sĩ</h1></b>
-        <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
       </div>
       <div class="modal-body">
         <div class="form-group">
@@ -76,8 +127,115 @@
       </div>
       <div class="modal-footer">
         <div class="operate-btn">
-          <button type="button" class="btn btn-danger mt-3">Huỷ</button>
+          <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
           <button type="button" class="btn btn-warning mt-3">Tạo</button>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+<div class="medicineDoctor">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">STT</th>
+        <th scope="col">Tên thuốc</th>
+        <th scope="col">Hình ảnh</th>
+        <th scope="col">Số lượng</th>
+        <th scope="col">Giá</th>
+        <th scope="col">Nhãn hiệu</th>
+        <th scope="col">Loại</th>
+        <th scope="col">Mô tả</th>
+        <th scope="col">Chỉnh sửa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of listMedicine, let idx = index">
+        <td>{{ idx + 1 }}</td>
+        <td>{{ i.name }}</td>
+        <td><img style="width: 100px;height: 100px" [src]="i.medicine_image[0]?.image" alt="Vaccine Image"></td>
+        <td>{{ i.quantity }}</td>
+        <td>{{ formatPrice(i.price) }} VND</td>
+        <td>{{ i.trademark }}</td>
+        <td>{{ i.type }}</td>
+        <td>{{ i.descrition }}</td>
+        <td>
+          <div class="btnModify">
+            <button mat-fab class="mat-fab" (click)="openDelete(deleteMedicine, i.id, i.name)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-fab class="mat-fab" (click)="openUpdate(editMedicine, i)">
+              <mat-icon>brush</mat-icon>
+            </button> 
+          </div>  
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+  
+
+
+
+  <ng-template #deleteMedicine>
+    <form ngNativeValidate>
+      <div class="modal-header">
+        <b><h1 class="modal-title pull-left">Xoá thông tin thuốc {{delete_medicine_name}}</h1></b>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
+      </div>
+      <div class="modal-footer">
+        <div class="operate-btn">
+          <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+          <button type="button" class="btn btn-warning mt-3" (click)="deleteAction()">Xoá</button>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+
+
+  <ng-template #editMedicine>
+    <form ngNativeValidate>
+      <div class="modal-header">
+        <b><h1 class="modal-title pull-left">Sửa thông tin thuốc</h1></b>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="medicine_name">Tên thuốc</label>
+          <input autocomplete="off" id="medicine_name" required class="form-control mt-1" placeholder="Tên thuốc" [(ngModel)]="medicine_name" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group mt-3">
+          <label for="">Hình ảnh</label>
+          <input autocomplete="off" accept=".jpg, .jpeg, .png, .pdf" (change)="onFileChangeUpdate($event)" required type="file" class="form-control mt-1" placeholder="Hình ảnh" [disabled]="loadingStatusFileUpdate">
+        </div>
+        <div class="form-group mt-3" *ngIf="loadingStatusFileUpdate">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        <div class="form-group mt-3">
+          <label for="quantity">Số lượng</label>
+            <input autocomplete="off" id="quantity" required type="text" class="form-control mt-1"placeholder="Số lượng" [(ngModel)]="quantity" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group mt-3">
+          <label for="price">Giá</label>
+          <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Giá" [(ngModel)]="price" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group mt-3">
+          <label for="trade_mark">Thương hiệu</label>
+          <input autocomplete="off" id="trade_mark" required type="text" class="form-control mt-1" placeholder="Thương hiệu" [(ngModel)]="trade_mark" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group mt-3">
+          <label for="type">Loại</label>
+          <input autocomplete="off" id="type" required type="text" class="form-control mt-1" placeholder="Loại" [(ngModel)]="type" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group mt-3">
+          <label for="description">Mô tả</label>
+          <input autocomplete="off" id="description" required type="text" class="form-control mt-1" placeholder="Mô tả" [(ngModel)]="description" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="operate-btn">
+          <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+          <button type="button" class="btn btn-warning mt-3" (click)="updateAction()">Cập nhật</button>
         </div>
       </div>
     </form>

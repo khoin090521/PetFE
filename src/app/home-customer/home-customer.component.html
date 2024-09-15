@@ -1,14 +1,9 @@
 <app-header></app-header>
 <router-outlet></router-outlet>
 
-
-<div class="container">
+<div class="container" *ngIf="!searchResults">
     <div class="item">
         <div class="avatar">
-            <!-- <button mat-fab class="insert" (click)="insertRecord(loginForm)">
-                <mat-icon>add</mat-icon>
-            </button> -->
-
                 <div class="text-center">
                   <button type="button" mat-fab class="insert" data-toggle="modal" data-target="#myModal2"><mat-icon>add</mat-icon></button>
                 </div>
@@ -25,13 +20,16 @@
                                 <div class="form-group">
                                     <form>
                                         <label class="file-upload">
-                                            <div *ngIf="!myImage">
+                                            <div *ngIf="!urlPetImage && !loadingStatusAvatar">
                                                 <img src="https://i.pinimg.com/474x/d7/70/33/d7703333ad8ba85827b60fccf42f9c25.jpg" alt="">
-                                                <input type="file" (change)="onChange($event)"/>
+                                                <input type="file" (change)="onFileChange($event)" [(ngModel)]="transfer_contract" [ngModelOptions]="{standalone: true}">
                                             </div>
-                                            <div *ngIf="myImage">
-                                                <img [src]="myImage" alt="">
-                                                <input type="file" (change)="onChange($event)"/>
+                                            <div *ngIf="urlPetImage && !loadingStatusAvatar">
+                                                <img style="width: 120px;height: 120px" [src]="urlPetImage" alt="">
+                                                <input type="file" (change)="onFileChange($event)"/>
+                                            </div>
+                                            <div *ngIf="loadingStatusAvatar">
+                                                <mat-spinner></mat-spinner>
                                             </div>
                                         </label>
                                     </form>
@@ -39,64 +37,72 @@
                             </div>
                             <div class="right-col">
                                 <div class="form-group">
-                                    <!-- <label for="username"></label> -->
-                                    <input autocomplete="off" required class="form-control mt-1" placeholder="Tên">
+                                    <label for="name" class="label-left">Tên</label>
+                                  <input autocomplete="off" id="name" required class="form-control mt-1" placeholder="Tên" [(ngModel)] = "name" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Loài">
+                                    <label for="species" class="label-left">Loài</label>
+                                    <input autocomplete="off" id="species" required type="text" class="form-control mt-1" placeholder="Loài" [(ngModel)] = "species" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Giống">
+                                    <label for="age" class="label-left">Tuổi</label>
+                                    <input autocomplete="off" id="age" required type="text" class="form-control mt-1" placeholder="Tuổi" [(ngModel)] = "age" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Giới tính">
+                                    <label for="identifying" class="label-left">Đặc điểm nhận dạng</label>
+                                    <input autocomplete="off" id="identifying" required type="text" class="form-control mt-1" placeholder="Đặc điểm nhận dạng" [(ngModel)] = "identifying" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Ngày sinh">
+                                  <h3 style="display: flex;margin-right: auto">Ảnh xác nhận nguồn gốc</h3>
+                                    <input (change)="onFileChangeCertificate($event)" autocomplete="off" required type="file" class="form-control mt-1" [disabled]="loadingStatusFile">
                                 </div>
-                                <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Màu sắc">
-                                </div>
-                                <div class="form-group mt-3">
-                                    <!-- <label for="password"></label> -->
-                                    <input autocomplete="off" required type="password" class="form-control mt-1" placeholder="Đặc điểm nhận dạng">
+                                <div class="form-group mt-3" *ngIf="loadingStatusFile">
+                                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                                 </div>
                             </div>
-                            <button mat-fab class="mat-fab" *ngIf="rightPopupIndex===1" (click)="nextRecord()">
+                            <button  mat-fab class="mat-fab" *ngIf="rightPopupIndex===1" (click)="nextRecord()" [disabled]="areAllFieldsFilledRecord()">
                                 <mat-icon class="arrow-forward">arrow_forward</mat-icon>
                             </button>
                         </div>
                         <div class="modal-body" *ngIf="rightPopupIndex===2">
                             <div class="form-group">
                                 <form>
-                                    <textarea class="form-control" id="" rows="20" cols="50"></textarea>
+                                  <h3 style="display: flex;margin-right: auto">Lịch sử sức khoẻ</h3>
+                                    <textarea class="form-control" id="" placeholder="Lịch sử sức khoẻ" rows="20" cols="50" [(ngModel)]="descriptionHealthHistory" [ngModelOptions]="{standalone: true}"></textarea>
                                 </form>
                             </div>
-                            <button mat-fab class="mat-fab" *ngIf="rightPopupIndex===2" (click)="nextRecord()">
+                            <button  mat-fab class="mat-fab" *ngIf="rightPopupIndex===2" (click)="nextRecord()" [disabled]="descriptionHealthHistory ? false : true">
                                 <mat-icon class="arrow-forward">arrow_forward</mat-icon>
                             </button>
                         </div>
                         <div class="modal-body" *ngIf="rightPopupIndex===3">
                             <div class="form-group">
                                 <form>
-                                    <textarea class="form-control" id="" rows="20" cols="50"></textarea>
+                                    <div class="form-group">
+                                    <label for="identifying" class="label-left">Tên vaccine</label>
+                                        <input autocomplete="off" id="vaccine" required type="text" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)] = "vaccine" [ngModelOptions]="{standalone: true}">
+                                    </div>
+                                    <div class="form-group">
+                                    <label for="descriptionVacineHistory" class="label-left">Mô tả thuốc</label>
+                                        <textarea class="form-control" id="descriptionVacineHistory" rows="10" cols="50" placeholder="Thêm mô tả thuốc" [(ngModel)]="descriptionVacineHistory" [ngModelOptions]="{standalone: true}"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="injection_date" class="label-left">Ngày</label>
+                                        <input autocomplete="off" required type="date" class="form-control mt-1" placeholder="" [(ngModel)] = "injection_date" [ngModelOptions]="{standalone: true}">
+                                    </div>
+                                    <div class="form-group">
+                                      <h3 style="display: flex;margin-right: auto">Giấy chứng nhận tiêm phòng</h3>
+                                        <input autocomplete="off" (change)="onFileChangeVaccine($event)" required type="file" class="form-control mt-1" [disabled]="loadingStatusFileVaccination">
+                                    </div>
+                                    <div class="form-group mt-3" *ngIf="loadingStatusFileVaccination">
+                                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                    </div>
                                 </form>
                             </div>
-                            <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3">
+                            <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3" (click)="addVaccinateHistory()" [disabled]="vaccine && descriptionVacineHistory && injection_date && urlVaccineImage ? false : true">
                                 Lưu
                             </button>
                         </div>
-                        <!-- <button mat-fab class="mat-fab" *ngIf="rightPopupIndex===1 || rightPopupIndex===2" (click)="nextRecord()">
-                            <mat-icon class="arrow-forward">arrow_forward</mat-icon>
-                        </button> -->
-                        <!-- <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3">
-                            Lưu
-                        </button> -->
                     </div>
                 </div>
             </div>
@@ -105,73 +111,59 @@
             <h2>Thêm hồ sơ thú cưng</h2>
         </div>
     </div>
-    <div class="item">
-        <div class="avatar">
-            <button mat-mini-fab class="cancel">
-                <mat-icon>clear</mat-icon>
-            </button>
-            <img src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg">
-        </div>
-        <div class="nick-name">
-            <!-- <h2>Husky</h2> -->
-            <button mat-fab extended>Husky</button>
-        </div>
-    </div>
-    <div class="item">
-        <div class="avatar">
-            <button mat-mini-fab class="cancel">
-                <mat-icon>clear</mat-icon>
-            </button>
-            <img src="https://i.pinimg.com/originals/c4/7c/3c/c47c3cec76bdafa04cbe9a2f62f742c3.jpg">
-        </div>
-        <div class="nick-name">
-            <!-- <h2>Chiba</h2> -->
-            <button mat-fab extended>Husky</button>
+    <div *ngFor="let i of petList">
+        <div class="item">
+            <div class="avatar">
+                <button mat-mini-fab class="cancel" (click)="removePet(i.id, i.name, removeForm)">
+                    <mat-icon>clear</mat-icon>
+                </button>
+                <img style="width: 150px;height: 150px" src="{{i.transfer_contract}}">
+            </div>
+            <div class="nick-name" (click)="viewDetail(i)">
+                <button mat-fab extended>{{ i.name }}</button>
+            </div>
         </div>
     </div>
-
 </div>
 
-    <!-- <div class="container demo">
-      <div class="text-center">
-        <button type="button" class="btn btn-demo" data-toggle="modal" data-target="#myModal2"> Right Sidebar Modal </button>
-      </div>
-      <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              Right Sidebar </div>
-            <div class="modal-body">
-              <p>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.</p>
-            </div>
-          </div>
+<div class="container" *ngIf="searchResults">
+    <div *ngFor="let i of searchResults" class="item">
+        <div class="avatar">
+            <img src="https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg">
         </div>
+        <div class="nick-name">
+            <button mat-fab extended (click)="changePetForCustomer(i, changePet)">{{i.full_name}}</button>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #changePet>
+    <div class="modal-header">
+        <b><h1 class="modal-title pull-left">Danh sách pet chuyển nhượng cho {{petMail}}</h1></b>
       </div>
-    </div> -->
+      <div class="modal-body">
+        <mat-selection-list class="custom-scroll-bar" *ngFor="let i of myPets" (click)="onChangePetAction(i)">
+          <mat-list-item>
+            {{i.name}}
+          </mat-list-item>
+        </mat-selection-list>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+      </div>
+</ng-template>
 
-
-<!-- <ng-template #loginForm>
+<ng-template #removeForm>
     <form ngNativeValidate>
         <div class="modal-header">
-          <b><h1 class="modal-title pull-left">Đăng nhập</h1></b>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="username">Tên tài khoản</label>
-            <input autocomplete="off" required class="form-control mt-1" id="username" placeholder="Tên tài khoản"
-              >
-          </div>
-          <div class="form-group mt-3">
-            <label for="password">Mật khẩu</label>
-            <input autocomplete="off" required type="password" class="form-control mt-1" id="password"
-              placeholder="Mật khẩu">
-          </div>
+          <b><h3 class="modal-title pull-left">Bạn có muốn xoá {{petName}}</h3></b>
         </div>
         <div class="modal-footer">
           <div class="operate-btn">
-            <button type="submit" class="btn btn-primary mt-3">Đăng nhập</button>
+            <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+            <button type="submit" class="btn btn-primary mt-3" (click)="removePetAccept()">Đồng ý</button>
           </div>
         </div>
       </form>
-</ng-template> -->
+</ng-template>
