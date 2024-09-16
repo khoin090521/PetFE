@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="form-group mt-3">
                                     <label for="age" class="label-left">Tuổi</label>
-                                    <input autocomplete="off" id="age" required type="text" class="form-control mt-1" placeholder="Tuổi" [(ngModel)] = "age" [ngModelOptions]="{standalone: true}">
+                                    <input autocomplete="off" id="age" required type="number" min="1" class="form-control mt-1" placeholder="Tuổi" [(ngModel)] = "age" [ngModelOptions]="{standalone: true}">
                                 </div>
                                 <div class="form-group mt-3">
                                     <label for="identifying" class="label-left">Đặc điểm nhận dạng</label>
@@ -99,7 +99,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3" (click)="addVaccinateHistory()" [disabled]="vaccine && descriptionVacineHistory && injection_date && urlVaccineImage ? false : true">
+                            <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3" (click)="addVaccinateHistory()" [disabled]="vaccine && descriptionVacineHistory && injection_date ? false : true"> <!-- urlVaccineImage -->
                                 Lưu
                             </button>
                         </div>

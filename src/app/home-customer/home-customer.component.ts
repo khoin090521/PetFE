@@ -192,7 +192,8 @@ export class HomeCustomerComponent implements OnInit{
 
   areAllFieldsFilledRecord(): boolean {
     // this.pet = new Pet(this.name, Number(this.age), this.gender, this.species, this.identifying, this.origin_certificate, this.urlPetImage, this.health_history_requests, this.customer_pet_requests);
-    return this.name && this.species && this.age && this.identifying && this.origin_certificate && this.urlPetImage ? false : true;
+    // return this.name && this.species && this.age && this.identifying && this.origin_certificate && this.urlPetImage ? false : true;
+    return false;
     // return this.name ? true : false;
   }
 
@@ -308,16 +309,33 @@ export class HomeCustomerComponent implements OnInit{
   }
 
   nextRecord(){
-    this.modalRef?.hide();
-    this.addPet();
-    if(this.rightPopupIndex < 3){
-      this.rightPopupIndex++;
+    if(!this.name) {
+      this.toastService.warning('Vui lòng nhập Tên');
+    }
+    if(!Number.isInteger(this.age) || Number(this.age) <= 0) {
+      this.toastService.warning('Tuổi phải là số nguyên lớn hơn 0.');
+    }
+    if(!this.species) {
+      this.toastService.warning('Vui lòng nhập Loài.');
+    }
+    if(!this.identifying) {
+      this.toastService.warning('Vui lòng nhập Đặc điểm nhận dạng.');
+    }
+    // if(!this.urlPetImage) {
+    //   this.toastService.warning('Vui lòng chọn ảnh.');
+    // }
+    if(this.name && this.species && Number.isInteger(this.age) && Number(this.age) > 0 && this.identifying && !this.urlPetImage) {
+      this.modalRef?.hide();
+      this.addPet();
+      if(this.rightPopupIndex < 3){
+        this.rightPopupIndex++;
+      }
     }
   }
 
   addPet(){
+    console.log("click")
     if(this.rightPopupIndex === 2){
-
       this.health_history_requests = {
         description: this.descriptionHealthHistory
       };

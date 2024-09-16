@@ -11,26 +11,6 @@ import { HttpClient } from '@angular/common/http';
 import { Md5 } from 'ts-md5';
 // import { ChatDoctorComponent } from '../chat-doctor/chat-doctor.component'; 
 
-export class Password {
-  private oldPassword: any;
-  private newPassword: any;
-  private resetPassword: any;
-
-  constructor(oldPassword: any, newPassword: any, resetPassword: any) {
-    this.oldPassword = oldPassword;
-    this.newPassword = newPassword;
-    this.resetPassword = resetPassword;
-  }
-}
-
-interface SearchResult {
-  gmail: string;
-  full_name: string;
-  address: string;
-  phone_number: string;
-  roles: string[];
-  status: number;
-}
 
 export class UserProfile {
   private gmail: any;
@@ -60,6 +40,18 @@ export class UserRegister{
     this.password = password;
     this.address = address;
     this.phone_number = phone_number;
+  }
+}
+
+export class Password {
+  private oldPassword: any;
+  private newPassword: any;
+  private resetPassword: any;
+
+  constructor(oldPassword: any, newPassword: any, resetPassword: any) {
+    this.oldPassword = oldPassword;
+    this.newPassword = newPassword;
+    this.resetPassword = resetPassword;
   }
 }
 
