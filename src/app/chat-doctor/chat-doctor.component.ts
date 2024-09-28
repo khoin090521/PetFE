@@ -49,7 +49,7 @@ class PetRecord{
     public symptom_description: string,
     public symptoms_time: string,
     public body_temperature: number,
-    public external_examinationd: string,
+    public external_examination: string,
     public test_results: string,
     public preliminary_diagnosis: string,
     public medications: string,
@@ -116,10 +116,10 @@ export class ChatDoctorComponent implements OnInit{
   examination_date: string = "";
   symptom_description: string = "";
   symptoms_time: string = "";
-  body_temperature: string = "";
-  external_examinationd: string = "";
+  body_temperature: number = 0;
+  external_examination: string = "";
   test_results: string = "";
-  preliminary_diagnosis: string = "";
+  preliminary_diagnosis: string = "Không có";
   medications: string = "";
   nutrition: string = "";
   re_examination: string = "";
@@ -332,39 +332,41 @@ export class ChatDoctorComponent implements OnInit{
   }
 
   async createPetRecord(){
-
-    this.doctor_id = Number(localStorage.getItem('user_id'));
-    const currentDate = new Date();
-    this.examination_date = currentDate.getFullYear() + '-' +
-    ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' +
-    ('0' + currentDate.getDate()).slice(-2);
-
-    this.petRecord = new PetRecord(
-      this.pet_id, this.doctor_id, this.examination_date, this.symptom_description, 
-      this.symptoms_time, Number(this.body_temperature), this.external_examinationd,
-      this.test_results, this.preliminary_diagnosis, this.medications,this.nutrition, this.re_examination);
-      await this.http.post<any>(`${BASE_URL}/petRecord/add`, this.petRecord).subscribe(
-      (res) => {
-        this.toastService.success('Thêm bệnh án thành công');
-        this.modalRef?.hide();
-        this.examination_date = ""; 
-        this.symptom_description = ""; 
-        this.symptoms_time = ""; 
-        this.body_temperature = "";
-        this.external_examinationd = "";
-        this.test_results = "";
-        this.preliminary_diagnosis = "";
-        this.medications = "";
-        this.nutrition = ""; 
-        this.re_examination = "";
-        this.getPetRecordAfterAdd();
-      },
-      (err) => {
-        this.toastService.error('Thêm bệnh án thất bại');
-        this.modalRef?.hide();
-      }
-    );
-    
+    if(!Number(this.body_temperature) && Number(this.body_temperature) <= 0) {
+      this.toastService.warning('Nhiệt độ cơ thể phải là số lớn hơn 0');
+    } else {
+      this.doctor_id = Number(localStorage.getItem('user_id'));
+      const currentDate = new Date();
+      this.examination_date = currentDate.getFullYear() + '-' +
+      ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' +
+      ('0' + currentDate.getDate()).slice(-2);
+  
+      this.petRecord = new PetRecord(
+        this.pet_id, this.doctor_id, this.examination_date, this.symptom_description, 
+        this.symptoms_time, Number(this.body_temperature), this.external_examination,
+        this.test_results, this.preliminary_diagnosis, this.medications,this.nutrition, this.re_examination);
+        await this.http.post<any>(`${BASE_URL}/petRecord/add`, this.petRecord).subscribe(
+        (res) => {
+          this.toastService.success('Thêm bệnh án thành công');
+          this.modalRef?.hide();
+          this.examination_date = ""; 
+          this.symptom_description = ""; 
+          this.symptoms_time = ""; 
+          this.body_temperature = 0;
+          this.external_examination = "";
+          this.test_results = "";
+          this.preliminary_diagnosis = "Không có";
+          this.medications = "";
+          this.nutrition = ""; 
+          this.re_examination = "";
+          this.getPetRecordAfterAdd();
+        },
+        (err) => {
+          this.toastService.error('Thêm bệnh án thất bại');
+          this.modalRef?.hide();
+        }
+      );
+    }
   }
 
   async getPetRecordAfterAdd(){

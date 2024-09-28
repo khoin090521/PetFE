@@ -213,7 +213,10 @@ export class DetailPetComponent implements OnInit{
     this.loadingStatusAvatar = true;
 
     const file = event.target.files[0];
-    if (file) {
+    if(!file.type.includes("image")) {
+      this.toastService.warning("Chỉ có thể chọn ảnh");
+    }
+    if (file.type.includes("image")) {
       const path = `yt/${file.name}`;
       try {
         const uploadTask = await this.fireStorage.upload(path, file);
@@ -282,7 +285,10 @@ export class DetailPetComponent implements OnInit{
     this.loadingStatusAvatar = true;
 
     const file = event.target.files[0];
-    if (file) {
+    if(!file.type.includes("image")) {
+      this.toastService.warning("Chỉ có thể chọn ảnh");
+    }
+    if (file.type.includes("image")) {
       const path = `yt/${file.name}`;
       try {
         const uploadTask = await this.fireStorage.upload(path, file);

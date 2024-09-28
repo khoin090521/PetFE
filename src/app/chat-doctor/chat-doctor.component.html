@@ -271,15 +271,15 @@
       </div>
       <div class="form-group">
         <label for="body_temperature">Cơ thể nhiệt độ</label>
-        <input autocomplete="off" required class="form-control mt-1" placeholder="Cơ thể nhiệt độ" [(ngModel)]="body_temperature" [ngModelOptions]="{standalone: true}">
+        <input type="number" min="1" autocomplete="off" required class="form-control mt-1" placeholder="Cơ thể nhiệt độ" [(ngModel)]="body_temperature" [ngModelOptions]="{standalone: true}">
       </div>
       <div class="form-group">
         <label for="test_results">Kết quả test</label>
         <input autocomplete="off" required class="form-control mt-1" placeholder="Kết quả test" [(ngModel)]="test_results" [ngModelOptions]="{standalone: true}">
       </div>
       <div class="form-group">
-        <label for="external_examinationd">Sơ bộ-chẩn đoán</label>
-        <input autocomplete="off" required class="form-control mt-1" placeholder="Sơ bộ-chẩn đoán" [(ngModel)]="external_examinationd" [ngModelOptions]="{standalone: true}">
+        <label for="external_examination">Sơ bộ-chẩn đoán</label>
+        <input autocomplete="off" required class="form-control mt-1" placeholder="Sơ bộ-chẩn đoán" [(ngModel)]="external_examination" [ngModelOptions]="{standalone: true}">
       </div>
       <div class="form-group">
         <label for="medications">Thuốc</label>

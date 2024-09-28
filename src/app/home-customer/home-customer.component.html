@@ -22,11 +22,11 @@
                                         <label class="file-upload">
                                             <div *ngIf="!urlPetImage && !loadingStatusAvatar">
                                                 <img src="https://i.pinimg.com/474x/d7/70/33/d7703333ad8ba85827b60fccf42f9c25.jpg" alt="">
-                                                <input type="file" (change)="onFileChange($event)" [(ngModel)]="transfer_contract" [ngModelOptions]="{standalone: true}">
+                                                <input type="file" accept=".jpg, .jpeg, .png" (change)="onFileChange($event)" [(ngModel)]="transfer_contract" [ngModelOptions]="{standalone: true}">
                                             </div>
                                             <div *ngIf="urlPetImage && !loadingStatusAvatar">
                                                 <img style="width: 120px;height: 120px" [src]="urlPetImage" alt="">
-                                                <input type="file" (change)="onFileChange($event)"/>
+                                                <input type="file" accept=".jpg, .jpeg, .png" (change)="onFileChange($event)"/>
                                             </div>
                                             <div *ngIf="loadingStatusAvatar">
                                                 <mat-spinner></mat-spinner>
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="form-group mt-3">
                                   <h3 style="display: flex;margin-right: auto">Ảnh xác nhận nguồn gốc</h3>
-                                    <input (change)="onFileChangeCertificate($event)" autocomplete="off" required type="file" class="form-control mt-1" [disabled]="loadingStatusFile">
+                                    <input (change)="onFileChangeCertificate($event)" accept=".jpg, .jpeg, .png" autocomplete="off" required type="file" class="form-control mt-1" [disabled]="loadingStatusFile">
                                 </div>
                                 <div class="form-group mt-3" *ngIf="loadingStatusFile">
                                     <mat-progress-bar mode="indeterminate"></mat-progress-bar>

@@ -52,11 +52,11 @@
                 <h3>Giấy chứng nhận nguồn gốc</h3>
                 <label class="certificatePet">
                     <div *ngIf="!urlCertificate">
-                        <img style="height: 200px;width: 300px" class="update-certificate" src="{{ certificatePet }}" alt=""><br>
-                        <input type="file" (change)="onFileChangeCertificate($event)" >
+                        <img style="height: 200px;width: 300px"  class="update-certificate" src="{{ certificatePet }}" alt=""><br>
+                        <input type="file" accept=".jpg, .jpeg, .png" (change)="onFileChangeCertificate($event)" >
                     </div>
                     <div *ngIf="urlCertificate">
-                        <input type="file" (change)="onFileChangeCertificate($event)" >
+                        <input type="file" accept=".jpg, .jpeg, .png" (change)="onFileChangeCertificate($event)" >
                         <img style="height: 200px;width: 300px" class="update-certificate" src="{{ certificatePet }}" alt=""><br>
                     </div>
                 </label>
@@ -68,11 +68,11 @@
                 <label class="file-upload">
                     <div *ngIf="!urlPetImage">
                         <img class="imgDev" style="height: 150px;width: 150px" class="update-avatar" src="{{ imagePet }}" alt=""><br>
-                        <input type="file" (change)="onFileChange($event)" >
+                        <input type="file" accept=".jpg, .jpeg, .png" (change)="onFileChange($event)" >
                         <button class="update-btn" mat-fab extended (click)="updatePet()">Cập nhật</button>
                     </div>
                     <div *ngIf="urlPetImage">
-                        <input type="file" (change)="onFileChange($event)" >
+                        <input type="file" accept=".jpg, .jpeg, .png" (change)="onFileChange($event)" >
                         <img style="height: 150px;width: 150px" class="update-avatar" src="{{ imagePet }}" alt=""><br>
                         <button style="display: flex;margin-left: 50%;" class="update-btn" mat-fab extended (click)="updatePet()">Cập nhật</button>
                     </div>
