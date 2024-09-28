@@ -41,6 +41,13 @@ const routes: Routes = [
       role: UserRole.ROLE_USER,
     },
   },
+  {
+    path: 'customer-booking?clinicId=&clinicName=',  component: CustomerBookingComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { 
+      role: UserRole.ROLE_USER,
+    },
+  },
   { 
     path: 'chat-doctor/:userId',  component: ChatDoctorComponent,
     canActivate: [AuthGuard, RoleGuard],

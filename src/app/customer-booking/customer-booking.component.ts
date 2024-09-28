@@ -42,7 +42,7 @@ interface SearchResult {
     id: number,
     name: string,
     quantity: number,
-    price: 12000,
+    price: number,
     type: string,
     trademark: string,
     descrition: string,
