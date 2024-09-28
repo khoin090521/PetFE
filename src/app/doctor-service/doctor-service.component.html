@@ -1,0 +1,72 @@
+<app-header></app-header>
+<router-outlet></router-outlet>
+
+<div class="tab" style="margin: 12px 0 0 12px;">
+    <div class="tab-container">
+        <button mat-fab class="mat-fab" routerLink="/create-doctor">
+          <mat-icon>reply</mat-icon>
+        </button>
+    </div>
+    
+</div>
+
+<div class="medicineDoctor" style="display: block;">
+    <div style="display: flex; margin-bottom: 12px; align-items: center;">
+    <label for="select_doctor" style="margin-right: 12px; white-space: nowrap;">Chọn bác sĩ:</label>
+    <select class="form-select" id="select_doctor" required placeholder="Tên bác siwx" [(ngModel)]="doctor_id" [ngModelOptions]="{standalone: true}" (change)="onSelectDoctor($event)"> 
+        <option selected value="" disabled>Chọn bác sĩ</option>
+        <option *ngFor="let i of doctorList" [value]="i.id">{{ i.user_name }}</option>
+    </select>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">STT</th>
+          <th scope="col">Tên dịch vụ</th>
+          <th scope="col">Giá dịch vụ</th>
+          <th scope="col">KQ xét nghiệm</th>
+          <th scope="col">nhận xét bác sĩ</th>
+          <th scope="col">Trạng thái</th>
+          <th scope="col">Cập nhật trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of listService, let idx = index" >
+            <td>{{ idx + 1 }}</td>
+            <td>{{ i.serviceName }}</td>
+            <td>{{ i.servicePrice }}</td>
+            <td>
+              <img style="width: 100px;height: 100px" [src]="i.result" alt="Ảnh kết quả" *ngIf="i.result">
+              <span *ngIf="!i.result">Chưa có kết quả</span>
+            </td>
+            <td>{{ i.comment || "Chưa có nhận xét" }}</td>
+            <td>{{ i.status === 0 ? "Chưa thanh toán" : "Đã thanh toán" }}</td>
+            <td style="width: 100px;">
+              <div class="verifySchedule">
+                <button mat-fab class="mat-fab" (click)="openUpdateRecord(updateStatus, i)" *ngIf="i.status === 0">
+                  <mat-icon>payments</mat-icon>
+                </button>      
+                <!-- <button mat-fab class="mat-fab" (click)="openDelete(deleteService, i.id, i.serviceName)" *ngIf="is_doctor">
+                  <mat-icon>delete</mat-icon>
+                </button> -->
+              </div>
+            </td>        
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #updateStatus>
+    <form ngNativeValidate>
+      <div class="modal-header">
+        <b><h1 class="modal-title pull-left">Xác nhận thanh toán</h1></b>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
+      </div>
+      <div class="modal-footer">
+        <div class="operate-btn">
+          <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+          <button type="button" class="btn btn-primary mt-3" (click)="updateStatusRecord()">Xác nhận</button>
+        </div>
+      </div>
+    </form>
+  </ng-template>

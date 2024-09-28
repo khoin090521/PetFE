@@ -1,0 +1,112 @@
+<app-header></app-header>
+<router-outlet></router-outlet>
+
+<div class="tab" style="margin: 12px 0 0 12px;">
+    <div class="tab-container">
+        <button mat-fab class="mat-fab" [routerLink]="routerLink">
+          <mat-icon>reply</mat-icon>
+        </button>
+        <button mat-fab class="mat-fab" (click)="openAdd(createService)">
+            <img style="width: 50px;height:50px;" src="assets/medicine.png" alt="Logo">
+        </button>
+    </div>
+</div>
+
+<div class="medicineDoctor">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">STT</th>
+        <th scope="col">Tên dịch vụ</th>
+        <th scope="col">Giá dịch vụ</th>
+        <th scope="col" style="width: 120px;">Chỉnh sửa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of listService, let idx = index">
+        <td>{{ idx + 1 }}</td>
+        <td>{{ i.serviceName }}</td>
+        <td>{{ formatPrice(i.servicePrice) }} VND</td>
+        <td>
+          <div class="btnModify">
+            <button mat-fab class="mat-fab" (click)="openDelete(deleteService, i.id, i.serviceName)">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-fab class="mat-fab" (click)="openUpdate(editService, i)">
+              <mat-icon>brush</mat-icon>
+            </button> 
+          </div>  
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+  
+
+<ng-template #createService>
+    <form ngNativeValidate>
+      <div class="modal-header">
+        <b><h1 class="modal-title pull-left">Thêm dịch vụ</h1></b>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="serviceName">Tên dịch vụ</label>
+          <input autocomplete="off" id="serviceName" required class="form-control mt-1" placeholder="Tên dịch vụ" [(ngModel)]="serviceName" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group mt-3">
+          <label for="servicePrice">Giá dịch vụ</label>
+          <input autocomplete="off" id="servicePrice" required type="text" class="form-control mt-1" placeholder="giá" [(ngModel)]="servicePrice" [ngModelOptions]="{standalone: true}">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="operate-btn">
+          <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+          <button type="button" class="btn btn-warning mt-3" (click)="addAction()">Tạo</button>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+
+  <ng-template #deleteService>
+    <form ngNativeValidate>
+      <div class="modal-header">
+        <b><h1 class="modal-title pull-left">Xoá thông tin dịch vụ {{delete_serviceName}}</h1></b>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
+      </div>
+      <div class="modal-footer">
+        <div class="operate-btn">
+          <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+          <button type="button" class="btn btn-warning mt-3" (click)="deleteAction()">Xoá</button>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+
+
+  <ng-template #editService>
+    <form ngNativeValidate>
+      <div class="modal-header">
+        <b><h1 class="modal-title pull-left">Sửa thông dịch vụ</h1></b>
+        <!-- <button class="btn-close" aria-label="Close" (click)="closeLoginForm()"></button> -->
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="serviceName">Tên dịch vụ</label>
+            <input autocomplete="off" id="serviceName" required class="form-control mt-1" placeholder="Tên dịch vụ" [(ngModel)]="serviceName" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group mt-3">
+            <label for="servicePrice">Giá dịch vụ</label>
+            <input autocomplete="off" id="servicePrice" required type="text" class="form-control mt-1" placeholder="giá" [(ngModel)]="servicePrice" [ngModelOptions]="{standalone: true}">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <div class="operate-btn">
+          <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Huỷ</button>
+          <button type="button" class="btn btn-warning mt-3" (click)="updateAction()">Cập nhật</button>
+        </div>
+      </div>
+    </form>
+  </ng-template>

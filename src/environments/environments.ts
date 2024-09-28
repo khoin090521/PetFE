@@ -6,9 +6,9 @@ export const environment = {
     production: false,
     firebaseConfig : {
         apiKey: "AIzaSyCPjFKbznb8XxaM3mo3vIJprIii16oZa5o",
-        authDomain: "clouddinary-565cb.firebaseapp.com",
-        projectId: "clouddinary-565cb",
-        storageBucket: "clouddinary-565cb.appspot.com",
+        authDomain: "doan-pet.firebaseapp.com",
+        projectId: "doan-pet",
+        storageBucket: "doan-pet.appspot.com",
         messagingSenderId: "339412676137",
         appId: "1:339412676137:web:139ac3e7fd7b15702db638"
     }

@@ -61,6 +61,10 @@ class MedicineAdd{
 })
 export class CreateDoctorComponent implements OnInit{
 
+  user_role: any = "";
+  routerLink: any = "/service-manager";
+  routerLinkServiceDoctor: any = "/service-doctor";
+
   modalRef?: BsModalRef;
   openMedicineScreen: any = false;
   createDoctorMeeting: any = false;

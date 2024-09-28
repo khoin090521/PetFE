@@ -1,8 +1,14 @@
 <app-header></app-header>
 <router-outlet></router-outlet>
 
-<div class="tab">
+<div class="tab" style="margin: 12px 0 0 12px;">
     <div class="tab-container">
+        <button mat-fab class="mat-fab" [routerLink]="routerLink">
+            <mat-icon>medical_services</mat-icon>
+        </button>
+        <button mat-fab class="mat-fab" [routerLink]="routerLinkServiceDoctor">
+            <mat-icon>medical_information</mat-icon>
+        </button>
         <button mat-fab class="mat-fab" (click)="openCreateDoctor(createDoctor)">
             <mat-icon>supervisor_account</mat-icon>
         </button>

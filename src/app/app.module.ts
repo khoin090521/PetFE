@@ -49,6 +49,9 @@ import {AngularFireStorageModule} from "@angular/fire/compat/storage";
 import { environment } from 'src/environments/environments'; 
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { ServiceManagerComponent } from './service-manager/service-manager.component';
+import { CustomerServiceComponent } from './customer-service/customer-service.component';
+import { DoctorServiceComponent } from './doctor-service/doctor-service.component';
 
 
 @NgModule({
@@ -63,6 +66,9 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     ChatComponent,
     CreateDoctorComponent,
     AdminManagerComponent,
+    ServiceManagerComponent,
+    CustomerServiceComponent,
+    DoctorServiceComponent,
   ],
   imports: [
     BrowserModule,

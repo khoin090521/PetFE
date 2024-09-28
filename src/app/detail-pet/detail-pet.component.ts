@@ -5,7 +5,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { ToastrService } from 'ngx-toastr';
-
+import { Router } from '@angular/router';
 
 export interface PeriodicElement {
   doctor: string;
@@ -114,6 +114,9 @@ export class DetailPetComponent implements OnInit{
 
   pet?: Pet;
 
+  routerLink: any = "/service-manager";
+  petRecordId: string = "";
+
   async ngAfterViewInit() {
     const routerUrl = window.location.href
     console.log("routerUrl",routerUrl);
@@ -146,6 +149,7 @@ export class DetailPetComponent implements OnInit{
     private modalService: BsModalService,
     private fireStorage:AngularFireStorage,
     private toastService: ToastrService,
+    private router: Router,
   ){
   }
 
@@ -386,6 +390,7 @@ export class DetailPetComponent implements OnInit{
     this.body_temperature = i.body_temperature;
     this.test_results = i.test_results;
     this.re_examination = i.re_examination;
+    this.petRecordId = i.id;
     this.meeting = i.doctorDto.link_meet;
     console.log("this.meeting",this.meeting);
 
@@ -440,4 +445,8 @@ export class DetailPetComponent implements OnInit{
     this.modalRef?.hide();
   }
 
+  navigatePage() {
+    this.router.navigate([`/my-service/${this.petRecordId}`]);
+    this.modalRef?.hide();
+  }
 }

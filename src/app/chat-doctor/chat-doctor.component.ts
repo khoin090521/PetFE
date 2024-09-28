@@ -4,6 +4,7 @@ import { BASE_URL } from '../_common/constants/api';
 import { HeaderComponent } from '../header/header.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 export interface Diagnostic {
   id: number;
@@ -69,6 +70,7 @@ export class ChatDoctorComponent implements OnInit{
     private headerComponent: HeaderComponent,
     private modalService: BsModalService,
     private toastService: ToastrService,
+    private router: Router,
   ){
   }
 
@@ -133,6 +135,8 @@ export class ChatDoctorComponent implements OnInit{
   nutritionDetail: string = "";
   re_examinationDetail: string = "";
 
+  petRecordId: string = "";
+
   ngOnInit(): void {
     this.getScheduleByDoctorId();
     setTimeout(() => {
@@ -162,6 +166,7 @@ export class ChatDoctorComponent implements OnInit{
     this.re_examinationDetail = petRecord.re_examination;
     this.nutritionDetail = petRecord.nutrition;
     this.medicationsDetail = petRecord.medications;
+    this.petRecordId = petRecord.id;
 
     this.modalRef = this.modalService.show(template);
   }
@@ -355,7 +360,7 @@ export class ChatDoctorComponent implements OnInit{
         this.getPetRecordAfterAdd();
       },
       (err) => {
-        this.toastService.success('Thêm bệnh án thất bại');
+        this.toastService.error('Thêm bệnh án thất bại');
         this.modalRef?.hide();
       }
     );
@@ -368,6 +373,11 @@ export class ChatDoctorComponent implements OnInit{
   }
 
   closeDialog(){
+    this.modalRef?.hide();
+  }
+
+  navigatePage() {
+    this.router.navigate([`/customer-service/${this.petRecordId}`]);
     this.modalRef?.hide();
   }
 }
