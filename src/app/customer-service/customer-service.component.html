@@ -39,7 +39,7 @@
           <td>{{ i.status === 0 ? "Chưa thanh toán" : "Đã thanh toán" }}</td>
           <td>
             <div class="verifySchedule">
-              <button mat-fab class="mat-fab" (click)="openAddRecord(addRecord, i)" *ngIf="is_doctor">
+              <button mat-fab class="mat-fab" (click)="openAddRecord(addRecord, i)" *ngIf="is_doctor && i.status === 1">
                 <mat-icon>content_paste</mat-icon>
               </button>      
               <button mat-fab class="mat-fab" (click)="openViewRecord(viewRecord, i)" *ngIf="!is_doctor">
