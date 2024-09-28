@@ -32,7 +32,7 @@
       </div>
       <div class="form-group mt-3">
         <label for="image_add">Hình ảnh</label>
-        <input  type="file" accept=".jpg, .jpeg, .png, .pdf" (change)="onFileChangeAdd($event)" autocomplete="off" id="image_add" required class="form-control mt-1" [(ngModel)]="image_add" [ngModelOptions]="{standalone: true}" [disabled]="loadingStatusFile">
+        <input  type="file" accept=".jpg, .jpeg, .png" (change)="onFileChangeAdd($event)" autocomplete="off" id="image_add" required class="form-control mt-1" [(ngModel)]="image_add" [ngModelOptions]="{standalone: true}" [disabled]="loadingStatusFile">
         <img [src]="image" alt="Ảnh" *ngIf="image" style="height: 100px; margin-top: 4px;"/>
       </div>
       <div class="form-group mt-3" *ngIf="loadingStatusFile">
@@ -213,7 +213,7 @@
         </div>
         <div class="form-group mt-3">
           <label for="">Hình ảnh</label>
-          <input autocomplete="off" accept=".jpg, .jpeg, .png, .pdf" (change)="onFileChangeUpdate($event)" required type="file" class="form-control mt-1" placeholder="Hình ảnh" [disabled]="loadingStatusFileUpdate">
+          <input autocomplete="off" accept=".jpg, .jpeg, .png" (change)="onFileChangeUpdate($event)" required type="file" class="form-control mt-1" placeholder="Hình ảnh" [disabled]="loadingStatusFileUpdate">
           <img [src]="image" alt="Ảnh" *ngIf="image" style="height: 100px; margin-top: 4px;"/>
         </div>
         <div class="form-group mt-3" *ngIf="loadingStatusFileUpdate">

@@ -110,7 +110,11 @@ export class CustomerServiceComponent implements OnInit{
   async onFileChangeAdd(event:any){
     this.loadingStatusFile = true;
     const file = event.target.files[0];
-    if (file) {
+    if(!file.type.includes("image")) {
+      this.toastService.warning("Chỉ có thể chọn ảnh");
+      this.image = ""
+    }
+    if (file.type.includes("image")) {
       const path = `yt/${file.name}`;
       try {
         const uploadTask = await this.fireStorage.upload(path, file);

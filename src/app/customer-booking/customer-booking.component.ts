@@ -288,7 +288,7 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
     }
 
     viewDetail(medicine: any,template: TemplateRef<any>){
-        this.medicineDescription = medicine.descrition;
+        this.medicineDescription = medicine.description;
         this.image = medicine.medicine_image[0].image;
         this.quantity = medicine.quantity;
         this.price = medicine.price;

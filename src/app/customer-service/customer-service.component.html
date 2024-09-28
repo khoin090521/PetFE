@@ -112,7 +112,7 @@
     <div class="modal-body">
       <div class="form-group mt-3">
         <label for="image_add">Hình ảnh kết quả</label>
-        <input  type="file" accept=".jpg, .jpeg, .png, .pdf" (change)="onFileChangeAdd($event)" autocomplete="off" id="image_add" required class="form-control mt-1" [(ngModel)]="image" [ngModelOptions]="{standalone: true}" [disabled]="loadingStatusFile">
+        <input  type="file" accept=".jpg, .jpeg, .png" (change)="onFileChangeAdd($event)" autocomplete="off" id="image_add" required class="form-control mt-1" [(ngModel)]="image" [ngModelOptions]="{standalone: true}" [disabled]="loadingStatusFile">
       </div>
       <div class="form-group mt-3" *ngIf="loadingStatusFile">
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
