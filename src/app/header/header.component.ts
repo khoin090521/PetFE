@@ -381,14 +381,12 @@ export class HeaderComponent implements OnInit{
   async updatePassword(){
     this.password = new Password(this.oldPassword, this.newPassword, this.retypePassword);
     this.http.post<any>(`${BASE_URL}/auth/change-password`, this.password).subscribe(
-      (res) => {},
-      (err) => {
-        if(err.status === 200){
-          this.toastService.success('Đổi mật khẩu thành công');
-        }else{
-          this.toastService.error('Đổi mật khẩu thất bại');
-        }
+      (res) => {
+        this.toastService.success('Đổi mật khẩu thành công');
         this.modalRef?.hide();
+      },
+      (err) => {
+        this.toastService.error('Đổi mật khẩu thất bại');
       }
     );
     this.oldPassword = "";

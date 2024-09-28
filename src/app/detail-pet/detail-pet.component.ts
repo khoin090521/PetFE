@@ -123,25 +123,25 @@ export class DetailPetComponent implements OnInit{
     const urlObj = new URL(routerUrl);
 
     this.petId = Number(urlObj.searchParams.get('petId') || '');
-    const name = urlObj.searchParams.get('name') || '';
-    const age = urlObj.searchParams.get('age') || ''; 
-    const gender = urlObj.searchParams.get('gender') || '';
-    const species = urlObj.searchParams.get('species') || '';
-    const identifying = urlObj.searchParams.get('identifying') || '';
-    const image = urlObj.searchParams.get('image') || '';
-    const certificate = urlObj.searchParams.get('origin_certificate') || '';
-    console.log("this.petId",this.petId);
-    console.log("certificate",certificate);
+    // const name = urlObj.searchParams.get('name') || '';
+    // const age = urlObj.searchParams.get('age') || ''; 
+    // const gender = urlObj.searchParams.get('gender') || '';
+    // const species = urlObj.searchParams.get('species') || '';
+    // const identifying = urlObj.searchParams.get('identifying') || '';
+    // const image = urlObj.searchParams.get('image') || '';
+    // const certificate = urlObj.searchParams.get('origin_certificate') || '';
+    // console.log("this.petId",this.petId);
+    // console.log("certificate",certificate);
 
-    setTimeout(() => {
-        this.petName = decodeURIComponent(name);
-        this.petAge = decodeURIComponent(age);
-        this.petGender = decodeURIComponent(gender);
-        this.petSpecies = decodeURIComponent(species);
-        this.petIdentifying = decodeURIComponent(identifying);
-        this.imagePet = image;
-        this.certificatePet = certificate;
-      }, 500)
+    // setTimeout(() => {
+    //     this.petName = decodeURIComponent(name);
+    //     this.petAge = decodeURIComponent(age);
+    //     this.petGender = decodeURIComponent(gender);
+    //     this.petSpecies = decodeURIComponent(species);
+    //     this.petIdentifying = decodeURIComponent(identifying);
+    //     this.imagePet = image;
+    //     this.certificatePet = certificate;
+    //   }, 500)
   }
 
   constructor(
@@ -158,12 +158,36 @@ export class DetailPetComponent implements OnInit{
     this.healthHistoryst = "noHighlightBtn";
     this.injectionHistory = "noHighlightBtn";
     this.basicDetail = "highlightBtn";
-
+    const routerUrl = window.location.href
+    console.log("routerUrl",routerUrl);
+    const urlObj = new URL(routerUrl);
+    this.petId = Number(urlObj.searchParams.get('petId') || '');
+    console.log("this.petId",this.petId)
+    this.getDetailPet()
     setTimeout(() => {
       this.getVacinationHistory();
       this.getHeathPet();
       this.getRecordPet();
     }, 1000)
+  }
+
+  getDetailPet() {
+    const user_id = Number(localStorage.getItem('user_id'));
+    this.http.get<any>(`${BASE_URL}/pet/show-detail?pet-id=${this.petId}&customer-id=${user_id}`).subscribe(
+      (res) => {
+        console.log("res",res)
+          this.petName = res.data.name;
+          this.petAge = res.data.age;
+          this.petGender = res.data.gender;
+          this.petSpecies = res.data.species;
+          this.petIdentifying = res.data.identifying;
+          this.imagePet = res.data.transfer_contract;
+          this.certificatePet = res.data.origin_certificate;
+      },
+      (err) => {
+        this.toastService.error("Không tìm thấy thông tin pet.")
+      } 
+    );
   }
 
   updatePet(){

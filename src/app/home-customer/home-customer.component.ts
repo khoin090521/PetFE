@@ -352,8 +352,11 @@ export class HomeCustomerComponent implements OnInit{
       }).subscribe(
         (res) => {
           this.petId = res.data.id
+          this.toastService.success('Thêm Pet thành công.');
         },
-        (err) => {}
+        (err) => {
+          this.toastService.error('Thêm Pet thất bại.');
+        }
       );
     }
   }
