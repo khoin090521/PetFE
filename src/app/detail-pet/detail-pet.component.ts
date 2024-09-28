@@ -72,6 +72,8 @@ export class DetailPetComponent implements OnInit{
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource123: any = ELEMENT_DATA;
 
+  showPagePetDetail: boolean = true;
+
   statusTab: boolean = true;
   profiltTabStatus: number = 1;
 
@@ -154,15 +156,12 @@ export class DetailPetComponent implements OnInit{
   }
 
   ngOnInit(): void {    
-
     this.healthHistoryst = "noHighlightBtn";
     this.injectionHistory = "noHighlightBtn";
     this.basicDetail = "highlightBtn";
     const routerUrl = window.location.href
-    console.log("routerUrl",routerUrl);
     const urlObj = new URL(routerUrl);
     this.petId = Number(urlObj.searchParams.get('petId') || '');
-    console.log("this.petId",this.petId)
     this.getDetailPet()
     setTimeout(() => {
       this.getVacinationHistory();
@@ -175,7 +174,6 @@ export class DetailPetComponent implements OnInit{
     const user_id = Number(localStorage.getItem('user_id'));
     this.http.get<any>(`${BASE_URL}/pet/show-detail?pet-id=${this.petId}&customer-id=${user_id}`).subscribe(
       (res) => {
-        console.log("res",res)
           this.petName = res.data.name;
           this.petAge = res.data.age;
           this.petGender = res.data.gender;
@@ -185,7 +183,8 @@ export class DetailPetComponent implements OnInit{
           this.certificatePet = res.data.origin_certificate;
       },
       (err) => {
-        this.toastService.error("Không tìm thấy thông tin pet.")
+        this.showPagePetDetail = false
+        this.toastService.error("Không có thông tin pet.")
       } 
     );
   }

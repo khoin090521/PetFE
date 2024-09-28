@@ -1,314 +1,312 @@
 <app-header></app-header>
 <router-outlet></router-outlet>
 
-<div class="detail-bar">
-    <div class="infor-detail">
-        <!-- <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
-        <h3 class="name-detail">Husky</h3> -->
-        <!-- <div class="option-detail"> -->
-            <!-- <button class="profile-btn" mat-fab extended (click)="openProfile()">Hồ sơ</button>
-            <button class="erecord-btn" mat-fab extended (click)="openERecord()">Bệnh án điện tử</button> -->
-        <!-- </div> -->
-        <button [ngClass]="profileBtn" mat-fab extended (click)="openProfile()">Hồ sơ</button>
-        <button [ngClass]="erecordBtn" mat-fab extended (click)="openERecord()">Bệnh án điện tử</button>
-    </div>
-</div>
-
-<div class="profile-tab" *ngIf="statusTab">
-    <div class="profile-tab-container">
-        <button [ngClass]="basicDetail" mat-fab extended (click)="openBasicDetail()">
-            Thông tin cơ bản
-        </button>
-        <button [ngClass]="healthHistoryst" mat-fab extended (click)="openHealthHistory()">
-            Lịch sử sức khoẻ
-        </button>
-        <button [ngClass]="injectionHistory" mat-fab extended (click)="openInjectionhHistory()">
-            Lịch sử tiêm phòng
-        </button>
-    </div>
-</div>
-
-<div class="basic-profile" *ngIf="profiltTabStatus === 1">
-<!-- <div class="basic-profile" *ngIf="profiltTabStatus === 1">     -->
-    <div class="left-group">
-        <div class="form-group">
-            <h3>Tên thú cưng</h3>
-            <input autocomplete="off" required class="form-control mt-1" placeholder="Tên" [(ngModel)]="petName">
-        </div>
-        <div class="form-group mt-3">
-            <h3>Loài</h3>
-            <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Loài" [(ngModel)]="petSpecies">
-        </div>
-        <div class="form-group mt-3">
-            <h3>Tuổi thú cưng</h3>
-            <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Tuổi" [(ngModel)]="petAge">
-        </div>
-        <div class="form-group mt-3">
-            <h3>Nhận dạng</h3>
-            <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Nhận dạng" [(ngModel)]="petIdentifying">
-        </div>
-        <div class="form-group mt-3 certificatePet">
-            <h3>Giấy chứng nhận nguồn gốc</h3>
-            <label class="certificatePet">
-                <div *ngIf="!urlCertificate">
-                    <img style="height: 200px;width: 300px" class="update-certificate" src="{{ certificatePet }}" alt=""><br>
-                    <input type="file" (change)="onFileChangeCertificate($event)" >
-                </div>
-                <div *ngIf="urlCertificate">
-                    <input type="file" (change)="onFileChangeCertificate($event)" >
-                    <img style="height: 200px;width: 300px" class="update-certificate" src="{{ certificatePet }}" alt=""><br>
-                </div>
-            </label>
+<div *ngIf="showPagePetDetail">
+    <div class="detail-bar">
+        <div class="infor-detail">
+            <!-- <img class="avatar-detail" src="https://spiritdogtraining.com/wp-content/uploads/2021/02/husky-eye-color.jpg" alt="">
+            <h3 class="name-detail">Husky</h3> -->
+            <!-- <div class="option-detail"> -->
+                <!-- <button class="profile-btn" mat-fab extended (click)="openProfile()">Hồ sơ</button>
+                <button class="erecord-btn" mat-fab extended (click)="openERecord()">Bệnh án điện tử</button> -->
+            <!-- </div> -->
+            <button [ngClass]="profileBtn" mat-fab extended (click)="openProfile()">Hồ sơ</button>
+            <button [ngClass]="erecordBtn" mat-fab extended (click)="openERecord()">Bệnh án điện tử</button>
         </div>
     </div>
-
-    <div class="right-group">
-        <form>
-            <label class="file-upload">
-                <div *ngIf="!urlPetImage">
-                    <img class="imgDev" style="height: 150px;width: 150px" class="update-avatar" src="{{ imagePet }}" alt=""><br>
-                    <input type="file" (change)="onFileChange($event)" >
-                    <button class="update-btn" mat-fab extended (click)="updatePet()">Cập nhật</button>
-                </div>
-                <div *ngIf="urlPetImage">
-                    <input type="file" (change)="onFileChange($event)" >
-                    <img style="height: 150px;width: 150px" class="update-avatar" src="{{ imagePet }}" alt=""><br>
-                    <button style="display: flex;margin-left: 50%;" class="update-btn" mat-fab extended (click)="updatePet()">Cập nhật</button>
-                </div>
-            </label>
-        </form>
+    
+    <div class="profile-tab" *ngIf="statusTab">
+        <div class="profile-tab-container">
+            <button [ngClass]="basicDetail" mat-fab extended (click)="openBasicDetail()">
+                Thông tin cơ bản
+            </button>
+            <button [ngClass]="healthHistoryst" mat-fab extended (click)="openHealthHistory()">
+                Lịch sử sức khoẻ
+            </button>
+            <button [ngClass]="injectionHistory" mat-fab extended (click)="openInjectionhHistory()">
+                Lịch sử tiêm phòng
+            </button>
+        </div>
     </div>
-</div>
-
-
-<div class="basic-profile" *ngIf="profiltTabStatus === 2">
-    <div class="left-group health-history">
-        <form *ngFor="let i of healthPetList">
-            <div style="display: flex; align-items: center;">
-                <textarea class="form-control" id="" rows="5" cols="50" value="{{ i.description }}" [disabled]="true"></textarea>
-                <button mat-fab style="margin-left: 10px;" (click)="deleteHealth(i)">
-                    <mat-icon>delete_forever</mat-icon>
+    
+    <div class="basic-profile" *ngIf="profiltTabStatus === 1">
+    <!-- <div class="basic-profile" *ngIf="profiltTabStatus === 1">     -->
+        <div class="left-group">
+            <div class="form-group">
+                <h3>Tên thú cưng</h3>
+                <input autocomplete="off" required class="form-control mt-1" placeholder="Tên" [(ngModel)]="petName">
+            </div>
+            <div class="form-group mt-3">
+                <h3>Loài</h3>
+                <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Loài" [(ngModel)]="petSpecies">
+            </div>
+            <div class="form-group mt-3">
+                <h3>Tuổi thú cưng</h3>
+                <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Tuổi" [(ngModel)]="petAge">
+            </div>
+            <div class="form-group mt-3">
+                <h3>Nhận dạng</h3>
+                <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Nhận dạng" [(ngModel)]="petIdentifying">
+            </div>
+            <div class="form-group mt-3 certificatePet">
+                <h3>Giấy chứng nhận nguồn gốc</h3>
+                <label class="certificatePet">
+                    <div *ngIf="!urlCertificate">
+                        <img style="height: 200px;width: 300px" class="update-certificate" src="{{ certificatePet }}" alt=""><br>
+                        <input type="file" (change)="onFileChangeCertificate($event)" >
+                    </div>
+                    <div *ngIf="urlCertificate">
+                        <input type="file" (change)="onFileChangeCertificate($event)" >
+                        <img style="height: 200px;width: 300px" class="update-certificate" src="{{ certificatePet }}" alt=""><br>
+                    </div>
+                </label>
+            </div>
+        </div>
+    
+        <div class="right-group">
+            <form>
+                <label class="file-upload">
+                    <div *ngIf="!urlPetImage">
+                        <img class="imgDev" style="height: 150px;width: 150px" class="update-avatar" src="{{ imagePet }}" alt=""><br>
+                        <input type="file" (change)="onFileChange($event)" >
+                        <button class="update-btn" mat-fab extended (click)="updatePet()">Cập nhật</button>
+                    </div>
+                    <div *ngIf="urlPetImage">
+                        <input type="file" (change)="onFileChange($event)" >
+                        <img style="height: 150px;width: 150px" class="update-avatar" src="{{ imagePet }}" alt=""><br>
+                        <button style="display: flex;margin-left: 50%;" class="update-btn" mat-fab extended (click)="updatePet()">Cập nhật</button>
+                    </div>
+                </label>
+            </form>
+        </div>
+    </div>
+    
+    
+    <div class="basic-profile" *ngIf="profiltTabStatus === 2">
+        <div class="left-group health-history">
+            <form *ngFor="let i of healthPetList">
+                <div style="display: flex; align-items: center;">
+                    <textarea class="form-control" id="" rows="5" cols="50" value="{{ i.description }}" [disabled]="true"></textarea>
+                    <button mat-fab style="margin-left: 10px;" (click)="deleteHealth(i)">
+                        <mat-icon>delete_forever</mat-icon>
+                    </button>
+                </div>
+            </form>
+            <form>
+                <textarea class="form-control" id="" rows="5" cols="50" [(ngModel)]="descriptionHealth" [ngModelOptions]="{standalone: true}"></textarea>
+            </form>
+        </div>
+        <div class="right-group">
+            <form>
+                <div class="update-right">
+                    <button mat-fab extended (click)="addHealthHistory()">Cập nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    
+    <div class="basic-profile sub-basic-profile" *ngIf="profiltTabStatus === 3">
+        <div class="add-btn">
+            <div class="sub-add-btn">
+                <button type="button" mat-fab class="insert" data-toggle="modal" (click)="openAddVacination(addVacinationForm)"><mat-icon>add</mat-icon></button>
+            </div>
+            <div class="search-container">
+                <input class="sub-search-input" type="text" placeholder="Tìm kiếm lịch sử tiêm vaccine...">
+                <mat-icon class="search-icon">search</mat-icon>
+              </div>
+        </div>
+    
+        <div class="table-field">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Tên thuốc</th>
+                    <th scope="col">Mô tả</th>
+                    <th scope="col">Ảnh</th>
+                    <th scope="col">Ngày tiêm</th>
+                    <th scope="col">Xoá lịch sử tiêm phòng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let i of listVacinationHistory">
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.description }}</td>
+                    <td><img style="width: 100px;height: 100px" [src]="i.vaccin_image" alt="Vaccine Image"></td>
+                    <td>{{ i.injection_date }}</td>
+                    <td>
+                        <button mat-fab style="margin-left: 10px;" (click)="deleteInjection(i)">
+                            <mat-icon>delete_forever</mat-icon>
+                        </button>
+                    </td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+    
+    
+        
+    
+    
+        <!-- <div class="left-group">
+            <form>
+                <textarea class="form-control" id="" rows="5" cols="50"></textarea>
+            </form>
+        </div>
+        <div class="right-group">
+            <form>
+                <div class="update-right">
+                    <button mat-fab class="openTextArea">
+                        <mat-icon>add</mat-icon>
+                    </button><br><br>
+                    <button mat-fab extended>Cập nhật</button>
+                </div>
+            </form> -->
+            <!-- <div class="modal-body">
+                <div class="form-group">
+                    <form>
+                        <div class="form-group">
+                            <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)] = "vaccine" [ngModelOptions]="{standalone: true}">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" id="" rows="10" cols="50" [(ngModel)]="descriptionVacineHistory" [ngModelOptions]="{standalone: true}"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input autocomplete="off" required type="date" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)] = "injection_date" [ngModelOptions]="{standalone: true}">
+                        </div>
+                        <div class="form-group">
+                            <input autocomplete="off" (change)="onFileChangeVaccine($event)" required type="file" class="form-control mt-1" placeholder="Tên vaccine">
+                        </div>
+                    </form>
+                </div>
+                <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3" (click)="addVaccinateHistory()">
+                    Lưu
                 </button>
-            </div>
-        </form>
-        <form>
-            <textarea class="form-control" id="" rows="5" cols="50" [(ngModel)]="descriptionHealth" [ngModelOptions]="{standalone: true}"></textarea>
-        </form>
+            </div> -->
+        <!-- </div> -->
     </div>
-    <div class="right-group">
-        <form>
-            <div class="update-right">
-                <button mat-fab extended (click)="addHealthHistory()">Cập nhật</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-<div class="basic-profile sub-basic-profile" *ngIf="profiltTabStatus === 3">
-    <div class="add-btn">
-        <div class="sub-add-btn">
-            <button type="button" mat-fab class="insert" data-toggle="modal" (click)="openAddVacination(addVacinationForm)"><mat-icon>add</mat-icon></button>
-        </div>
-        <div class="search-container">
-            <input class="sub-search-input" type="text" placeholder="Tìm kiếm lịch sử tiêm vaccine...">
-            <mat-icon class="search-icon">search</mat-icon>
-          </div>
-    </div>
-
-    <div class="table-field">
+    
+    <div class="erecord-tab" *ngIf="!statusTab">
         <table class="table">
             <thead>
               <tr>
-                <th scope="col">Tên thuốc</th>
-                <th scope="col">Mô tả</th>
-                <th scope="col">Ảnh</th>
-                <th scope="col">Ngày tiêm</th>
-                <th scope="col">Xoá lịch sử tiêm phòng</th>
+                <th scope="col">Ngày khám</th>
+                <th scope="col">Bác sĩ</th>
+                <th scope="col">Chuẩn đoán sơ bộ </th>
+                <th scope="col">Thông tin chi tiết </th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let i of listVacinationHistory">
-                <td>{{ i.name }}</td>
-                <td>{{ i.description }}</td>
-                <td><img style="width: 100px;height: 100px" [src]="i.vaccin_image" alt="Vaccine Image"></td>
-                <td>{{ i.injection_date }}</td>
+              <tr *ngFor="let i of recordPetList">
+                <td>{{ i.examination_date }}</td>
+                <td>{{ i.doctorDto.user_name }}</td>
+                <td>{{ i.test_results }}</td>
                 <td>
-                    <button mat-fab style="margin-left: 10px;" (click)="deleteInjection(i)">
-                        <mat-icon>delete_forever</mat-icon>
-                    </button>
+                  <button mat-fab class="mat-fab" (click)="viewDetail(i,viewDetailForm)">
+                    <mat-icon>remove_red_eye</mat-icon>
+                  </button>        
                 </td>
               </tr>
             </tbody>
         </table>
     </div>
-
-
     
-
-
-    <!-- <div class="left-group">
-        <form>
-            <textarea class="form-control" id="" rows="5" cols="50"></textarea>
-        </form>
-    </div>
-    <div class="right-group">
-        <form>
-            <div class="update-right">
-                <button mat-fab class="openTextArea">
-                    <mat-icon>add</mat-icon>
-                </button><br><br>
-                <button mat-fab extended>Cập nhật</button>
-            </div>
-        </form> -->
-        <!-- <div class="modal-body">
-            <div class="form-group">
-                <form>
-                    <div class="form-group">
-                        <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)] = "vaccine" [ngModelOptions]="{standalone: true}">
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" id="" rows="10" cols="50" [(ngModel)]="descriptionVacineHistory" [ngModelOptions]="{standalone: true}"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <input autocomplete="off" required type="date" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)] = "injection_date" [ngModelOptions]="{standalone: true}">
-                    </div>
-                    <div class="form-group">
-                        <input autocomplete="off" (change)="onFileChangeVaccine($event)" required type="file" class="form-control mt-1" placeholder="Tên vaccine">
-                    </div>
-                </form>
-            </div>
-            <button class="save-record" mat-fab extended *ngIf="rightPopupIndex===3" (click)="addVaccinateHistory()">
-                Lưu
-            </button>
-        </div> -->
-    <!-- </div> -->
-</div>
-
-
-
-
-
-<div class="erecord-tab" *ngIf="!statusTab">
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Ngày khám</th>
-            <th scope="col">Bác sĩ</th>
-            <th scope="col">Chuẩn đoán sơ bộ </th>
-            <th scope="col">Thông tin chi tiết </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let i of recordPetList">
-            <td>{{ i.examination_date }}</td>
-            <td>{{ i.doctorDto.user_name }}</td>
-            <td>{{ i.test_results }}</td>
-            <td>
-              <button mat-fab class="mat-fab" (click)="viewDetail(i,viewDetailForm)">
-                <mat-icon>remove_red_eye</mat-icon>
-              </button>        
-            </td>
-          </tr>
-        </tbody>
-    </table>
-</div>
-
-
-<ng-template #addVacinationForm>
-        <form ngNativeValidate>
-            <div class="modal-header">
-                <b><h1 class="modal-title pull-left">Thêm lịch sử tiêm phòng</h1></b>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <form>
-                        <div class="form-group">
-                            <label for="vaccine">Tên vaccine</label>
-                            <input autocomplete="off" id="vaccine" required type="text" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)]="vaccine" [ngModelOptions]="{standalone: true}">
-                        </div>
-                        <div class="form-group">
-                            <label for="descriptionVacineHistory">Mô tả</label>
-                            <textarea class="form-control" id="descriptionVacineHistory" rows="10" cols="50" [(ngModel)]="descriptionVacineHistory" [ngModelOptions]="{standalone: true}"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="injection_date">Ngày</label>
-                            <input autocomplete="off" id="injection_date" required type="date" class="form-control mt-1" placeholder="Ngày" [(ngModel)]="injection_date" [ngModelOptions]="{standalone: true}">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Chọn file</label>
-                            <input autocomplete="off" (change)="onFileChangeVaccine($event)" required type="file" class="form-control mt-1" placeholder="" [disabled]="loadingStatusFileVaccination">
-                        </div>
-                        <div class="form-group mt-3" *ngIf="loadingStatusFileVaccination">
-                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                        </div>
-                    </form>
+    <ng-template #addVacinationForm>
+            <form ngNativeValidate>
+                <div class="modal-header">
+                    <b><h1 class="modal-title pull-left">Thêm lịch sử tiêm phòng</h1></b>
                 </div>
-            <button class="save-record" mat-fab extended (click)="addVaccinateHistory()">
-                Lưu
-            </button>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <form>
+                            <div class="form-group">
+                                <label for="vaccine">Tên vaccine</label>
+                                <input autocomplete="off" id="vaccine" required type="text" class="form-control mt-1" placeholder="Tên vaccine" [(ngModel)]="vaccine" [ngModelOptions]="{standalone: true}">
+                            </div>
+                            <div class="form-group">
+                                <label for="descriptionVacineHistory">Mô tả</label>
+                                <textarea class="form-control" id="descriptionVacineHistory" rows="10" cols="50" [(ngModel)]="descriptionVacineHistory" [ngModelOptions]="{standalone: true}"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="injection_date">Ngày</label>
+                                <input autocomplete="off" id="injection_date" required type="date" class="form-control mt-1" placeholder="Ngày" [(ngModel)]="injection_date" [ngModelOptions]="{standalone: true}">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Chọn file</label>
+                                <input autocomplete="off" (change)="onFileChangeVaccine($event)" required type="file" class="form-control mt-1" placeholder="" [disabled]="loadingStatusFileVaccination">
+                            </div>
+                            <div class="form-group mt-3" *ngIf="loadingStatusFileVaccination">
+                                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                            </div>
+                        </form>
+                    </div>
+                <button class="save-record" mat-fab extended (click)="addVaccinateHistory()">
+                    Lưu
+                </button>
+                </div>
+            </form>
+    </ng-template>
+    
+    <ng-template #viewDetailForm>
+        <form ngNativeValidate>
+          <div class="modal-header">
+            <b><h1 class="modal-title pull-left">Xem chi tiết bệnh án điện tử</h1></b>
+            <div class="form-group">
+                <!-- <a [href]="meeting">Meeting với bác sĩ</a> -->
+                <a [href]="meeting" target="_blank">Meeting với bác sĩ</a>
             </div>
-        </form>
-</ng-template>
-
-
-
-
-<ng-template #viewDetailForm>
-    <form ngNativeValidate>
-      <div class="modal-header">
-        <b><h1 class="modal-title pull-left">Xem chi tiết bệnh án điện tử</h1></b>
-        <div class="form-group">
-            <!-- <a [href]="meeting">Meeting với bác sĩ</a> -->
-            <a [href]="meeting" target="_blank">Meeting với bác sĩ</a>
-        </div>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="medications">Loại thuốc</label>
-          <input [disabled]="true" id="medications" class="form-control mt-1" [(ngModel)]="medications" [ngModelOptions]="{standalone: true}">
-        </div>
-        <div class="form-group">
-            <label for="nutrition">Dưỡng chất</label>
-            <input [disabled]="true" id="nutrition" class="form-control mt-1" [(ngModel)]="nutrition" [ngModelOptions]="{standalone: true}">
-        </div>
-
-        <div class="form-group">
-            <label for="examination_date">Ngày khám</label>
-            <input [disabled]="true" id="examination_date" class="form-control mt-1" [(ngModel)]="examination_date" [ngModelOptions]="{standalone: true}">
-        </div>
-        <div class="form-group">
-            <label for="symptom_description">Biểu hiện</label>
-            <input [disabled]="true" id="symptom_description" class="form-control mt-1" [(ngModel)]="symptom_description" [ngModelOptions]="{standalone: true}">
-        </div>
-        <div class="form-group">
-            <label for="symptoms_time">Thời gian có triệu chứng</label>
-            <input [disabled]="true" id="symptoms_time" class="form-control mt-1" [(ngModel)]="symptoms_time" [ngModelOptions]="{standalone: true}">
-        </div>
-        <div class="form-group">
-            <label for="body_temperature">Nhiệt độ cơ thể</label>
-            <input [disabled]="true" id="body_temperature" class="form-control mt-1" [(ngModel)]="body_temperature" [ngModelOptions]="{standalone: true}">
-        </div>
-        <div class="form-group">
-            <label for="test_results">Kết quả kiểm tra</label>
-            <input [disabled]="true" id="test_results" class="form-control mt-1" [(ngModel)]="test_results" [ngModelOptions]="{standalone: true}">
-        </div>
-        <div class="form-group">
-            <label for="re_examination">Kết quả test lại</label>
-            <input [disabled]="true" id="re_examination" class="form-control mt-1" [(ngModel)]="re_examination" [ngModelOptions]="{standalone: true}">
-        </div>
-        <div class="form-group">
-            <!-- <label for="username">Meeting với bác sĩ</label> -->
-            <!-- <input [disabled]="true" class="form-control mt-1" [(ngModel)]="meeting" [ngModelOptions]="{standalone: true}"> -->
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div class="operate-btn">
-            <button type="submit" class="btn btn-primary mt-3" (click)="navigatePage()">Dịch vụ khách hàng</button>
           </div>
-        <div class="operate-btn">
-          <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Đóng</button>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="medications">Loại thuốc</label>
+              <input [disabled]="true" id="medications" class="form-control mt-1" [(ngModel)]="medications" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label for="nutrition">Dưỡng chất</label>
+                <input [disabled]="true" id="nutrition" class="form-control mt-1" [(ngModel)]="nutrition" [ngModelOptions]="{standalone: true}">
+            </div>
+    
+            <div class="form-group">
+                <label for="examination_date">Ngày khám</label>
+                <input [disabled]="true" id="examination_date" class="form-control mt-1" [(ngModel)]="examination_date" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label for="symptom_description">Biểu hiện</label>
+                <input [disabled]="true" id="symptom_description" class="form-control mt-1" [(ngModel)]="symptom_description" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label for="symptoms_time">Thời gian có triệu chứng</label>
+                <input [disabled]="true" id="symptoms_time" class="form-control mt-1" [(ngModel)]="symptoms_time" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label for="body_temperature">Nhiệt độ cơ thể</label>
+                <input [disabled]="true" id="body_temperature" class="form-control mt-1" [(ngModel)]="body_temperature" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label for="test_results">Kết quả kiểm tra</label>
+                <input [disabled]="true" id="test_results" class="form-control mt-1" [(ngModel)]="test_results" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label for="re_examination">Kết quả test lại</label>
+                <input [disabled]="true" id="re_examination" class="form-control mt-1" [(ngModel)]="re_examination" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <!-- <label for="username">Meeting với bác sĩ</label> -->
+                <!-- <input [disabled]="true" class="form-control mt-1" [(ngModel)]="meeting" [ngModelOptions]="{standalone: true}"> -->
+            </div>
         </div>
-    </div>
-    </form>
-</ng-template>
+        <div class="modal-footer">
+            <div class="operate-btn">
+                <button type="submit" class="btn btn-primary mt-3" (click)="navigatePage()">Dịch vụ khách hàng</button>
+              </div>
+            <div class="operate-btn">
+              <button type="button" class="btn btn-danger mt-3" (click)="closeDialog()">Đóng</button>
+            </div>
+        </div>
+        </form>
+    </ng-template>
+</div>
+
+<div *ngIf="!showPagePetDetail" style="display: flex; justify-content: center;align-items: center;">
+    <h1>Không thể truy cập sồ sơ Pet không phải của mình.</h1>
+</div>
