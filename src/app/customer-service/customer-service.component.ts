@@ -176,6 +176,7 @@ export class CustomerServiceComponent implements OnInit{
     this.modalRef = this.modalService.show(template);
     console.log("service",service);
     this.service_id = service.id;
+    this.comment = '';
   }
   openViewRecord(template: TemplateRef<any>, service: any){
     this.modalRef = this.modalService.show(template);
