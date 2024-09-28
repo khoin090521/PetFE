@@ -149,6 +149,7 @@ export class CreateDoctorComponent implements OnInit{
   openMedicine(template: TemplateRef<any>){
     // this.openMedicineScreen = true;
     this.modalRef = this.modalService.show(template);
+    this.image = ""
   }
 
   openCreateMeeting(template: TemplateRef<any>){
@@ -187,9 +188,10 @@ export class CreateDoctorComponent implements OnInit{
     this.medicine_name = medicine.name;
     this.quantity = medicine.quantity;
     this.price = medicine.price;
-    this.description = medicine.descrition;
+    this.description = medicine.description;
     this.trade_mark = medicine.trademark;
     this.type = medicine.type;
+    this.image = medicine.medicine_image?.[0]?.image;
   }
 
   
