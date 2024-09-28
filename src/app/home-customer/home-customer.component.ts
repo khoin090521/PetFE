@@ -321,10 +321,10 @@ export class HomeCustomerComponent implements OnInit{
     if(!this.identifying) {
       this.toastService.warning('Vui lòng nhập Đặc điểm nhận dạng.');
     }
-    // if(!this.urlPetImage) {
-    //   this.toastService.warning('Vui lòng chọn ảnh.');
-    // }
-    if(this.name && this.species && Number.isInteger(this.age) && Number(this.age) > 0 && this.identifying && !this.urlPetImage) {
+    if(!this.urlPetImage) {
+      this.toastService.warning('Vui lòng chọn ảnh.');
+    }
+    if(this.name && this.species && Number.isInteger(this.age) && Number(this.age) > 0 && this.identifying && this.urlPetImage) {
       this.modalRef?.hide();
       this.addPet();
       if(this.rightPopupIndex < 3){
@@ -346,7 +346,10 @@ export class HomeCustomerComponent implements OnInit{
       };
 
       this.pet = new Pet(this.name, Number(this.age), this.gender, this.species, this.identifying, this.origin_certificate, this.urlPetImage, this.health_history_requests, this.customer_pet_requests);
-      this.http.post<any>(`${BASE_URL}/pet/add`, this.pet).subscribe(
+      this.http.post<any>(`${BASE_URL}/pet/add`, {
+        ...this.pet,
+        status: 0
+      }).subscribe(
         (res) => {
           this.petId = res.data.id
         },

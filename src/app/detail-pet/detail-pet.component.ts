@@ -172,6 +172,7 @@ export class DetailPetComponent implements OnInit{
     this.http.post<any>(`${BASE_URL}/pet/update`,{
       ...this.pet,
       customer_id: user_id,
+      status: 0
     }).subscribe(
       (res) => {
         this.listVacinationHistory = res.data;
