@@ -97,8 +97,8 @@ export class CreateDoctorComponent implements OnInit{
 
   medicine_name_add: string = "";
   image_add: string = "";
-  quantity_add: string = "";
-  price_add: string = "";
+  quantity_add: number = 0;
+  price_add: number = 0;
   description_add: string = "";
   type_add: string = "";
   trademark_add: string = "";
@@ -237,7 +237,6 @@ export class CreateDoctorComponent implements OnInit{
   async onFileChangeAdd(event:any){
     this.loadingStatusFile = true;
     const file = event.target.files[0];
-    console.log("file", file)
     if(!file.type.includes("image")) {
       this.toastService.warning("Chỉ có thể chọn ảnh");
       this.image = ""
@@ -289,17 +288,16 @@ export class CreateDoctorComponent implements OnInit{
   }
 
   addAction(){
-    
     if(!this.medicine_name_add) {
       this.toastService.warning('Tên thuốc không được để trống!');
     } 
-    if(Number(this.quantity_add) <= 0) {
+    if(!Number(this.quantity_add) && Number(this.quantity_add) <= 0) {
       this.toastService.warning('Số lượng thuốc phải lớn hơn 0!');
     } 
-    if(Number(this.price_add) <= 500) {
+    if(!Number(this.price_add) && Number(this.price_add) <= 500) {
       this.toastService.warning('Giá tiền phải lớn hơn 500!');
     } 
-    if(this.medicine_name_add && Number(this.quantity_add) > 0 && Number(this.price_add) > 500) {
+    if(this.medicine_name_add  && Number(this.quantity_add) && Number(this.quantity_add) > 0 && Number(this.price_add) && Number(this.price_add) > 500) {
       const clinicId = localStorage.getItem("clinic_id");
       this.medicineAdd = new MedicineAdd(this.medicine_name_add, Number(this.quantity_add), Number(this.price_add), this.type_add, this.trademark_add,this.description_add, Number(clinicId), this.image_add);
       this.http.post<any>(`${BASE_URL}/medicine/add`, this.medicineAdd).subscribe(
@@ -308,8 +306,8 @@ export class CreateDoctorComponent implements OnInit{
           this.getMedicineByClinicId();
           this.modalRef?.hide();
           this.medicine_name_add = "";
-          this.quantity_add= "";
-          this.price_add = "";
+          this.quantity_add= 0;
+          this.price_add = 0;
           this.type_add = "";
           this.trademark_add = "";
           this.description_add = "";

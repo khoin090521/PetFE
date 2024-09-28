@@ -40,11 +40,11 @@
       </div>
       <div class="form-group mt-3">
           <label for="quantity_add">Số lượng</label>
-          <input autocomplete="off" id="quantity_add" required type="text" class="form-control mt-1"placeholder="Số lượng" [(ngModel)]="quantity_add" [ngModelOptions]="{standalone: true}">
+          <input autocomplete="off" id="quantity_add" required type="number" min="1" class="form-control mt-1"placeholder="Số lượng" [(ngModel)]="quantity_add" [ngModelOptions]="{standalone: true}">
       </div>
       <div class="form-group mt-3">
         <label for="price_add">Giá sản phẩm</label>
-        <input autocomplete="off" required type="text" class="form-control mt-1" placeholder="Giá sản phẩm" [(ngModel)]="price_add" [ngModelOptions]="{standalone: true}">
+        <input autocomplete="off" required type="number" min="500" class="form-control mt-1" placeholder="Giá sản phẩm" [(ngModel)]="price_add" [ngModelOptions]="{standalone: true}">
       </div>
       <div class="form-group mt-3">
         <label for="trademark_add">Nhãn hiệu</label>

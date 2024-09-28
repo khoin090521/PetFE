@@ -224,7 +224,7 @@ export class CustomerBookingComponent implements OnInit, AfterViewChecked{
     }
 
     onSelectChange(event: Event): void {
-        this.doctor_id = Number((event.target as HTMLSelectElement).value.toString());
+        this.doctor_id = Number((event.target as HTMLSelectElement).value.toString());//khi chọn sẽ lưu id bác sĩ được chọn
         console.log('Selected value:', this.doctor_id);
     }
 
