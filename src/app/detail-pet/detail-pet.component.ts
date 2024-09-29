@@ -35,7 +35,7 @@ class Pet{
   constructor(
     public id: number,
     public name: string,
-    public age: string,
+    public age: number,
     public gender: boolean,
     public species: string,
     public identifying: string,
@@ -84,7 +84,7 @@ export class DetailPetComponent implements OnInit{
 
   petId: number = 0;
   petName: string = "";
-  petAge: string = "";
+  petAge: number = 0;
   petGender: string = "";
   petSpecies: string = "";
   petIdentifying: string = "";
@@ -190,21 +190,25 @@ export class DetailPetComponent implements OnInit{
   }
 
   updatePet(){
-    const user_id = Number(localStorage.getItem('user_id'));
-    this.pet = new Pet(Number(this.petId), this.petName, this.petAge, true, this.petSpecies, this.petIdentifying, this.certificatePet, this.imagePet, this.certificatePet, null, null, null);
-    this.http.post<any>(`${BASE_URL}/pet/update`,{
-      ...this.pet,
-      customer_id: user_id,
-      status: 0
-    }).subscribe(
-      (res) => {
-        this.listVacinationHistory = res.data;
-        this.toastService.success("Back lại trang trước và cập nhật lại trang này");
-      },
-      (err) => {
-        this.toastService.error("Cập nhật thất bại")
-      } 
-    );
+    if(Number(this.petAge) <=0 ) {
+      this.toastService.warning("Tuổi thú cưng phải lớn hơn 0!");
+    } else {
+      const user_id = Number(localStorage.getItem('user_id'));
+      this.pet = new Pet(Number(this.petId), this.petName, Number(this.petAge), true, this.petSpecies, this.petIdentifying, this.certificatePet, this.imagePet, this.certificatePet, null, null, null);
+      this.http.post<any>(`${BASE_URL}/pet/update`,{
+        ...this.pet,
+        customer_id: user_id,
+        status: 0
+      }).subscribe(
+        (res) => {
+          this.listVacinationHistory = res.data;
+          this.toastService.success("Quay lại trang trước và cập nhật lại trang này");
+        },
+        (err) => {
+          this.toastService.error("Cập nhật thất bại")
+        } 
+      );
+    }
   }
 
   urlPetImage: any = "";
