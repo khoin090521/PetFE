@@ -137,8 +137,8 @@ export class HomeCustomerComponent implements OnInit{
     let userId = localStorage.getItem('user_id');
     await this.http.get<any>(`${BASE_URL}/pet/list?index-page=1&size=100&customer-id=`+userId).subscribe(
       (res) => {
-        this.petList = res.data.content;
-        this.myPets = res.data.content;
+        this.petList = res.data.content?.filter((i: any) => i.status === 0);
+        this.myPets = res.data.content?.filter((i: any) => i.status === 0);
         console.log("petList",this.petList);
       },
       (err) => {
@@ -401,13 +401,16 @@ export class HomeCustomerComponent implements OnInit{
 
   removePetAccept(){
     const user_id = Number(localStorage.getItem('user_id'));
-    this.http.get<any>(`${BASE_URL}/pet/delete?pet-id=${this.petRemoveId}&customer-id=${user_id}`).subscribe(
+    this.http.post<any>(`${BASE_URL}/pet/delete?pet-id=${this.petRemoveId}&status=1`, {}).subscribe(
       (res) => {
         this.getListPetByUserId();
         this.modalRef?.hide();
-        this.toastService.success('Xoá thành công');
+        this.toastService.success('Xoá thành công.');
       },
-      (err) => {}
+      (err) => {
+        this.toastService.error('Xoá thất bại.');
+
+      }
     );
   }
 
